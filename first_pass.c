@@ -25,19 +25,28 @@ int main_pass(char* filename){
     while (fgets(str, max_row_len, fd)!=NULL)
     {
        if (ignore_line==1){
-           
+
        }
 
     }
-    
+    //checking if it's an empty line or a comment line
     int ignore_line(){
 
         return 0;
     }
 
+    //determine if it's a command line or an instruction line
+    int check_if_com_or_dir(){
 
+        return 0;
+    };
     
+
+
     fclose(filename);
+
+    second_pass();
+
     return 0;
 
 }
