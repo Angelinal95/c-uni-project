@@ -1,73 +1,73 @@
 #include "error_check.h"
 
-void show_error(int num_er){
+void show_error(int num_er,int line_num){
     switch(num_er){
 
         case 1:
-            printf("there's no such function");
+            printf("line: %d, there's no such function", line_num);
             break;
         case 2:
-            printf("too many operands");
+            printf("line: %d,too many operands", line_num);
             break;
         case 3:
-            printf("too little operands");
+            printf("line: %d,too little operands", line_num);
             break;
         case 4:
-            printf("incorrect type of source operand ");
+            printf("line: %d,incorrect type of source operand ", line_num);
             break;
         case 5:
-            printf("incorrect type of destination operand");
+            printf("line: %d,incorrect type of destination operand", line_num);
             break;
         case 6:
-            printf("destination operand doesn't exist");
+            printf("line: %d,destination operand doesn't exist", line_num);
             break;
         case 7:
-            printf("source operand doesn't exist");
+            printf("line: %d,source operand doesn't exist", line_num);
             break;
         case 8:
-            printf("incorrect structure of the statement");
+            printf("line: %d,incorrect structure of the statement", line_num);
             break;
         case 9:
-            printf("label already exists");
+            printf("line: %d,label already exists", line_num);
             break;
         case 10:
-            printf("labale's name is the same as the name of a saved word");
+            printf("line: %d,labale's name is the same as the name of a saved word", line_num);
             break;
         case 11:
-            printf("there's a white space after the colon");
+            printf("line: %d,there's a white space after the colon", line_num);
             break;
         case 12:
-            printf("missing quotation from a .string diractive statement");
+            printf("line: %d,missing quotation from a .string diractive statement", line_num);
             break;
         case 13:
-            printf("usage of an undifined label");
+            printf("line: %d,usage of an undifined label");
             break;
         case 14:
-            printf("label can't be a directive statement");
+            printf("line: %d,label can't be a directive statement", line_num);
             break;
         case 15:
-            printf("label can't be an instruction");
+            printf("line: %d,label can't be an instruction", line_num);
             break;
         case 16:
-            printf("label is already defined as being external");
+            printf("line: %d,label is already defined as being external", line_num);
             break;
         /*case 17:
             printf("label is already defined as being internal");
             break;*/
         case 18:
-            printf("not a number");
+            printf("line: %d,not a number", line_num);
             break;
         case 19:
-            printf("not a string");
+            printf("line: %d,not a string", line_num);
             break;
         case 20:
-            printf("token's length is higher than %d",row_len);
+            printf("line: %d,token's length is higher than %d", line_num, max_row_len);
             break;
         case 21:
-            printf("row too long(more than %d characters)",row_len);
+            printf("line: %d,row too long(more than %d characters)", line_num,max_row_len);
             break;
         case 22:
-            printf("invalid adress");
+            printf("line: %d,invalid adress", line_num);
             break;
 
 

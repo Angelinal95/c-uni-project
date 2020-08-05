@@ -10,9 +10,11 @@ index_term action_instruction[]={{"mov"},{"cmp"},{"add"},{"sub"},{"lea"},{"clr"}
 
 index_term sentence_instruction[]={{".data"},{".string"},{".entry"},{".extern"}};
 
+
 int main_pass(char* filename){
     FILE *fd;
     char *str;
+    int line_count=0;
     fd=fopen(filename, "r");
 
     if (fd == NULL){
@@ -20,15 +22,19 @@ int main_pass(char* filename){
         return 1;
     }
 
-    while (!feof(fd))
+    while (fgets(str, max_row_len, fd)!=NULL)
     {
-        
+       if (ignore_line==1){
+           
+       }
+
     }
     
+    int ignore_line(){
 
-    while (fgets(str, max_row_len, fd) != NULL){
-        printf("%s", str);
+        return 0;
     }
+
 
     
     fclose(filename);
