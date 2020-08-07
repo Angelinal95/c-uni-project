@@ -16,6 +16,18 @@ typedef struct {
 
 }hash_table;
 
+typedef struct {
+    char *opcode;
+    char *adress_mode_src;
+    char *operand_src;
+    char *adress_mode_dest;
+    char *operand_dest;
+    char *funct;
+    int A;
+    int R;
+    int E;
+}full_instruction;
+
 #define hash_table first_pass_table[]={};
 
 //global variables

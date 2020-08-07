@@ -5,7 +5,7 @@ index_term registers[]={
     {"r_0"},{"r_1"},{"r_2"},{"r_3"},{"r_4"},{"r_5"},{"r_6"},{"r_7"}
 };
 
-index_term action_instruction[]={{"mov"},{"cmp"},{"add"},{"sub"},{"lea"},{"clr"},{"not"},
+index_term func_list[]={{"mov"},{"cmp"},{"add"},{"sub"},{"lea"},{"clr"},{"not"},
 {"inc"},{"dec"},{"jmp"},{"bne"},{"jsr"},{"red"},{"prn"},{"rts"},{"stop"}};
 
 index_term sentence_instruction[]={{".data"},{".string"},{".entry"},{".extern"}};
@@ -24,9 +24,16 @@ int main_pass(char* filename){
 
     while (fgets(str, max_row_len, fd)!=NULL)
     {
-       if (ignore_line==1){
-
+       if (ignore_line)()==0){
+           break;
        }
+       if (check_if_com_or_dir()==1)
+       {
+           /* code */
+       }
+       
+
+       
 
     }
     //checking if it's an empty line or a comment line
@@ -35,12 +42,35 @@ int main_pass(char* filename){
         return 0;
     }
 
-    //determine if it's a command line or an instruction line
+    //determine if it's a command line or a direction line
     int check_if_com_or_dir(){
+        if(){
+
+            return 1; //for a direction
+        }
+        return 0;//for a command
+    };
+
+    int is_label(){
 
         return 0;
-    };
-    
+    }
+
+    int is_string_or_data(){
+
+        return 0;
+    }
+
+    int is_entry_or_extern(){
+
+        return 0;
+    }
+    int insert_label_table(){
+
+        return 0;
+    }
+
+
 
 
     fclose(filename);
