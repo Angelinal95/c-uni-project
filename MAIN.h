@@ -10,7 +10,7 @@ typedef struct
 
 
 typedef struct {
-    char *symbol;
+    char *label;
     int value;
     char *type_of_symbol;
 
@@ -27,6 +27,18 @@ typedef struct {
     int R;
     int E;
 }full_instruction;
+
+typedef struct 
+{
+    char *label;
+    char *action;
+    char *operand_src;
+    char *operand_dest;
+
+
+}break_sentence;
+
+
 
 #define hash_table first_pass_table[]={};
 
