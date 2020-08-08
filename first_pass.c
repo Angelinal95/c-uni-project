@@ -20,7 +20,6 @@ int main_pass(char *filename)
     char temp[81];
     const char s[2] = " ";
     char *token;
-    int error;
 
     fd = fopen(filename, "r");
 
@@ -43,17 +42,31 @@ int main_pass(char *filename)
         if (temp[81] != '/n')
         {
             show_error(20, line_count);
-            error++;
         }
-
-        if (ignore_line)()==0)
+        else
+        {
+            if (ignore_line(token) == 0)
             {
                 go_through_line(token);
             }
+        }
+    }
+
+    //checking if it's an empty line or a comment line
+    int ignore_line(char *token)
+    {
+
+        return (skip_white_space(token)==NULL)||(*token==';'));
     }
 
     int go_through_line(char *token)
     {
+
+        if (ignore_line(token) != 0)
+        {
+
+            return 0;
+        }
 
         //checking if there's a label and taking care of it
         if (strchr(str, ':') != NULL)
@@ -79,12 +92,6 @@ int main_pass(char *filename)
             {
             }
         }
-    }
-    //checking if it's an empty line or a comment line
-    int ignore_line()
-    {
-
-        return 0;
     }
 
     //determine if it's a command line or a direction line
