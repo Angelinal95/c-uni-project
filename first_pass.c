@@ -62,7 +62,7 @@ int main_pass(char *filename)
         //checking if there's a label and taking care of it
         if (strchr(str, ':') != NULL)
         {
-            if (is_valid_label(token) == 1)
+            if (legal_label(token) == 1)
             {
                 temp_label = token;
             }
@@ -96,7 +96,7 @@ int main_pass(char *filename)
         else
         {
             temp_com_or_inst = "code";
-            if (is_valid_command() == 1)
+            if (name_function() == 1)
             {
             }
             else
@@ -157,22 +157,5 @@ int skip_white_space(char *token)
         token = ++token;
         temp = *token;
     }
-    return 0;
-}
-
-/*error check*/
-int is_valid_label(char *token)
-{
-    return 0;
-}
-
-int is_valid_command(char *token)
-{
-    return 0;
-}
-
-int is_valid_num_of_operands()
-{
-
     return 0;
 }
