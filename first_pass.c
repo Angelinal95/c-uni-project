@@ -140,13 +140,6 @@ int check_if_com_or_inst(char *token)
     return 0;
 };
 
-//inserting a label into the symbols table
-int insert_into_symbols_table(char *label, char *type_of_symbol)
-{
-
-    return 0;
-}
-
 int skip_white_space(char *token)
 {
     char temp = *token;
