@@ -6,8 +6,6 @@ index_term registers[] = {
 
 index_term command_list[] = {{"mov"}, {"cmp"}, {"add"}, {"sub"}, {"lea"}, {"clr"}, {"not"}, {"inc"}, {"dec"}, {"jmp"}, {"bne"}, {"jsr"}, {"red"}, {"prn"}, {"rts"}, {"stop"}};
 
-symbols_table *symbols_table;
-
 int main_pass(char *filename)
 {
     FILE *fd;
@@ -29,7 +27,7 @@ int main_pass(char *filename)
     {
         line_count++;
         error = 0;
-
+        symbols_table *symbols_table = NULL;
         token = strtok(temp, s);
 
         //checking if the length of the line is more than 80 characters
@@ -41,9 +39,15 @@ int main_pass(char *filename)
         {
             if (ignore_line(token) == 0)
             {
-                go_through_line(token);
+                go_through_line(token, symbols_table);
             }
         }
+
+        fclose(filename);
+
+        second_pass();
+
+        return 0;
     }
 
     //checking if it's an empty line or a comment line
@@ -54,7 +58,7 @@ int main_pass(char *filename)
     }
 
     //analyzing what's in the current line
-    int go_through_line(char *token)
+    int go_through_line(char *token, symbols_table *symbols_table)
     {
         char *temp_label = NULL;
         char *temp_com_or_inst;
@@ -62,7 +66,7 @@ int main_pass(char *filename)
         //checking if there's a label and taking care of it
         if (strchr(str, ':') != NULL)
         {
-            if (is_valid_label(token) == 1)
+            if (legal_label(token) == 1)
             {
                 temp_label = token;
             }
@@ -96,7 +100,7 @@ int main_pass(char *filename)
         else
         {
             temp_com_or_inst = "code";
-            if (is_valid_command() == 1)
+            if (name_function() == 1)
             {
             }
             else
@@ -121,12 +125,6 @@ int main_pass(char *filename)
             }
         }
     }
-
-    fclose(filename);
-
-    second_pass();
-
-    return 0;
 }
 
 //determine if it's a command line or a instruction line
@@ -142,13 +140,6 @@ int check_if_com_or_inst(char *token)
     return 0;
 };
 
-//inserting a label into the symbols table
-int insert_into_symbols_table(char *label, char *type_of_symbol)
-{
-
-    return 0;
-}
-
 int skip_white_space(char *token)
 {
     char temp = *token;
@@ -157,22 +148,5 @@ int skip_white_space(char *token)
         token = ++token;
         temp = *token;
     }
-    return 0;
-}
-
-/*error check*/
-int is_valid_label(char *token)
-{
-    return 0;
-}
-
-int is_valid_command(char *token)
-{
-    return 0;
-}
-
-int is_valid_num_of_operands()
-{
-
     return 0;
 }
