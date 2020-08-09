@@ -9,13 +9,12 @@ index_term func_list[] = {{"mov"}, {"cmp"}, {"add"}, {"sub"}, {"lea"}, {"clr"}, 
 index_term sentence_instruction[] = {{".data"}, {".string"}, {".entry"}, {".extern"}};
 
 full_instruction *first_pass_full_instruction;
-
+symbols_table *symbols_table;
 char *parts_of_sentence;
 
 int main_pass(char *filename)
 {
     FILE *fd;
-    char *str;
     int line_count = 0;
     char temp[81];
     const char s[2] = " ";
@@ -29,13 +28,12 @@ int main_pass(char *filename)
         return 1;
     }
 
-    while (fgets(str, max_row_len + 1, fd) != NULL)
+    while (fgets(temp, max_row_len + 1, fd) != NULL)
 
     {
         line_count++;
         error = 0;
 
-        temp = strcpy(temp, str);
         token = strtok(temp, s);
 
         //checking if the length of the line is more than 80 characters
@@ -56,29 +54,39 @@ int main_pass(char *filename)
     int ignore_line(char *token)
     {
 
-        return (skip_white_space(token)==NULL)||(*token==';'));
+        return (skip_white_space(token) == NULL) || (strcmp(token, ";"));
     }
 
     //analyzing what's in the current line
     int go_through_line(char *token)
     {
+        char *temp_label = NULL;
+        char *temp_com_or_inst;
 
         //checking if there's a label and taking care of it
         if (strchr(str, ':') != NULL)
         {
-            if ()
+            if (is_valid_label(token) == 1)
             {
-
-                insert_into_label_table();
+                temp_label = token;
             }
         }
 
-        //
         token = strtok(NULL, s)
 
-            if (check_if_com_or_dir() == 1)
+            if (check_if_com_or_inst(token) == 1)
         {
-            /* code */
+            temp_com_or_inst = "data";
+        }
+
+        else
+        {
+            temp_com_or_inst = "code";
+        }
+
+        if (temp_label != NULL)
+        {
+            insert_into_symbols_table(temp_label, temp_com_or_ins);
         }
 
         token = strtok(NULL, s)
@@ -93,15 +101,17 @@ int main_pass(char *filename)
         }
     }
 
-    //determine if it's a command line or a direction line
-    int check_if_com_or_dir()
+    //determine if it's a command line or a instruction line
+    int check_if_com_or_inst(char *token)
     {
-        if ()
-        {
 
-            return 1; //for a direction
+        //if it's an instruction
+        if (strchr(str, '.') != NULL)
+        {
+            return 1;
         }
-        return 0; //for a command
+        //if it's a command
+        return 0;
     };
 
     int is_label()
@@ -121,7 +131,9 @@ int main_pass(char *filename)
 
         return 0;
     }
-    int insert_into_label_table()
+
+    //inserting a label into the symbols table
+    int insert_into_symbols_table(char *label, char *type_of_symbol)
     {
 
         return 0;
