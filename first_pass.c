@@ -174,5 +174,5 @@ int is_valid_command(char *token)
 int is_valid_num_of_operands()
 {
 
-    return 0;
+    return 1;
 }
