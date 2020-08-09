@@ -59,19 +59,18 @@ int main_pass(char *filename)
         return (skip_white_space(token)==NULL)||(*token==';'));
     }
 
+    //analyzing what's in the current line
     int go_through_line(char *token)
     {
-
-        if (ignore_line(token) != 0)
-        {
-
-            return 0;
-        }
 
         //checking if there's a label and taking care of it
         if (strchr(str, ':') != NULL)
         {
-            /* code */
+            if ()
+            {
+
+                insert_into_label_table();
+            }
         }
 
         //
@@ -131,12 +130,17 @@ int main_pass(char *filename)
     int skip_white_space(char *token)
     {
         char temp = *token;
-        while (isspace() != 0)
+        while ((isspace() != 0) && (token != NULL))
         {
             token = ++token;
             temp = *token;
         }
         return 0;
+    }
+
+    /*error check*/
+    int is_valid_label(char *token)
+    {
     }
 
     fclose(filename);
