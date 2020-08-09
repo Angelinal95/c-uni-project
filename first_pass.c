@@ -1,52 +1,163 @@
 #include "MAIN.h"
 #include "error_check.h"
 
-index_term registers[]={
-    {"r_0"},{"r_1"},{"r_2"},{"r_3"},{"r_4"},{"r_5"},{"r_6"},{"r_7"}
-};
+index_term registers[] = {
+    {"r_0"}, {"r_1"}, {"r_2"}, {"r_3"}, {"r_4"}, {"r_5"}, {"r_6"}, {"r_7"}};
 
-index_term action_instruction[]={{"mov"},{"cmp"},{"add"},{"sub"},{"lea"},{"clr"},{"not"},
-{"inc"},{"dec"},{"jmp"},{"bne"},{"jsr"},{"red"},{"prn"},{"rts"},{"stop"}};
+index_term func_list[] = {{"mov"}, {"cmp"}, {"add"}, {"sub"}, {"lea"}, {"clr"}, {"not"}, {"inc"}, {"dec"}, {"jmp"}, {"bne"}, {"jsr"}, {"red"}, {"prn"}, {"rts"}, {"stop"}};
 
-index_term sentence_instruction[]={{".data"},{".string"},{".entry"},{".extern"}};
+index_term sentence_instruction[] = {{".data"}, {".string"}, {".entry"}, {".extern"}};
 
+full_instruction *first_pass_full_instruction;
+symbols_table *symbols_table;
+char *parts_of_sentence;
 
-int main_pass(char* filename){
+int main_pass(char *filename)
+{
     FILE *fd;
-    char *str;
-    int line_count=0;
-    fd=fopen(filename, "r");
+    int line_count = 0;
+    char temp[81];
+    const char s[2] = " ";
+    char *token;
 
-    if (fd == NULL){
-        printf("Could not open file %s",filename);
+    fd = fopen(filename, "r");
+
+    if (fd == NULL)
+    {
+        printf("Could not open file %s", filename);
         return 1;
     }
 
-    while (fgets(str, max_row_len, fd)!=NULL)
+    while (fgets(temp, max_row_len + 1, fd) != NULL)
+
     {
-       if (ignore_line==1){
+        line_count++;
+        error = 0;
 
-       }
+        token = strtok(temp, s);
 
+        //checking if the length of the line is more than 80 characters
+        if (temp[81] != '/n')
+        {
+            show_error(20, line_count);
+        }
+        else
+        {
+            if (ignore_line(token) == 0)
+            {
+                go_through_line(token);
+            }
+        }
     }
+
     //checking if it's an empty line or a comment line
-    int ignore_line(){
+    int ignore_line(char *token)
+    {
 
-        return 0;
+        return (skip_white_space(token) == NULL) || (strcmp(token, ";"));
     }
 
-    //determine if it's a command line or an instruction line
-    int check_if_com_or_dir(){
+    //analyzing what's in the current line
+    int go_through_line(char *token)
+    {
+        char *temp_label = NULL;
+        char *temp_com_or_inst;
 
+        //checking if there's a label and taking care of it
+        if (strchr(str, ':') != NULL)
+        {
+            if (is_valid_label(token) == 1)
+            {
+                temp_label = token;
+            }
+        }
+
+        token = strtok(NULL, s)
+
+            if (check_if_com_or_inst(token) == 1)
+        {
+            temp_com_or_inst = "data";
+        }
+
+        else
+        {
+            temp_com_or_inst = "code";
+        }
+
+        if (temp_label != NULL)
+        {
+            insert_into_symbols_table(temp_label, temp_com_or_ins);
+        }
+
+        token = strtok(NULL, s)
+
+            if (token != NULL)
+        {
+            token = strtok(NULL, s)
+
+                if (token != NULL)
+            {
+            }
+        }
+    }
+
+    //determine if it's a command line or a instruction line
+    int check_if_com_or_inst(char *token)
+    {
+
+        //if it's an instruction
+        if (strchr(str, '.') != NULL)
+        {
+            return 1;
+        }
+        //if it's a command
         return 0;
     };
-    
 
+    int is_label()
+    {
+
+        return 0;
+    }
+
+    int is_string_or_data()
+    {
+
+        return 0;
+    }
+
+    int is_entry_or_extern()
+    {
+
+        return 0;
+    }
+
+    //inserting a label into the symbols table
+    int insert_into_symbols_table(char *label, char *type_of_symbol)
+    {
+
+        return 0;
+    }
+
+    int skip_white_space(char *token)
+    {
+        char temp = *token;
+        while ((isspace() != 0) && (token != NULL))
+        {
+            token = ++token;
+            temp = *token;
+        }
+        return 0;
+    }
+
+    /*error check*/
+    int is_valid_label(char *token)
+    {
+    }
 
     fclose(filename);
 
     second_pass();
 
     return 0;
-
 }
