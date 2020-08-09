@@ -11,6 +11,7 @@ typedef struct
 
 typedef struct
 {
+    symbols_table *next;
     char *label;
     char *value;
     char *type_of_symbol;

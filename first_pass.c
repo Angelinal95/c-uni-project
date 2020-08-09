@@ -6,8 +6,6 @@ index_term registers[] = {
 
 index_term command_list[] = {{"mov"}, {"cmp"}, {"add"}, {"sub"}, {"lea"}, {"clr"}, {"not"}, {"inc"}, {"dec"}, {"jmp"}, {"bne"}, {"jsr"}, {"red"}, {"prn"}, {"rts"}, {"stop"}};
 
-symbols_table *symbols_table;
-
 int main_pass(char *filename)
 {
     FILE *fd;
