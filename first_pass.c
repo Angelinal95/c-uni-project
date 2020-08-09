@@ -27,7 +27,7 @@ int main_pass(char *filename)
     {
         line_count++;
         error = 0;
-
+        symbols_table *symbols_table = NULL;
         token = strtok(temp, s);
 
         //checking if the length of the line is more than 80 characters
@@ -39,9 +39,15 @@ int main_pass(char *filename)
         {
             if (ignore_line(token) == 0)
             {
-                go_through_line(token);
+                go_through_line(token, symbols_table);
             }
         }
+
+        fclose(filename);
+
+        second_pass();
+
+        return 0;
     }
 
     //checking if it's an empty line or a comment line
@@ -52,7 +58,7 @@ int main_pass(char *filename)
     }
 
     //analyzing what's in the current line
-    int go_through_line(char *token)
+    int go_through_line(char *token, symbols_table *symbols_table)
     {
         char *temp_label = NULL;
         char *temp_com_or_inst;
@@ -119,12 +125,6 @@ int main_pass(char *filename)
             }
         }
     }
-
-    fclose(filename);
-
-    second_pass();
-
-    return 0;
 }
 
 //determine if it's a command line or a instruction line
