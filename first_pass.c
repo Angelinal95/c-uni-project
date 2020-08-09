@@ -29,7 +29,7 @@ int main_pass(char *filename)
         return 1;
     }
 
-    while (fgets(str, max_row_len, fd) != NULL)
+    while (fgets(str, max_row_len + 1, fd) != NULL)
 
     {
         line_count++;
@@ -122,15 +122,20 @@ int main_pass(char *filename)
 
         return 0;
     }
-    int insert_label_table()
+    int insert_into_label_table()
     {
 
         return 0;
     }
 
-    int skip_white_space()
+    int skip_white_space(char *token)
     {
-
+        char temp = *token;
+        while (isspace() != 0)
+        {
+            token = ++token;
+            temp = *token;
+        }
         return 0;
     }
 
