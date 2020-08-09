@@ -4,13 +4,9 @@
 index_term registers[] = {
     {"r_0"}, {"r_1"}, {"r_2"}, {"r_3"}, {"r_4"}, {"r_5"}, {"r_6"}, {"r_7"}};
 
-index_term func_list[] = {{"mov"}, {"cmp"}, {"add"}, {"sub"}, {"lea"}, {"clr"}, {"not"}, {"inc"}, {"dec"}, {"jmp"}, {"bne"}, {"jsr"}, {"red"}, {"prn"}, {"rts"}, {"stop"}};
+index_term command_list[] = {{"mov"}, {"cmp"}, {"add"}, {"sub"}, {"lea"}, {"clr"}, {"not"}, {"inc"}, {"dec"}, {"jmp"}, {"bne"}, {"jsr"}, {"red"}, {"prn"}, {"rts"}, {"stop"}};
 
-index_term sentence_instruction[] = {{".data"}, {".string"}, {".entry"}, {".extern"}};
-
-full_instruction *first_pass_full_instruction;
 symbols_table *symbols_table;
-char *parts_of_sentence;
 
 int main_pass(char *filename)
 {
@@ -77,11 +73,36 @@ int main_pass(char *filename)
             if (check_if_com_or_inst(token) == 1)
         {
             temp_com_or_inst = "data";
+
+            if (strcmp(token, ".data"))
+            {
+            }
+
+            else if (strcmp(token, ".string"))
+            {
+            }
+
+            else if (.extern)
+            {
+            }
+
+            else
+            {
+
+                return 0;
+            }
         }
 
         else
         {
             temp_com_or_inst = "code";
+            if (is_valid_command() == 1)
+            {
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         if (temp_label != NULL)
@@ -101,63 +122,57 @@ int main_pass(char *filename)
         }
     }
 
-    //determine if it's a command line or a instruction line
-    int check_if_com_or_inst(char *token)
-    {
-
-        //if it's an instruction
-        if (strchr(str, '.') != NULL)
-        {
-            return 1;
-        }
-        //if it's a command
-        return 0;
-    };
-
-    int is_label()
-    {
-
-        return 0;
-    }
-
-    int is_string_or_data()
-    {
-
-        return 0;
-    }
-
-    int is_entry_or_extern()
-    {
-
-        return 0;
-    }
-
-    //inserting a label into the symbols table
-    int insert_into_symbols_table(char *label, char *type_of_symbol)
-    {
-
-        return 0;
-    }
-
-    int skip_white_space(char *token)
-    {
-        char temp = *token;
-        while ((isspace() != 0) && (token != NULL))
-        {
-            token = ++token;
-            temp = *token;
-        }
-        return 0;
-    }
-
-    /*error check*/
-    int is_valid_label(char *token)
-    {
-    }
-
     fclose(filename);
 
     second_pass();
+
+    return 0;
+}
+
+//determine if it's a command line or a instruction line
+int check_if_com_or_inst(char *token)
+{
+
+    //if it's an instruction
+    if (strchr(str, '.') != NULL)
+    {
+        return 1;
+    }
+    //if it's a command
+    return 0;
+};
+
+//inserting a label into the symbols table
+int insert_into_symbols_table(char *label, char *type_of_symbol)
+{
+
+    return 0;
+}
+
+int skip_white_space(char *token)
+{
+    char temp = *token;
+    while ((isspace() != 0) && (token != NULL))
+    {
+        token = ++token;
+        temp = *token;
+    }
+    return 0;
+}
+
+/*error check*/
+int is_valid_label(char *token)
+{
+    return 0;
+}
+
+int is_valid_command(char *token)
+{
+    return 0;
+}
+
+int is_valid_num_of_operands()
+{
 
     return 0;
 }
