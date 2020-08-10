@@ -197,7 +197,31 @@ int valid_data(char *data, int line)
 
 int valid_string(char *string, int line)
 {
-    return 0;
+    int i, firstChar, firstAssci=0, lastAssci=177;
+    
+    if (string == NULL)
+    {
+        printf("the string variable is NULL.\n\n");
+        return FALSE;
+    }
+    firstChar = count_spaces(string);
+    if((string[firstChar] != ' " ') || (string[strlen(string)] != ' " '))// the first and last character in string need to be a : "
+    {
+        show_error(missingQuotation, line);
+        return FALSE;// not valid string
+    }
+    else
+    {
+        for(i = firstChar ; i <= strlen(string) ; i++)
+        {
+            if((string[i] < firstAssci) && (string[i] > lastAssci))//if the characters not valid (ASSCI)
+            {
+                show_error(notString, line);
+                return FALSE;//not valid string
+            }
+        }
+        return TRUE;  //this is a valid string
+    }
 }
 
 int defined_label(char *label, int line)
@@ -226,7 +250,7 @@ int valid_label(char *label, int line)
     /* Checks if the label starts with a letter */
     else if((label[firstChar] >= 'A') && (label[firstChar] <= 'Z') || (label[firstChar] >= 'a') && (label[firstChar] <= 'z'))
     {
-        for (i=firstChar+1 ; i <= strlen(label) ; i++) //A loop starts from where the first letter is
+        for (i=firstChar+1 ; i <= strlen(label) ; i++) //A loop starts from the second character.
         {
             if(label[i] == ' ')//Check that there is no space in the middle of the label
             {
