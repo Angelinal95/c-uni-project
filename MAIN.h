@@ -18,6 +18,34 @@ typedef struct
 
 } symbols_table;
 
+
+typedef struct {
+	char *name;
+     unsigned int funct;
+	unsigned int opcode;
+   int numOfParams;
+} command;
+
+
+typedef struct
+{   const command *cmd; /* A pointer to the command in g_cmdArr */
+    char *label; /*A pointer to the symbol_table*/
+    char *action;
+    char *operand_src;
+    char *operand_dest;
+
+} command_line;
+
+typedef struct
+{   const command *cmd; /* A pointer to the command in g_cmdArr */
+    char *label; /*A pointer to the symbol_table*/
+    char *info;
+
+}instruction_line;
+
+
+
+    
 typedef struct
 {
     char *opcode;
@@ -31,16 +59,11 @@ typedef struct
     int E;
 } full_instruction;
 
-typedef struct
-{
-    char *label;
-    char *action;
-    char *operand_src;
-    char *operand_dest;
 
-} break_sentence;
 
-#define hash_table first_pass_table[] = {};
+
+
+
 
 /*---------------------global variables-------------------*/
 
