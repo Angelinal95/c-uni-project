@@ -74,22 +74,31 @@ int main_pass(char *filename)
             if (check_if_com_or_inst(token) == 1)
         {
             temp_com_or_inst = "data";
+                
 
             if (strcmp(token, ".data"))
-            {
+            {token = strtok(NULL, s)
+                 if(valid_data(token)){
+                
+                }
             }
 
             else if (strcmp(token, ".string"))
+                
             {
+                token = strtok(NULL, s)
+                if(valid_string(token)){
+                
+                }
             }
 
             else if (strcmp(token, ".extern"))
             {
+                token = strtok(NULL, s)
             }
             /*if it's a .entry */
             else
             {
-
                 return 0;
             }
         }
