@@ -14,6 +14,8 @@ enum error_type {function, manyOperands, littleOperands, typeOperand,
                      manyLabelsSameRow, manyOpcodeSameLine, notValidRegister, 
                      longLabel, invalidLabel};
 
+enum function_name {mov, cmp, add, sub, lea, clr, not, inc, dec, jmp, bne, jsr, red, prn, rts, stop};
+
 void show_error(int, int);/*Prints an appropriate error message by error type*/
 int valid_label(char *, int);/*Checks if the label is written legally*/
 int defined_label(char *, int);/*When using a label in a command,

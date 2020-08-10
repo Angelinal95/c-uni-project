@@ -177,7 +177,7 @@ int check_adress(char *adress, int line)
 
 int name_function(char *nameFunc, int line)
 {
-    return 0;
+ return 0;
 }
 
 int valid_variable(char *var, int line)
