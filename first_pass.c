@@ -83,10 +83,10 @@ int main_pass(char *filename)
             {
             }
 
-            else if (.extern)
+            else if (strcmp(token, ".extern"))
             {
             }
-
+            /*if it's a .entry */
             else
             {
 
