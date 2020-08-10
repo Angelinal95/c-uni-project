@@ -14,6 +14,21 @@ int insert_into_symbol_table(char *symbol_name, int num, char *type_of_symbol, s
     return 0;
 }
 
+   insert_into_instruction_list(char *type_of_inst, char *info, char *pointer_to_row_in_symbol_table){
+   
+        return 0;
+   }
+
+/*
+
+   insert_into_command_list(char *type_of_inst, char *info, char *pointer_to_row_in_symbol_table){
+   
+        return 0;
+   }
+   
+   */
+
+
 int erase_table()
 {
 
