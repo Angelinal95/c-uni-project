@@ -25,8 +25,9 @@ typedef struct {
 
 
 typedef struct
-{   const command *cmd; /* A pointer to the command in g_cmdArr */
+{  
     char *label; /*A pointer to the symbol_table*/
+	 const command *cmd; /* A pointer to the command in g_cmdArr */
     char *action;
     char *operand_src;
     char *operand_dest;
@@ -34,8 +35,10 @@ typedef struct
 } command_line;
 
 typedef struct
-{   const command *cmd; /* A pointer to the command in g_cmdArr */
-    char *label; /*A pointer to the symbol_table*/
+	
+{     char *label; /*A pointer to the symbol_table*/
+	char *type_of_inst; 
+  
     char *info;
 
 }instruction_line;
