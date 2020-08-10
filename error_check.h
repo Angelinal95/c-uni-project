@@ -1,4 +1,9 @@
 #include "MAIN.h"
+#include "auxiliary_functions.h"
+
+#define TRUE 1
+#define FALSE 0
+#define LABEL_LENGTH 31
 
 enum error_type {function, manyOperands, littleOperands, typeOperand,
                      typeDestination, destinationNotFound, sourceNotFound,
@@ -6,7 +11,8 @@ enum error_type {function, manyOperands, littleOperands, typeOperand,
                      missingQuotation, undifinedLabel, labelIsStatement, 
                      labelInstruction, labelIsExternal, labelIsInternal, 
                      notNumber, notString, tokenLength, longRow, invalidAdress, 
-                     manyLabelsSameRow, manyOpcodeSameLine,notValidRegister};
+                     manyLabelsSameRow, manyOpcodeSameLine, notValidRegister, 
+                     longLabel, invalidLabel};
 
 void show_error(int, int);/*Prints an appropriate error message by error type*/
 int valid_label(char *, int);/*Checks if the label is written legally*/

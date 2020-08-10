@@ -5,95 +5,124 @@ void show_error(int num_er, int line_num)
     switch (num_er)
     {
 
-    case 1:
+    case function:
         printf("line: %d, there's no such function\n\n", line_num);
         break;
-    case 2:
+
+    case manyOperands:
         printf("line: %d,too many operands\n\n", line_num);
         break;
-    case 3:
+
+    case littleOperands:
         printf("line: %d,too little operands\n\n", line_num);
         break;
-    case 4:
+
+    case typeOperand:
         printf("line: %d,incorrect type of source operand\n\n", line_num);
         break;
-    case 5:
+
+    case typeDestination:
         printf("line: %d,incorrect type of destination operand\n\n", line_num);
         break;
-    case 6:
+
+    case destinationNotFound:
         printf("line: %d,destination operand doesn't exist\n\n", line_num);
         break;
-    case 7:
+
+    case sourceNotFound:
         printf("line: %d,source operand doesn't exist\n\n", line_num);
         break;
-    case 8:
+
+    case incorrectStatement:
         printf("line: %d,incorrect structure of the statement\n\n", line_num);
         break;
-    case 9:
+
+    case labelExists:
         printf("line: %d,label already exists\n\n", line_num);
         break;
-    case 10:
+
+    case savedWord:
         printf("line: %d,labale's name is the same as the name of a saved word\n\n", line_num);
         break;
-    case 11:
-        printf("line: %d,there's a white space after the colon\n\n", line_num);
+
+    case whiteSpace:
+        printf("line: %d,there's a white space in the label.\n\n", line_num);
         break;
-    case 12:
+
+    case missingQuotation:
         printf("line: %d,missing quotation from a .string diractive statement\n\n", line_num);
         break;
-    case 13:
+
+    case undifinedLabel:
         printf("line: %d,usage of an undifined label\n\n");
         break;
-    case 14:
+
+    case labelIsStatement:
         printf("line: %d,label can't be a directive statement\n\n", line_num);
         break;
-    case 15:
+
+    case labelInstruction:
         printf("line: %d,label can't be an instruction\n\n", line_num);
         break;
-    case 16:
+
+    case labelIsExternal:
         printf("line: %d,label is already defined as being external\n\n", line_num);
         break;
-    /*case 17:
+
+    /*case labelIsInternal:
             printf("label is already defined as being internal");
             break;*/
-    case 18:
+
+    case notNumber:
         printf("line: %d,not a number\n\n", line_num);
         break;
-    case 19:
+
+    case notString:
         printf("line: %d,not a string\n\n", line_num);
         break;
-    case 20:
+
+    case tokenLength:
         printf("line: %d,token's length is higher than %d\n\n", line_num, max_row_len);
         break;
-    case 21:
+
+    case longRow:
         printf("line: %d,row too long(more than %d characters)\n\n", line_num, max_row_len);
         break;
-    case 22:
+
+    case invalidAdress:
         printf("line: %d,invalid adress\n\n", line_num);
         break;
 
-    case 23:
+    case manyLabelsSameRow:
         printf("line: %d, too many labels in the same row\n\n", line_num);
         break;
 
-    case 24:
+    case manyOpcodeSameLine:
         printf("line: %d, too many opcodes in the same line\n\n", line_num);
         break;
-    case 25: 
+
+    case notValidRegister: 
         printf("line: %d, not a valid register\n\n", line_num);
         break;
-    }
 
+    case longLabel:
+        printf("line: %d, label too long (more then %d characters).\n\n", line_num, LABEL_LENGTH);
+        break;
+
+    case invalidLabel:
+        printf("line: %d, invalid label\n\n");
+        break;
+    }
 }
 
 int valid_number(char *checkNum, int line)
 {
-    int i, true=1, false=0;
+    int i;
 
     if(checkNum == NULL)
     {
         printf("No variable of type number was obtained for the function\n");
-        return false;
+        return FALSE;
     }
 
     else if((checkNum[0] == '#') || (checkNum[0] == '-') || (checkNum[0] == '+') || ((checkNum[0] >= '0' )&& (checkNum[0] <= '9')))
@@ -103,32 +132,32 @@ int valid_number(char *checkNum, int line)
             if((checkNum[i] < '0') || (checkNum[i] > '9'))
             {
                 show_error(notNumber, line);
-                return false; /*error*/
+                return FALSE; /*error*/
             }  
         }
-        return true; /* is a valid number*/
+        return TRUE; /* is a valid number*/
     }
     else
     {
-        return false; /* checkNum[0] is not '#' , not a number and not '-' or '+' */
+        return FALSE; /* checkNum[0] is not '#' , not a number and not '-' or '+' */
     }
 }
 
 int valid_register(char *reg, int line)
 {
-    int i, true=1, false=0;
+    int i;
 
     if (reg == NULL)
     {
         printf("No register variable was obtained for the function.\n");
-        return false;
+        return FALSE;
     }
     else if ((reg[0] != 'r' ) || (reg[1] < '0')||(reg[1] > '7') || (strlen(reg) > 2))
     {
         show_error(notValidRegister, line);
-        return false;
+        return FALSE;
     }
-    return true;
+    return TRUE;
 }
 
 int check_extern_label(char *label, int line)
@@ -178,5 +207,51 @@ int defined_label(char *label, int line)
 
 int valid_label(char *label, int line)
 {
-    return 0;
+    int i, firstChar=0;
+
+    if (label == NULL)
+    {
+        printf("the variable of the libel = NULL. \n\n");
+        return FALSE;
+    }
+
+
+    firstChar = count_spaces(label); //Checks for white characters at the beginning of the string
+
+    if ((strlen(label)-firstChar) > LABEL_LENGTH) //Checks the length of the label starting with the first letter
+    {
+        show_error(longLabel, line);
+        return FALSE;
+    }
+    /* Checks if the label starts with a letter */
+    else if((label[firstChar] >= 'A') && (label[firstChar] <= 'Z') || (label[firstChar] >= 'a') && (label[firstChar] <= 'z'))
+    {
+        for (i=firstChar+1 ; i <= strlen(label) ; i++) //A loop starts from where the first letter is
+        {
+            if(label[i] == ' ')//Check that there is no space in the middle of the label
+            {
+                show_error(whiteSpace, line);
+                return FALSE;
+            }
+            else if (label[i] == ':' && (i != strlen(label)))//Check that there are no colon in the middle of the label
+            {
+                show_error(manyLabelsSameRow, line);
+                return FALSE;
+            }
+            else if(((label[i] > '9') && (label[i] < 'A')) || ((label[i] > 'Z') && (label[i] < 'a' )) || (label[i] > 'z'))//Check that the characters after the first character are letters or numbers
+            {
+                show_error(invalidLabel, line);
+                return FALSE;
+            }
+        }
+        return TRUE; //valid label 
+
+    }
+    /* the first character is not a letter */
+    else 
+    {
+        return FALSE;
+    }
+    
 }
+
