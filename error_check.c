@@ -131,6 +131,52 @@ int valid_register(char *reg, int line)
     return true;
 }
 
+int check_extern_label(char *label, int line)
+{
+    return 0;
+}
 
+int check_entry_label(char *label, int line)
+{
+    return 0;
+}
 
+int check_adress(char *adress, int line)
+{
+    return 0;
+}
 
+int name_function(char *nameFunc, int line)
+{
+    return 0;
+}
+
+int valid_variable(char *var, int line)
+{
+    return 0;
+}
+
+int valid_directive(char *directive, int line)
+{
+    return 0;
+}
+
+int valid_data(char *data, int line)
+{
+    return 0;
+}
+
+int valid_string(char *string, int line)
+{
+    return 0;
+}
+
+int defined_label(char *label, int line)
+{
+    return 0;
+}
+
+int valid_label(char *label, int line)
+{
+    return 0;
+}
