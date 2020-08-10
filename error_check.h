@@ -14,6 +14,7 @@ int defined_label(char *, int);/*When using a label in a command,
                                  we will check that such a label has been defined.*/
 int valid_number(char *, int); /*Checks whether the number is integer (positive / negative)*/
 int valid_string(char *, int); /*Checks if the string is valid*/
+int valid_data(char *, int); /*Checks if the .data is valid*/
 int valid_directive(char *, int);/**/
 int valid_variable(char *, int);/*Checks whether the defined variables are valid*/
 int valid_register(char *, int);/*Checking the validity of registers (r0-r7)*/
