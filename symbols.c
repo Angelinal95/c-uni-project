@@ -28,14 +28,35 @@ int insert_into_symbol_table(char *symbol_name, int num, char *type_of_symbol, s
         return 0;
    }
 
-/*
 
-   insert_into_command_list(char *type_of_inst, char *info, char *pointer_to_row_in_symbol_table){
-   
+
+   insert_into_command_list(char *pointer_to_row_in_symbol_table, char *operand_src,char *operand_dest, char *name_of_command,command_line *command_line_list){
+       command_line *new_command_line;
+       new_command_line=(new_command_line*)malloc(sizeof(new_command_line));
+       new_command_line->label=pointer_to_row_in_symbol_table;
+       new_command_line->operand_src=operand_src;
+       new_command_line->operand_dest=operand_dest;
+    /*  while(!=NULL){
+          
+          if(){
+        new_command_line->cmd= ;
+            break;
+          }
+          
+          check if I should make a pointer array out of the command list and according to that make the comparison
+          
+      }
+       */
+        new_command_line->next=command_line_list;
+       command_line_list=new_command_line;
+       
+
+
+       
         return 0;
    }
    
-   */
+
 
 
 int erase_table()
