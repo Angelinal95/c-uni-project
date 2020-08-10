@@ -28,8 +28,7 @@ typedef struct
 {  
     char *label; /*A pointer to the symbol_table*/
 	const command *cmd; /* A pointer to the command in g_cmdArr */
-    char *action;
-    char *operand_src;
+        char *operand_src;
     char *operand_dest;
 	command_line *next;
 
