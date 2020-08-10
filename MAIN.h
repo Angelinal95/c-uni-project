@@ -4,10 +4,7 @@
 #include <mm_malloc.h>
 
 /*---------------------structers------------------------*/
-typedef struct
-{
-    char *term;
-} index_term;
+
 
 typedef struct
 {
@@ -65,7 +62,7 @@ typedef struct
 
 
 
-/*---------------------global variables-------------------*/
+/*-----------------------global variables-----------------------*/
 
 int IC = 100;
 int DC = 0;
@@ -73,4 +70,18 @@ int max_row_len = 80;
 int line_num; //the line number we're at
 int error;    //global variable to mark an error
 
-/*------------------------functions------------------------*/
+/*------------------------functions----------------------------*/
+
+
+
+/*------------------------Register List ------------------------*/
+
+char registers[] = {
+    {"r_0"}, {"r_1"}, {"r_2"}, {"r_3"}, {"r_4"}, {"r_5"}, {"r_6"}, {"r_7"}};
+
+
+/*------------------------Commands List ------------------------*/
+
+
+command command_list[] = {{"mov", NULL, 0,2}, {"cmp",NULL,1,2}, {"add",1,2,2}, {"sub",2,2,2}, {"lea",NULL,4,2}, {"clr",1,5,1}, {"not",2,5,1}, {"inc",3,5,1}, {"dec",4,5,1}, {"jmp",1,9,1}, {"bne",2,9,1}, {"jsr"3,9,1}, {"red",NULL,12,1}, {"prn",NULL,13,1}, {"rts",NULL,14,0}, {"stop",NULL,15,0}};
+
