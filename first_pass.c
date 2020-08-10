@@ -1,6 +1,8 @@
 #include "MAIN.h"
 #include "error_check.h"
 
+command_line *command_line_list;
+instruction_line *instruction_line_list;
 
 
 int main_pass(char *filename)
@@ -79,8 +81,8 @@ int main_pass(char *filename)
             if (strcmp(token, ".data"))
             {token = strtok(NULL, s)
                  if(valid_data(token)){
-                
-                }
+                          insert_into_instruction_list(".data",token);
+                }   
             }
 
             else if (strcmp(token, ".string"))
@@ -88,7 +90,7 @@ int main_pass(char *filename)
             {
                 token = strtok(NULL, s)
                 if(valid_string(token)){
-                
+                    insert_into_instruction_list(".string",token);
                 }
             }
 
