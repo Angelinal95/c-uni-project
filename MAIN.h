@@ -37,7 +37,7 @@ typedef struct instruction_line
     char *type_of_inst;
 
     char *info;
-    instruction_line *next;
+    struct instruction_line *next;
 };
 
 typedef struct
