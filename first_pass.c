@@ -4,6 +4,9 @@
 struct command_line *command_line_list;
 struct instruction_line *instruction_line_list;
 struct symbols_table *symbols_list;
+int count_c_lines = 0;
+int count_i_lines = 0;
+int count_symbols = 0;
 
 int main_pass(char *filename)
 {
@@ -53,7 +56,7 @@ int main_pass(char *filename)
     int ignore_line(char *token)
     {
 
-        return (skip_white_space(token) == NULL) || (strcmp(token, ";"));
+        return (skip_white_space(token) == NULL) || (strcmp(token, ";") == 0);
     }
 
     //analyzing what's in the current line
@@ -76,17 +79,18 @@ int main_pass(char *filename)
         {
             temp_com_or_inst = "data";
 
-            if (strcmp(token, ".data"))
+            if (strcmp(token, ".data") == 0)
             {
                 token = strtok(NULL, s);
                 if (valid_data(token))
                 {
                     token = strtok(NULL, s);
-                    insert_into_instruction_list(".data", token, instruction_line_list, search_row_in_symbol_table());
+                    insert_into_instruction_list(count_i_lines, ".data", token, instruction_line_list, search_row_in_symbol_table());
+                    count_i_lines++;
                 }
             }
 
-            else if (strcmp(token, ".string"))
+            else if (strcmp(token, ".string") == 0)
 
             {
                 token = strtok(NULL, s);
@@ -94,11 +98,12 @@ int main_pass(char *filename)
                 if (valid_string(token))
                 {
                     token = strtok(NULL, s);
-                    insert_into_instruction_list(".string", token, instruction_line_list, search_row_in_symbol_table());
+                    insert_into_instruction_list(count_i_lines, ".string", token, instruction_line_list, search_row_in_symbol_table());
+                    count_i_lines++;
                 }
             }
 
-            else if (strcmp(token, ".extern"))
+            else if (strcmp(token, ".extern") == 0)
             {
                 token = strtok(NULL, s)
             }
@@ -151,7 +156,8 @@ int main_pass(char *filename)
                     token = strtok(NULL, s);
                 }
 
-                insert_into_command_list(temp, symbols_list, operand_src, operand_dest, command_line_list);
+                insert_into_command_list(count_c_lines, temp, symbols_list, operand_src, operand_dest, command_line_list);
+                count_c_lines++;
             }
             else
             {
@@ -162,13 +168,15 @@ int main_pass(char *filename)
 
         if (temp_label != NULL)
         {
-            if (strcmp(temp_com_or_ins, "code"))
+            if (strcmp(temp_com_or_ins, "code") == 0)
             {
-                insert_into_symbols_table(temp_label, IC, temp_com_or_ins, symbols_list);
+                insert_into_symbols_table(count_symbols, temp_label, IC, temp_com_or_ins, symbols_list);
+                count_symbols++;
             }
             else
             {
-                insert_into_symbols_table(temp_label, DC, temp_com_or_ins, symbols_list);
+                insert_into_symbols_table(count_symbols, temp_label, DC, temp_com_or_ins, symbols_list);
+                count_symbols++;
             }
         }
     }
@@ -198,8 +206,15 @@ int skip_white_space(char *token)
     return 0;
 }
 
-int search_row_in_symbol_table()
+int search_row_in_symbol_table(struct symbols_table *symbols_list, char *temp_label)
 {
+    while (symbols_list->value != NULL)
+    {
+        if (strcmp(temp_label, symbols_list.label) == 0)
+        {
+            return 1; /*if label was found*/
+        }
+    }
 
     return 0;
 }
