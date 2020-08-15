@@ -62,34 +62,38 @@ int main_pass(char *filename)
         char *temp_com_or_inst;
 
         //checking if there's a label and taking care of it
-        if (strchr(str, ':') != NULL)
+        if (strchr(token, ':') != NULL)
         {
             if (legal_label(token) == 1)
             {
                 temp_label = token;
+                token = strtok(NULL, s);
             }
         }
 
-        token = strtok(NULL, s)
-
-            if (check_if_com_or_inst(token) == 1)
+        if (check_if_com_or_inst(token) == 1)
         {
-            temp_com_or_inst = "data";
+            temp_com_or_inst = "instruction";
 
             if (strcmp(token, ".data"))
             {
-                token = strtok(NULL, s) if (valid_data(token))
+                token = strtok(NULL, s);
+                if (valid_data(token))
                 {
-                    insert_into_instruction_list(".data", token);
+                    token = strtok(NULL, s);
+                    insert_into_instruction_list(".data", token, instruction_line_list, search_row_in_symbol_table());
                 }
             }
 
             else if (strcmp(token, ".string"))
 
             {
-                token = strtok(NULL, s) if (valid_string(token))
+                token = strtok(NULL, s);
+
+                if (valid_string(token))
                 {
-                    insert_into_instruction_list(".string", token);
+                    token = strtok(NULL, s);
+                    insert_into_instruction_list(".string", token, instruction_line_list, search_row_in_symbol_table());
                 }
             }
 
@@ -120,17 +124,6 @@ int main_pass(char *filename)
         {
             insert_into_symbols_table(temp_label, temp_com_or_ins);
         }
-
-        token = strtok(NULL, s)
-
-            if (token != NULL)
-        {
-            token = strtok(NULL, s)
-
-                if (token != NULL)
-            {
-            }
-        }
     }
 }
 
@@ -155,5 +148,11 @@ int skip_white_space(char *token)
         token = ++token;
         temp = *token;
     }
+    return 0;
+}
+
+int search_row_in_symbol_table()
+{
+
     return 0;
 }
