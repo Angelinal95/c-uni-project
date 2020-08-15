@@ -30,22 +30,24 @@ insert_into_instruction_list(char *type_of_inst, char *info, char *pointer_to_ro
 
 insert_into_command_list(char *pointer_to_row_in_symbol_table, char *operand_src, char *operand_dest, char *name_of_command, struct command_line *command_line_list)
 {
+    int i = 0;
     struct command_line *new_command_line;
     new_command_line = (struct command_line *)malloc(sizeof(struct command_line));
     new_command_line->label = pointer_to_row_in_symbol_table;
     new_command_line->operand_src = operand_src;
     new_command_line->operand_dest = operand_dest;
-    /*  while(!=NULL){
-          
-          if(){
-        new_command_line->cmd= ;
+
+    while (command_list[i].name != NULL)
+    {
+        if (strcmp(name_of_command, command_list[i].name) == 0)
+        {
+            new_command_line->cmd = &command_list[i];
+
             break;
-          }
-          
-          check if I should make a pointer array out of the command list and according to that make the comparison
-          
-      }
-       */
+        }
+        i++;
+    }
+
     new_command_line->next = command_line_list;
     command_line_list = new_command_line;
 

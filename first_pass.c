@@ -3,6 +3,7 @@
 
 struct command_line *command_line_list;
 struct instruction_line *instruction_line_list;
+struct symbols_table *symbols_list;
 
 int main_pass(char *filename)
 {
@@ -73,7 +74,7 @@ int main_pass(char *filename)
 
         if (check_if_com_or_inst(token) == 1)
         {
-            temp_com_or_inst = "instruction";
+            temp_com_or_inst = "data";
 
             if (strcmp(token, ".data"))
             {
@@ -122,7 +123,14 @@ int main_pass(char *filename)
 
         if (temp_label != NULL)
         {
-            insert_into_symbols_table(temp_label, temp_com_or_ins);
+            if (strcmp(temp_com_or_ins, "code"))
+            {
+                insert_into_symbols_table(temp_label, IC, temp_com_or_ins, symbols_list);
+            }
+            else
+            {
+                insert_into_symbols_table(temp_label, DC, temp_com_or_ins, symbols_list);
+            }
         }
     }
 }
