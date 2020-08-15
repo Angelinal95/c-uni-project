@@ -1,9 +1,8 @@
 #include "MAIN.h"
 #include "error_check.h"
 
-command_line *command_line_list;
-instruction_line *instruction_line_list;
-
+struct command_line *command_line_list;
+struct instruction_line *instruction_line_list;
 
 int main_pass(char *filename)
 {
@@ -26,7 +25,7 @@ int main_pass(char *filename)
     {
         line_count++;
         error = 0;
-        symbols_table *symbols_table = NULL;
+        struct symbols_table *symbols_table = NULL;
         token = strtok(temp, s);
 
         //checking if the length of the line is more than 80 characters
@@ -57,7 +56,7 @@ int main_pass(char *filename)
     }
 
     //analyzing what's in the current line
-    int go_through_line(char *token, symbols_table *symbols_table)
+    int go_through_line(char *token, struct symbols_table *symbols_table)
     {
         char *temp_label = NULL;
         char *temp_com_or_inst;
@@ -76,21 +75,21 @@ int main_pass(char *filename)
             if (check_if_com_or_inst(token) == 1)
         {
             temp_com_or_inst = "data";
-                
 
             if (strcmp(token, ".data"))
-            {token = strtok(NULL, s)
-                 if(valid_data(token)){
-                          insert_into_instruction_list(".data",token);
-                }   
+            {
+                token = strtok(NULL, s) if (valid_data(token))
+                {
+                    insert_into_instruction_list(".data", token);
+                }
             }
 
             else if (strcmp(token, ".string"))
-                
+
             {
-                token = strtok(NULL, s)
-                if(valid_string(token)){
-                    insert_into_instruction_list(".string",token);
+                token = strtok(NULL, s) if (valid_string(token))
+                {
+                    insert_into_instruction_list(".string", token);
                 }
             }
 

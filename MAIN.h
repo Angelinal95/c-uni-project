@@ -5,48 +5,41 @@
 
 /*---------------------structers------------------------*/
 
-
-typedef struct
+typedef struct symbols_table
 {
-    symbols_table *next;
+    struct symbols_table *next;
     char *label;
     char *value;
     char *type_of_symbol;
+};
 
-} symbols_table;
-
-
-typedef struct {
-	char *name;
-     unsigned int funct;
-	unsigned int opcode;
-   int numOfParams;
+typedef struct
+{
+    char *name;
+    unsigned int funct;
+    unsigned int opcode;
+    int numOfParams;
 } command;
 
-
-typedef struct
-{  
-    char *label; /*A pointer to the symbol_table*/
-	const command *cmd; /* A pointer to the command in g_cmdArr */
-        char *operand_src;
+typedef struct command_line
+{
+    char *label;        /*A pointer to the symbol_table*/
+    const command *cmd; /* A pointer to the command in g_cmdArr */
+    char *operand_src;
     char *operand_dest;
-	command_line *next;
+    struct command_line *next;
+};
 
-} command_line;
+typedef struct instruction_line
 
-typedef struct
-	
-{     char *label; /*A pointer to the symbol_table*/
-	char *type_of_inst; 
-  
+{
+    char *label; /*A pointer to the symbol_table*/
+    char *type_of_inst;
+
     char *info;
- instruction_line *next;
+    instruction_line *next;
+};
 
-}instruction_line;
-
-
-
-    
 typedef struct
 {
     char *opcode;
@@ -60,12 +53,6 @@ typedef struct
     int E;
 } full_instruction;
 
-
-
-
-
-
-
 /*-----------------------global variables-----------------------*/
 
 int IC = 100;
@@ -76,16 +63,11 @@ int error;    //global variable to mark an error
 
 /*------------------------functions----------------------------*/
 
-
-
 /*------------------------Register List ------------------------*/
 
 char registers[] = {
-    {"r_0"}, {"r_1"}, {"r_2"}, {"r_3"}, {"r_4"}, {"r_5"}, {"r_6"}, {"r_7"},{ NULL }};
-
+    {"r_0"}, {"r_1"}, {"r_2"}, {"r_3"}, {"r_4"}, {"r_5"}, {"r_6"}, {"r_7"}, {NULL}};
 
 /*------------------------Commands List ------------------------*/
 
-
-command command_list[] = {{"mov", NULL, 0,2}, {"cmp",NULL,1,2}, {"add",1,2,2}, {"sub",2,2,2}, {"lea",NULL,4,2}, {"clr",1,5,1}, {"not",2,5,1}, {"inc",3,5,1}, {"dec",4,5,1}, {"jmp",1,9,1}, {"bne",2,9,1}, {"jsr"3,9,1}, {"red",NULL,12,1}, {"prn",NULL,13,1}, {"rts",NULL,14,0}, {"stop",NULL,15,0},{ NULL }};
-
+command command_list[] = {{"mov", NULL, 0, 2}, {"cmp", NULL, 1, 2}, {"add", 1, 2, 2}, {"sub", 2, 2, 2}, {"lea", NULL, 4, 2}, {"clr", 1, 5, 1}, {"not", 2, 5, 1}, {"inc", 3, 5, 1}, {"dec", 4, 5, 1}, {"jmp", 1, 9, 1}, {"bne", 2, 9, 1}, {"jsr" 3, 9, 1}, {"red", NULL, 12, 1}, {"prn", NULL, 13, 1}, {"rts", NULL, 14, 0}, {"stop", NULL, 15, 0}, {NULL}};
