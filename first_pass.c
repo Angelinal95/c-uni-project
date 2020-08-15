@@ -269,3 +269,33 @@ operand *build_operand()
 
     return new_operand;
 }
+
+/*/* Adds the number to the g_dataArr and increases DC. Returns if it succeeded
+bool addNumberToData(int num, int *IC, int *DC, int lineNum)
+{
+    /* Check if there is enough space in g_dataArr for the data 
+    if (*DC + *IC < MAX_DATA_NUM)
+    {
+        g_dataArr[(*DC)++] = num;
+    }
+    else
+    {
+        return FALSE;
+    }
+
+    return TRUE;
+}
+*/
+/* Adds the str to the g_dataArr and increases DC. Returns if it succeeded. 
+bool addStringToData(char *str, int *IC, int *DC, int lineNum)
+{
+    do
+    {
+        if (!addNumberToData((int)*str, IC, DC, lineNum))
+        {
+            return FALSE;
+        }
+    } while (*str++);
+
+    return TRUE;
+}*/
