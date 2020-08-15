@@ -4,6 +4,12 @@
 #include <mm_malloc.h>
 
 /*---------------------structers------------------------*/
+typedef struct
+{
+    unsigned int Addressing_Mode;
+    char *operand_value;
+
+} operand;
 
 typedef struct symbols_table
 {
@@ -25,8 +31,8 @@ typedef struct command_line
 {
     char *label;        /*A pointer to the symbol_table*/
     const command *cmd; /* A pointer to the command in g_cmdArr */
-    char *operand_src;
-    char *operand_dest;
+    operand *operand_src;
+    operand *operand_dest;
     struct command_line *next;
 };
 

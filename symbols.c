@@ -46,7 +46,7 @@ insert_into_instruction_list(int count_i_lines, char *type_of_inst, char *info, 
     return 0;
 }
 
-insert_into_command_list(int count_c_lines, command *pointer_to_com, char *pointer_to_row_in_symbol_table, char *operand_src, char *operand_dest, struct command_line *command_line_list)
+insert_into_command_list(int count_c_lines, command *pointer_to_com, char *pointer_to_row_in_symbol_table, operand *operand_src, operand *operand_dest, struct command_line *command_line_list)
 {
     int i = 0;
     struct command_line *new_command_line;

@@ -224,3 +224,48 @@ int search_row_in_symbol_table(struct symbols_table *symbols_list, char *temp_la
 
     return 0;
 }
+
+int is_Instant()
+{
+
+    return 0;
+}
+int is_Direct()
+{
+
+    return 0;
+}
+int is_Relative()
+{
+
+    return 0;
+}
+int is_register()
+{
+
+    return 0;
+}
+
+operand *build_operand()
+{
+    operand *new_operand;
+    if (is_Instant() == 1)
+    {
+    }
+    else if (is_Direct() == 1)
+    {
+    }
+    else if (is_Relative() == 1)
+    {
+    }
+    else if (is_register() == 1)
+    {
+    }
+    else
+    {
+
+        /*error - complete it*/
+    }
+
+    return new_operand;
+}
