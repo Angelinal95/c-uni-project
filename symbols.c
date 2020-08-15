@@ -28,7 +28,7 @@ insert_into_instruction_list(char *type_of_inst, char *info, char *pointer_to_ro
     return 0;
 }
 
-insert_into_command_list(char *pointer_to_row_in_symbol_table, char *operand_src, char *operand_dest, char *name_of_command, struct command_line *command_line_list)
+insert_into_command_list(command *pointer_to_com, char *pointer_to_row_in_symbol_table, char *operand_src, char *operand_dest, struct command_line *command_line_list)
 {
     int i = 0;
     struct command_line *new_command_line;
@@ -37,16 +37,7 @@ insert_into_command_list(char *pointer_to_row_in_symbol_table, char *operand_src
     new_command_line->operand_src = operand_src;
     new_command_line->operand_dest = operand_dest;
 
-    while (command_list[i].name != NULL)
-    {
-        if (strcmp(name_of_command, command_list[i].name) == 0)
-        {
-            new_command_line->cmd = &command_list[i];
-
-            break;
-        }
-        i++;
-    }
+    new_command_line->cmd = pointer_to_com;
 
     new_command_line->next = command_line_list;
     command_line_list = new_command_line;

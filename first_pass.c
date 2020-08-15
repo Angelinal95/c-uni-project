@@ -112,11 +112,50 @@ int main_pass(char *filename)
         else
         {
             temp_com_or_inst = "code";
-            if (name_function() == 1)
+            command *temp;
+            int i = 0;
+            while (command_list[i].name != NULL)
             {
+                if (strcmp(token, command_list[i].name) == 0)
+                {
+                    temp = &command_list[i];
+
+                    break;
+                }
+                i++;
+            }
+            if (i < 16)
+            {
+                int j = 0;
+                char *operand_src;
+                char *operand_dest;
+                token = strtok(NULL, s);
+                while (token != NULL)
+                {
+                    if (j == 0)
+                    {
+
+                        operand_src = token;
+                    }
+                    else if ((j == 1) && (strcmp(token, ',') != 0))
+                    {
+                        /*there's an error - func doesn't exist*/
+                    }
+
+                    else if (j == 2)
+                    {
+                        operand_dest = token;
+                    }
+
+                    j++;
+                    token = strtok(NULL, s);
+                }
+
+                insert_into_command_list(temp, symbols_list, operand_src, operand_dest, command_line_list);
             }
             else
             {
+                /*there's an error - func doesn't exist*/
                 return 0;
             }
         }
