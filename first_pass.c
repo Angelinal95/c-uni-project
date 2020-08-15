@@ -7,8 +7,10 @@ struct symbols_table *symbols_list;
 int count_c_lines = 0;
 int count_i_lines = 0;
 int count_symbols = 0;
+struct symbols_table *pointer_to_row
 
-int main_pass(char *filename)
+    int
+    main_pass(char *filename)
 {
     FILE *fd;
     int line_count = 0;
@@ -64,6 +66,7 @@ int main_pass(char *filename)
     {
         char *temp_label = NULL;
         char *temp_com_or_inst;
+        struct symbols_table *pointer_to_row = NULL;
 
         //checking if there's a label and taking care of it
         if (strchr(token, ':') != NULL)
@@ -206,14 +209,16 @@ int skip_white_space(char *token)
     return 0;
 }
 
-int search_row_in_symbol_table(struct symbols_table *symbols_list, char *temp_label)
+int search_row_in_symbol_table(struct symbols_table *symbols_list, char *temp_label, struct symbols_table *pointer_to_row)
 {
     while (symbols_list->value != NULL)
     {
         if (strcmp(temp_label, symbols_list.label) == 0)
         {
+            pointer_to_row = &symbols_list;
             return 1; /*if label was found*/
         }
+        symbols_list = symbols_list->next;
     }
 
     return 0;
