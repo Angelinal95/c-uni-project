@@ -88,7 +88,7 @@ struct symbols_table *pointer_to_row
                 if (valid_data(token))
                 {
                     token = strtok(NULL, s);
-                    insert_into_instruction_list(count_i_lines, ".data", token, instruction_line_list, search_row_in_symbol_table());
+                    insert_into_instruction_list(count_i_lines, ".data", pointer_to_row, token, instruction_line_list, search_row_in_symbol_table());
                     count_i_lines++;
                 }
             }
@@ -101,7 +101,7 @@ struct symbols_table *pointer_to_row
                 if (valid_string(token))
                 {
                     token = strtok(NULL, s);
-                    insert_into_instruction_list(count_i_lines, ".string", token, instruction_line_list, search_row_in_symbol_table());
+                    insert_into_instruction_list(count_i_lines, ".string", pointer_to_row, token, instruction_line_list, search_row_in_symbol_table());
                     count_i_lines++;
                 }
             }
@@ -159,7 +159,7 @@ struct symbols_table *pointer_to_row
                     token = strtok(NULL, s);
                 }
 
-                insert_into_command_list(count_c_lines, temp, symbols_list, operand_src, operand_dest, command_line_list);
+                insert_into_command_list(count_c_lines, temp, pointer_to_row, symbols_list, operand_src, operand_dest, command_line_list);
                 count_c_lines++;
             }
             else
@@ -209,6 +209,7 @@ int skip_white_space(char *token)
     return 0;
 }
 
+/*get the adress of the label*/
 int search_row_in_symbol_table(struct symbols_table *symbols_list, char *temp_label, struct symbols_table *pointer_to_row)
 {
     while (symbols_list->value != NULL)
