@@ -15,7 +15,7 @@ int insert_into_symbol_table(char *symbol_name, int num, char *type_of_symbol, s
     return 0;
 }
 
-insert_into_instruction_list(char *type_of_inst, char *info, char *pointer_to_row_in_symbol_table, instruction_line *instruction_line_list)
+insert_into_instruction_list(char *type_of_inst, char *info, char *pointer_to_row_in_symbol_table, struct instruction_line *instruction_line_list)
 {
     struct instruction_line *new_inst_line;
     new_inst_line = (struct instruction_line *)malloc(sizeof(struct instruction_line));
@@ -28,10 +28,10 @@ insert_into_instruction_list(char *type_of_inst, char *info, char *pointer_to_ro
     return 0;
 }
 
-insert_into_command_list(char *pointer_to_row_in_symbol_table, char *operand_src, char *operand_dest, char *name_of_command, command_line *command_line_list)
+insert_into_command_list(char *pointer_to_row_in_symbol_table, char *operand_src, char *operand_dest, char *name_of_command, struct command_line *command_line_list)
 {
     struct command_line *new_command_line;
-    new_command_line = (struct new_command_line *)malloc(sizeof(struct new_command_line));
+    new_command_line = (struct command_line *)malloc(sizeof(struct command_line));
     new_command_line->label = pointer_to_row_in_symbol_table;
     new_command_line->operand_src = operand_src;
     new_command_line->operand_dest = operand_dest;
