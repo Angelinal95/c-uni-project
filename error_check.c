@@ -6,111 +6,111 @@ void show_error(errorType typeName, int line_num)
     {
 
     case function:
-        printf("line: %d, there's no such function\n\n", line_num);
+        printf("error in line: %d, there's no such function\n\n", line_num);
         break;
 
     case manyOperands:
-        printf("line: %d,too many operands\n\n", line_num);
+        printf("error in line: %d, too many operands\n\n", line_num);
         break;
 
     case littleOperands:
-        printf("line: %d,too little operands\n\n", line_num);
+        printf("error in line: %d, too little operands\n\n", line_num);
         break;
 
     case typeOperand:
-        printf("line: %d,incorrect type of source operand\n\n", line_num);
+        printf("error in line: %d, incorrect type of source operand\n\n", line_num);
         break;
 
     case typeDestination:
-        printf("line: %d,incorrect type of destination operand\n\n", line_num);
+        printf("error in line: %d, incorrect type of destination operand\n\n", line_num);
         break;
 
     case destinationNotFound:
-        printf("line: %d,destination operand doesn't exist\n\n", line_num);
+        printf("error in line: %d, destination operand doesn't exist\n\n", line_num);
         break;
 
     case sourceNotFound:
-        printf("line: %d,source operand doesn't exist\n\n", line_num);
+        printf("error in line: %d, source operand doesn't exist\n\n", line_num);
         break;
 
     case incorrectStatement:
-        printf("line: %d,incorrect structure of the statement\n\n", line_num);
+        printf("error in line: %d, incorrect structure of the statement\n\n", line_num);
         break;
 
     case labelExists:
-        printf("line: %d,label already exists\n\n", line_num);
+        printf("error in line: %d, label already exists\n\n", line_num);
         break;
 
     case savedWord:
-        printf("line: %d,labale's name is the same as the name of a saved word\n\n", line_num);
+        printf("error in line: %d, labale's name is the same as the name of a saved word\n\n", line_num);
         break;
 
     case whiteSpace:
-        printf("line: %d,there's a white space in the label.\n\n", line_num);
+        printf("error in line: %d, there's a white space in the label.\n\n", line_num);
         break;
 
     case missingQuotation:
-        printf("line: %d,missing quotation from a .string diractive statement\n\n", line_num);
+        printf("error in line: %d, missing quotation from a .string diractive statement\n\n", line_num);
         break;
 
     case undifinedLabel:
-        printf("line: %d,usage of an undifined label\n\n");
+        printf("error in line: %d, usage of an undifined label\n\n");
         break;
 
     case labelIsStatement:
-        printf("line: %d,label can't be a directive statement\n\n", line_num);
+        printf("error in line: %d, label can't be a directive statement\n\n", line_num);
         break;
 
     case labelInstruction:
-        printf("line: %d,label can't be an instruction\n\n", line_num);
+        printf("error in line: %d, label can't be an instruction\n\n", line_num);
         break;
 
     case labelIsExternal:
-        printf("line: %d,label is already defined as being external\n\n", line_num);
+        printf("error in line: %d, label is already defined as being external\n\n", line_num);
         break;
 
     /*case labelIsInternal:
-            printf("label is already defined as being internal");
+            printf("error in line: %d, label is already defined as being internal.\n\n", line_num);
             break;*/
 
     case notNumber:
-        printf("line: %d,not a number\n\n", line_num);
+        printf("error in line: %d, not a number\n\n", line_num);
         break;
 
     case notString:
-        printf("line: %d,not a string\n\n", line_num);
+        printf("error in line: %d, not a string\n\n", line_num);
         break;
 
     case tokenLength:
-        printf("line: %d,token's length is higher than %d\n\n", line_num, max_row_len);
+        printf("error in line: %d, token's length is higher than %d\n\n", line_num, max_row_len);
         break;
 
     case longRow:
-        printf("line: %d,row too long(more than %d characters)\n\n", line_num, max_row_len);
+        printf("error in line: %d, row too long(more than %d characters)\n\n", line_num, max_row_len);
         break;
 
     case invalidAdress:
-        printf("line: %d,invalid adress\n\n", line_num);
+        printf("error in line: %d, invalid adress\n\n", line_num);
         break;
 
     case manyLabelsSameRow:
-        printf("line: %d, too many labels in the same row\n\n", line_num);
+        printf("error in line: %d, too many labels in the same row\n\n", line_num);
         break;
 
     case manyOpcodeSameLine:
-        printf("line: %d, too many opcodes in the same line\n\n", line_num);
+        printf("error in line: %d, too many opcodes in the same line\n\n", line_num);
         break;
 
     case notValidRegister: 
-        printf("line: %d, not a valid register\n\n", line_num);
+        printf("error in line: %d, not a valid register\n\n", line_num);
         break;
 
     case longLabel:
-        printf("line: %d, label too long (more then %d characters).\n\n", line_num, LABEL_LENGTH);
+        printf("error in line: %d, label too long (more then %d characters).\n\n", line_num, LABEL_LENGTH);
         break;
 
     case invalidLabel:
-        printf("line: %d, invalid label\n\n");
+        printf("error in line: %d, invalid label\n\n");
         break;
 
     case invalidData:
@@ -169,9 +169,43 @@ int check_extern_label(char *label, int line)
     return 0;
 }
 
-int check_entry_label(char *label, int line)
+int check_entry_label(char *entry, int line)
 {
-    return 0;
+    int i, indexLabel = strspn(entry, ".entry"), word = 0;
+
+
+    i = indexLabel;
+    while (*(entry+i) != '\0')
+    {
+        if (*(entry+i) == ' ') 
+        {
+            i++;
+            continue;    
+        }
+        else
+        {
+            while (*(entry+i) != ' ' && *(entry+i) != '\0' )
+            {
+                i++;
+            }
+            word++;
+        } 
+    }
+
+    if (word == 1)
+    {
+        if(valid_label(entry+indexLabel, line) && defined_label(entry+indexLabel, line))
+        {
+            return TRUE;
+        } 
+        else return FALSE;
+    }
+
+    else //(word == 0) || (word > 1)
+    {
+        show_error(incorrectStatement, line);
+        return FALSE;
+    }
 }
 
 int check_adress(char *adress, int line)
