@@ -1,8 +1,8 @@
 #include "error_check.h"
 
-void show_error(int num_er, int line_num)
+void show_error(errorType typeName, int line_num)
 {
-    switch (num_er)
+    switch (typeName)
     {
 
     case function:
@@ -111,6 +111,10 @@ void show_error(int num_er, int line_num)
 
     case invalidLabel:
         printf("line: %d, invalid label\n\n");
+        break;
+
+    case invalidData:
+        printf("error in line: %d, invalid data.\n\n");
         break;
     }
 }
@@ -282,7 +286,28 @@ int valid_variable(char *var, int line)
 
 int valid_directive(char *directive, int line)
 {
-    return 0;
+
+    if(strcmp(directive, ".data") == 0)
+    {
+        return TRUE;
+    }
+    else if (strcmp(directive,".string") == 0)
+    {
+        return TRUE;
+    }
+    else if (strcmp(directive,".entry") == 0)
+    {
+        return TRUE;
+    }   
+    else if (strcmp(directive,".extern") == 0)
+    {
+        return TRUE;
+    }
+    else
+    {
+        show_error(incorrectStatement,line);
+        return FALSE;
+    }
 }
 
 int valid_data(char *data, int line)

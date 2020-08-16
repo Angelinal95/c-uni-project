@@ -7,10 +7,10 @@ struct symbols_table *symbols_list;
 int count_c_lines = 0;
 int count_i_lines = 0;
 int count_symbols = 0;
-struct symbols_table *pointer_to_row
+struct symbols_table *pointer_to_row;
 
-    int
-    main_pass(char *filename)
+
+ int main_pass(char *filename)
 {
     FILE *fd;
     int line_count = 0;
@@ -58,7 +58,7 @@ struct symbols_table *pointer_to_row
     int ignore_line(char *token)
     {
 
-        return (skip_white_space(token) == NULL) || (strcmp(token, ";") == 0);
+        return ((skip_white_space(token) == NULL) || (strcmp(token, ";") == 0));
     }
 
     //analyzing what's in the current line
