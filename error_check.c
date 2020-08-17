@@ -164,9 +164,53 @@ int valid_register(char *reg, int line)
     return TRUE;
 }
 
-int check_extern_label(char *label, int line)
+int check_extern_label(char *strExtern, int line)
 {
-    return 0;
+    int i, indexLabel = strspn(strExtern, ".extern"), word = 0;
+
+
+    i = indexLabel;
+
+    if (*(strExtern+i) == ' ')
+    {
+        i++;
+    
+        while (*(strExtern+i) != '\0')
+        {
+            if (*(strExtern+i) == ' ') 
+            {
+                i++;
+                continue;    
+            }
+            else
+            {
+                while (*(strExtern+i) != ' ' && *(strExtern+i) != '\0' )
+                {
+                    i++;
+                }
+                word++;
+            } 
+        }
+        if (word == 1)
+        {
+            if( (valid_label(strExtern+indexLabel, line)) && (!(defined_label(strExtern+indexLabel, line)) ))
+            {
+                return TRUE;
+            } 
+            else return FALSE;
+        }
+
+        else //(word == 0) || (word > 1)
+        {
+            show_error(incorrectStatement, line);
+            return FALSE;
+        }
+    }
+    else
+    {
+        return FALSE;
+    }
+    
 }
 
 int check_entry_label(char *entry, int line)
@@ -175,37 +219,47 @@ int check_entry_label(char *entry, int line)
 
 
     i = indexLabel;
-    while (*(entry+i) != '\0')
+
+    if (*(entry+i) == ' ')
     {
-        if (*(entry+i) == ' ') 
+        i++;
+    
+        while (*(entry+i) != '\0')
         {
-            i++;
-            continue;    
-        }
-        else
-        {
-            while (*(entry+i) != ' ' && *(entry+i) != '\0' )
+            if (*(entry+i) == ' ') 
             {
                 i++;
+                continue;    
             }
-            word++;
-        } 
-    }
-
-    if (word == 1)
-    {
-        if(valid_label(entry+indexLabel, line) && defined_label(entry+indexLabel, line))
+            else
+            {
+                while (*(entry+i) != ' ' && *(entry+i) != '\0' )
+                {
+                    i++;
+                }
+                word++;
+            } 
+        }
+        if (word == 1)
         {
-            return TRUE;
-        } 
-        else return FALSE;
-    }
+            if(valid_label(entry+indexLabel, line) && defined_label(entry+indexLabel, line))
+            {
+                return TRUE;
+            } 
+            else return FALSE;
+        }
 
-    else //(word == 0) || (word > 1)
+        else //(word == 0) || (word > 1)
+        {
+            show_error(incorrectStatement, line);
+            return FALSE;
+        }
+    }
+    else
     {
-        show_error(incorrectStatement, line);
         return FALSE;
     }
+
 }
 
 int check_adress(char *adress, int line)
