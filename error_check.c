@@ -193,7 +193,7 @@ int check_extern_label(char *strExtern, int line)
         }
         if (word == 1)
         {
-            if( (valid_label(strExtern+indexLabel, line)) && (!(defined_label(strExtern+indexLabel, line)) ))
+            if( (valid_label(strExtern+indexLabel, line)) /*&& (!(defined_label(strExtern+indexLabel, line)) )*/)
             {
                 return TRUE;
             } 
@@ -405,7 +405,7 @@ int valid_data(char *data, int line)
 
 int valid_string(char *string, int line)
 {
-    int i, firstChar, firstAssci=0, lastAssci=177;
+    int i, firstChar, firstAssci=32, lastAssci=127;
     
     if (string == NULL)
     {
