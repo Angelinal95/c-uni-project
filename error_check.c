@@ -123,17 +123,17 @@ int valid_number(char *checkNum, int line)
 {
     int i;
 
-    if(checkNum == NULL)
-    {
-        printf("No variable of type number was obtained for the function\n");
-        return FALSE;
-    }
+    checkNum += count_spaces(checkNum); // skip the spaces in the begining of checkNum
 
-    else if((checkNum[0] == '#') || (checkNum[0] == '-') || (checkNum[0] == '+') || ((checkNum[0] >= '0' )&& (checkNum[0] <= '9')))
+    if (*checkNum == '#') 
     {
-        for(i=1; i <= strlen(checkNum); i++)
+        checkNum++;
+
+        if ((*checkNum == '-') || (*checkNum == '+') || ((*checkNum >= '0' ) && (*checkNum <= '9')))
+
+        for (i=1; i <= strlen(checkNum); i++)
         {
-            if((checkNum[i] < '0') || (checkNum[i] > '9'))
+            if ((checkNum[i] < '0') || (checkNum[i] > '9'))
             {
                 show_error(notNumber, line);
                 return FALSE; /*error*/
@@ -149,14 +149,8 @@ int valid_number(char *checkNum, int line)
 
 int valid_register(char *reg, int line)
 {
-    int i;
 
-    if (reg == NULL)
-    {
-        printf("No register variable was obtained for the function.\n");
-        return FALSE;
-    }
-    else if ((reg[0] != 'r' ) || (reg[1] < '0')||(reg[1] > '7') || (strlen(reg) > 2))
+    if (!isRegister(reg))
     {
         show_error(notValidRegister, line);
         return FALSE;
@@ -439,37 +433,47 @@ int defined_label(char *label, int line)
 
 int valid_label(char *label, int line)
 {
-    int i, firstChar=0;
+    int i, firstCharIndex=0, lengthLabel = strlen(label);
+    char tempLabel[LABEL_LENGTH];
+    firstCharIndex = count_spaces(label); //Checks for white characters at the beginning of the string
 
-    if (label == NULL)
+    if(defined_label(label, line))
     {
-        printf("the variable of the libel = NULL. \n\n");
+        show_error(labelExists, line);
         return FALSE;
     }
-
-
-    firstChar = count_spaces(label); //Checks for white characters at the beginning of the string
-
-    if ((strlen(label)-firstChar) > LABEL_LENGTH) //Checks the length of the label starting with the first letter
+    else if ((lengthLabel-firstCharIndex) > LABEL_LENGTH) //Checks the length of the label starting with the first letter
     {
         show_error(longLabel, line);
         return FALSE;
     }
-    /* Checks if the label starts with a letter */
-    else if((label[firstChar] >= 'A') && (label[firstChar] <= 'Z') || (label[firstChar] >= 'a') && (label[firstChar] <= 'z'))
+
+    else if (*(label+lengthLabel-1) != ':')
     {
-        for (i=firstChar+1 ; i <= strlen(label) ; i++) //A loop starts from the second character.
+        show_error(invalidLabel, line);
+        return FALSE;
+    }
+
+    label += firstCharIndex;
+
+    if(isRegister(label))
+    {
+        show_error(savedWord, line);
+        return FALSE;
+        
+    }
+
+    /* Checks if the label starts with a letter */
+    else if((*label >= 'A') && (*label <= 'Z') || (*label >= 'a') && (*label <= 'z'))
+    {
+        for (i=1 ; i <= strlen(label) ; i++) //A loop starts from the second character.
         {
             if(label[i] == ' ')//Check that there is no space in the middle of the label
             {
                 show_error(whiteSpace, line);
                 return FALSE;
             }
-            else if (label[i] == ':' && (i != strlen(label)))//Check that there are no colon in the middle of the label
-            {
-                show_error(manyLabelsSameRow, line);
-                return FALSE;
-            }
+
             else if(((label[i] > '9') && (label[i] < 'A')) || ((label[i] > 'Z') && (label[i] < 'a' )) || (label[i] > 'z'))//Check that the characters after the first character are letters or numbers
             {
                 show_error(invalidLabel, line);
@@ -482,8 +486,37 @@ int valid_label(char *label, int line)
     /* the first character is not a letter */
     else 
     {
+        show_error(invalidLabel, line);
         return FALSE;
     }
     
+}
+
+int OnlySpacesAfterCode(char *str, int line)
+{
+    int i;
+
+    for (i=0; *(str+i) == ' '; i++);
+
+    if(*(str+i) == '\0')
+    {
+        return TRUE;
+    }
+    else 
+    {
+        show_error(incorrectStatement, line);
+        return FALSE;
+    }
+    
+}
+
+int lebalInComment(char *label, int line)
+{
+    if (!defined_label(label, line))
+    {
+        show_error(undifinedLabel, line);
+        return FALSE;
+    }
+    return TRUE;
 }
 
