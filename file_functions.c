@@ -1,6 +1,6 @@
 #include "file_functions.h"
 
-
+/* Create a new file by selecting a name and extension */
 FILE *openFile(char *fileName, char *fileType)
 {
 	FILE *file;
