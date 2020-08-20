@@ -94,7 +94,6 @@ struct symbols_table *pointer_to_row;
             }
 
             else if (strcmp(token, ".string") == 0)
-
             {
                 token = strtok(NULL, s);
 

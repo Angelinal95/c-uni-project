@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <mm_malloc.h>
 
+
+
 /*---------------------structers------------------------*/
 typedef struct
 {
@@ -37,7 +39,6 @@ typedef struct command_line
 };
 
 typedef struct instruction_line
-
 {
     char *label; /*A pointer to the symbol_table*/
     char *type_of_inst;
@@ -65,7 +66,8 @@ int IC = 100;
 int DC = 0;
 int max_row_len = 80;
 int line_num; //the line number we're at
-int error;    //global variable to mark an error
+int error ;    //global variable to mark an errors
+
 
 /*------------------------functions----------------------------*/
 

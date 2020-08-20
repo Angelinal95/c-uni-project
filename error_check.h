@@ -1,9 +1,9 @@
 #include "MAIN.h"
 #include "auxiliary_functions.h"
 
-#define TRUE 1
-#define FALSE 0
 #define LABEL_LENGTH 31
+#define TRUE 1
+#define FALSE -1
 
 typedef enum error_type {function, manyOperands, littleOperands, typeOperand,
                      typeDestination, destinationNotFound, sourceNotFound,

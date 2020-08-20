@@ -263,98 +263,22 @@ int check_adress(char *adress, int line)
 
 int name_function(char *nameFunc, int line)
 {
-    int found;  // boolean found/not found.
-
-    // deal with empty pointers case. 
-
-    if (nameFunc == NULL) 
-    {
-        printf("string variable is NULL.\n\n");
-        return FALSE; 
-    }
+    int found,i;  // boolean found/not found.
 
     // deal with empty strings case. 
-
     if (*nameFunc == '\0')
     {
         show_error(function, line);
         return FALSE;
     } 
 
-    switch (*nameFunc)
+    for (i=0; command_list[i].name != NULL; i++)
     {
-        case 'a': // if add
-            if((*(nameFunc+1)=='d') && (*(nameFunc+2)=='d') && ((*(nameFunc+3)==' ') || (*(nameFunc+3)=='\0')))
-                return TRUE;
-            break;
+        if(!strcmp(nameFunc, command_list[i].name))
+        {
+            return i; //return the index of the function in command_list
+        }
 
-        case 'b': // if bne
-            if((*(nameFunc+1)=='n') && (*(nameFunc+2)=='e') && ((*(nameFunc+3)==' ')||(*(nameFunc+3)=='\0')))
-                return TRUE;
-            break;
-
-        case 'c': // if cmp / clr
-            if((*(nameFunc+1)=='m') && (*(nameFunc+2)=='p') && ((*(nameFunc+3)==' ')||(*(nameFunc+3)=='\0')))
-                return TRUE;
-            else if((*(nameFunc+1)=='l') && (*(nameFunc+2)=='r') && ((*(nameFunc+3)==' ')||(*(nameFunc+3)=='\0')))
-                return TRUE;
-            break;
-
-        case 'd': // if dec
-            if((*(nameFunc+1)=='e') && (*(nameFunc+2)=='c') && ((*(nameFunc+3)==' ')||(*(nameFunc+3)=='\0')))
-                return TRUE;
-            break;
-
-        case 'i': // if inc
-            if((*(nameFunc+1)=='n') && (*(nameFunc+2)=='c') && ((*(nameFunc+3)==' ')||(*(nameFunc+3)=='\0')))
-                return TRUE;
-            break;
-
-        case 'j': // if jmp / jsr
-            if((*(nameFunc+1)=='m') && (*(nameFunc+2)=='p') && ((*(nameFunc+3)==' ')||(*(nameFunc+3)=='\0')))
-                return TRUE;
-            else if((*(nameFunc+1)=='s') && (*(nameFunc+2)=='r') && ((*(nameFunc+3)==' ')||(*(nameFunc+3)=='\0')))
-                return TRUE;
-            break;
-
-        case 'l': // if lea
-             if((*(nameFunc+1)=='e') && (*(nameFunc+2)=='a') && ((*(nameFunc+3)==' ')||(*(nameFunc+3)=='\0')))
-                return TRUE;
-             break;
-
-        case 'm': // if mov
-            if((*(nameFunc+1)=='o') && (*(nameFunc+2)=='v') && ((*(nameFunc+3)==' ')||(*(nameFunc+3)=='\0')))
-                return TRUE;
-            break;
-
-        case 'n': // if not
-            if((*(nameFunc+1)=='o') && (*(nameFunc+2)=='t') && ((*(nameFunc+3)==' ')||(*(nameFunc+3)=='\0')))
-                return TRUE;
-            break;
-
-        case 'p': // if prn
-            if((*(nameFunc+1)=='r') && (*(nameFunc+2)=='n') && ((*(nameFunc+3)==' ')||(*(nameFunc+3)=='\0')))
-                return TRUE;
-            break;
-
-        case 'r': // if red / rts
-            if((*(nameFunc+1)=='e') && (*(nameFunc+2)=='d') && ((*(nameFunc+3)==' ')||(*(nameFunc+3)=='\0')))
-                return TRUE;
-            else if((*(nameFunc+1)=='t') && (*(nameFunc+2)=='s') && ((*(nameFunc+3)==' ')||(*(nameFunc+3)=='\0')))
-                return TRUE;
-            break;
-
-        case 's': // if sub / stop
-            if((*(nameFunc+1)=='u') && (*(nameFunc+2)=='b') && ((*(nameFunc+3)==' ')||(*(nameFunc+3)=='\0')))
-                return TRUE;
-            else if((*(nameFunc+1)=='t') && (*(nameFunc+2)=='o') && (*(nameFunc+3)=='p') && ((*(nameFunc+4)==' ') || (*(nameFunc+5)=='\0')))
-                return TRUE;
-            break;
-    
-        default: 
-            show_error(function, line);
-            return FALSE;
-            break;
     }
     
     show_error(function, line); // this is not a valid function
@@ -399,14 +323,12 @@ int valid_data(char *data, int line)
 
 int valid_string(char *string, int line)
 {
-    int i, firstChar, firstAssci=32, lastAssci=127;
+    int i, firstChar;
+    char firstAssci=32, lastAssci=127;
     
-    if (string == NULL)
-    {
-        printf("the string variable is NULL.\n\n");
-        return FALSE;
-    }
+
     firstChar = count_spaces(string);
+
     if((string[firstChar] != ' " ') || (string[strlen(string)] != ' " '))// the first and last character in string need to be a : "
     {
         show_error(missingQuotation, line);
@@ -462,31 +384,33 @@ int valid_label(char *label, int line)
         return FALSE;
         
     }
-
-    /* Checks if the label starts with a letter */
-    else if((*label >= 'A') && (*label <= 'Z') || (*label >= 'a') && (*label <= 'z'))
+    if (name_function(label, line) == FALSE)
     {
-        for (i=1 ; i <= strlen(label) ; i++) //A loop starts from the second character.
+        /* Checks if the label starts with a letter */
+        if((*label >= 'A') && (*label <= 'Z') || (*label >= 'a') && (*label <= 'z'))
         {
-            if(label[i] == ' ')//Check that there is no space in the middle of the label
+            for (i=1 ; i <= strlen(label) ; i++) //A loop starts from the second character.
             {
-                show_error(whiteSpace, line);
-                return FALSE;
-            }
+                if(label[i] == ' ')//Check that there is no space in the middle of the label
+                {
+                 show_error(whiteSpace, line);
+                    return FALSE;
+                }
 
-            else if(((label[i] > '9') && (label[i] < 'A')) || ((label[i] > 'Z') && (label[i] < 'a' )) || (label[i] > 'z'))//Check that the characters after the first character are letters or numbers
-            {
-                show_error(invalidLabel, line);
-                return FALSE;
+                else if(((label[i] > '9') && (label[i] < 'A')) || ((label[i] > 'Z') && (label[i] < 'a' )) || (label[i] > 'z'))//Check that the characters after the first character are letters or numbers
+                {
+                    show_error(invalidLabel, line);
+                    return FALSE;
+                }
             }
+            return TRUE; //valid label 
+
         }
-        return TRUE; //valid label 
-
     }
     /* the first character is not a letter */
     else 
     {
-        show_error(invalidLabel, line);
+        show_error(savedWord, line);
         return FALSE;
     }
     
