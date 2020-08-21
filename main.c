@@ -17,9 +17,9 @@ int main(int argc, char *argv[])
 	        if (numOfErrors == 0)
 	        {
 		        /* Create all the output files */
-		        ObjectFile(argv[i], IC, DC/*, memoryArr*/);
-		        ExternFile(argv[i]/*, linesArr, numOflines*/);
-		        EntriesFile(argv[i]);
+		        createObjectFile(argv[i], IC, DC/*, memoryArr*/);
+		        createExternFile(argv[i]/*, linesArr, numOflines*/);
+		        createEntriesFile(argv[i]);
 		        printf("success, output files for the file \"%s.as\" were created.\n", argv[i]);
 	        }
 	    

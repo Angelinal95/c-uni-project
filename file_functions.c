@@ -2,7 +2,7 @@
 
 
 /* Create a new file by selecting a name and extension */
-FILE *openFile(char *fileName, char *fileType)
+FILE *createFile(char *fileName, char *fileType)
 {
 	FILE *file;
 	 
@@ -27,7 +27,7 @@ void createObjectFile(char *fileName,int *instrucLinesArr, int IC, int DC)
 {
 	int i;
 	FILE *file;
-	file = openFile(fileName, ".ob");
+	file = createFile(fileName, ".ob");
 
 	/* write IC into the file */
 	
@@ -48,4 +48,9 @@ void createObjectFile(char *fileName,int *instrucLinesArr, int IC, int DC)
 	}
 
 	fclose(file);
+}
+
+void createEntryFile(char *fileName)
+{
+    
 }
