@@ -50,7 +50,8 @@ void createObjectFile(char *fileName,int *instrucLinesArr, int IC, int DC)
 	fclose(file);
 }
 
+/* create a file with addresses where externals values appear in the code */
 void createEntryFile(char *fileName)
 {
-    
+
 }
