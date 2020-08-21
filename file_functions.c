@@ -30,19 +30,21 @@ void createObjectFile(char *fileName,int *instrucLinesArr, int IC, int DC)
 	file = openFile(fileName, ".ob");
 
 	/* write IC into the file */
-	writeInBase16(file, IC, 1);
-	fprintf(file, "\t\t");
+	
+	fprintf(file, "%d\t\t", IC);
 
     /* write DC into the file */
-	writeInBase16(file, DC, 1);
+    fprintf(file, "%d\n", DC);
 
 	/* Print all of memoryArr */
 	for (i = 0; i < IC + DC; i++)
 	{
-		fprintf(file, "\n");
-		writeInBase16(file, INITIAL_ADDRESS + i, 3);
+        
+		writeInBase10(file, INITIAL_ADDRESS + i, 6);
 		fprintf(file, "\t\t");
-		writeInBase16(file, instrucLinesArr[i], 3);
+		writeInBase16(file, instrucLinesArr[i], 6);
+        fprintf(file, "\n");
+
 	}
 
 	fclose(file);

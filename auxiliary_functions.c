@@ -39,7 +39,7 @@ char modol16(int num, char *arrNum, int arrLength)
 }
 
 /* Prints the number to the file in base 16 */
-void printInBase16(FILE *file, int instuction, int wordMemLength)
+void writeInBase16(FILE *file, int instuction, int wordMemLength)
 {
     int j, sumOfZiros;
     char base16num[7]={0}; //Space saver: \ 0
@@ -53,7 +53,41 @@ void printInBase16(FILE *file, int instuction, int wordMemLength)
             fprintf(file, "0");
         }
     }
-    fprintf(file, "%s \n", base16num);
+    fprintf(file, "%s", base16num);
+     
+}
+
+/* count how much digits in the base 10 number */
+char modol10(int num)
+{
+    int index=0;
+
+    if (num < 10)
+    {
+        return ++index;  
+    }
+    
+    index = modol10(num / 10); 
+    return ++index;
+}
+
+
+/* Prints the number to the file in base 10 */
+void writeInBase10(FILE *file, int numInBase10, int numLength)
+{
+    int j, numOfDigit;
+    
+
+    numOfDigit = modol10(numInBase10);
+
+    if(numOfDigit != numLength)//If is shorter than 6 digits
+    {
+        for(j=0; j < (numLength - numOfDigit); j++)//Completes with '0' so that it contains 6 digits in print
+        {
+            fprintf(file, "0");
+        }
+    }
+    fprintf(file, "%d", numInBase10);
      
 }
 
