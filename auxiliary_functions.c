@@ -23,41 +23,39 @@ int isRegister(char *reg) //check if register (return : 0 if No or 1 if Yes)
     }
     return 1; //is register
 }
-int modol2(int num, int *binariArrNum,int numOfBits)
-{
 
-    if (num < 2)
+/* Converts an integer to a number at base 16, and puts the result into a string sent to the function */
+char modol16(int num, char *arrNum, int arrLength)
+{
+    char listBase16[] = "0123456789ABCDEF";
+
+    if (num < 16)
     {
-        return num;  
+        return listBase16[num % 16];  
     }
     
-    binariArrNum[numOfBits-1] = modol2(num / 2, binariArrNum, numOfBits-1); 
-    return num%2;
+    arrNum[arrLength-1] = modol16(num / 16, arrNum, arrLength-1); 
+    return listBase16[num%16];
 }
 
-void intToBinari(int *bitFields, int numOfBits, int numOfLines)
+/* Prints the number to the file in base 16 */
+void printInBase16(FILE *file, int instuction, int wordMemLength)
 {
-    int i,j;
-    int *arrBinariNum = (int *)malloc(sizeof(int)*numOfBits);
+    int j, sumOfZiros;
+    char base16num[7]={0}; //Space saver: \ 0
 
-    for (i=0; i <= numOfLines; i++)
+    modol16(instuction, base16num, wordMemLength);
+
+    if(sumOfZiros = (wordMemLength - strlen(base16num)))//If the string is shorter than 6 characters
     {
-        modol2(*bitFields, arrBinariNum, numOfBits);
-        for (j=0; j < numOfBits; j++)
+        for(j=0; j<sumOfZiros; j++)//Completes with '0' so that it contains 6 numbers in print
         {
-            *(bitFields+j) = *(arrBinariNum+j);
-        }   
-    } 
+            fprintf(file, "0");
+        }
+    }
+    fprintf(file, "%s \n", base16num);
+     
 }
 
-/*void trunsInstrucToBinari(full_instruction *instructin, int numOfLines)
-{
-    int i;
-
-    for (i=0; i < numOfLines; i++)
-    {
-        instructin->opcode
-    }
-}*/
 
 

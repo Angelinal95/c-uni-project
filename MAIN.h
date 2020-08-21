@@ -4,6 +4,9 @@
 #include <mm_malloc.h>
 
 
+#define INITIAL_ADDRESS 100
+
+
 
 /*---------------------structers------------------------*/
 typedef struct
