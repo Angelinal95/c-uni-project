@@ -11,4 +11,21 @@ typedef struct
 func_table func_table_1[] = {
     {"mov", NULL, 0}, {"cmp", NULL, 1}, {"add", 1, 2}, {"sub", 2, 2}, {"lea", NULL, 4}, {"clr", 1, 5}, {"not", 2, 5}, {"inc", 3, 5}, {"dec", 4, 5}, {"jmp", 1, 9}, {"bne", 2, 9}, {"jsr", 3, 9}, {"red", NULL, 12}, {"prn", NULL, "13"}, {"rts", NULL, 14}, {"stop", NULL, 15}
 
+};
+
+void completeLabelAddress(int IC) 
+{
+    symbols_table* tempLabel = labelList;
+
+	/* Search in the array for .entry / .data / .string label */
+	while (tempLabel.next)
+    {
+        /* code */
+    }
+     (i = 0; i < g_labelNum; i++) {
+		if (g_labelArr[i].isData || g_labelArr[i].isMatrix) {
+			/* Increase the address */
+			g_labelArr[i].address += FIRST_ADDRESS + IC;
+		}
+	}
 }

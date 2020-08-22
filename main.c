@@ -10,17 +10,22 @@ int main(int argc, char *argv[])
         {
             /* First Read */
             numOfErrors += first_pass(argv[i]);
-            /* Second Read */
-            numOfErrors += secondPass(argv[i]);
+
+            if (!numOfErrors)
+            {
+                /* Second Read */
+                numOfErrors += secondPass(argv[i]);
+            }
 
             /* If there are no errors */
-	        if (numOfErrors == 0)
+	        if (!numOfErrors)
 	        {
 		        /* Create all the output files */
-		        createObjectFile(argv[i], IC, DC/*, memoryArr*/);
-		        createExternFile(argv[i]/*, linesArr, numOflines*/);
-		        createEntriesFile(argv[i]);
-		        printf("success, output files for the file \"%s.as\" were created.\n", argv[i]);
+		        ObjectFile(argv[i], IC, DC/*, memoryArr*/);
+		        ExternFile(argv[i]/*, linesArr, numOflines*/);
+		        EntriesFile(argv[i]);
+		        printf("success, output files for \"%s.as\" created.\n", argv[i]);
+
 	        }
 	    
         }

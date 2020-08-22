@@ -1,11 +1,11 @@
 #include "MAIN.h"
 #include "auxiliary_functions.h"
 
-FILE *createFile(char *, char *);/* Creates a file for writing from a given file name and file type,returns a pointer. */
+FILE *createNewFile(char *fileName, char *fileType);/* Creates a file for writing from a given file name and file type,returns a pointer. */
 
-void createObjectFile(char *, int *, int , int);
+void ObjectFile(char *fileName, int *instrucLinesArr, int IC, int DC);
 
-void createEntryFile(char *);
+void EntryFile(char *fileName);
 
-//void createExternFile(char *, , int);
+void ExternFile(char *fileName);
 

@@ -2,7 +2,7 @@
 
 
 /* Create a new file by selecting a name and extension */
-FILE *createFile(char *fileName, char *fileType)
+FILE *createNewFile(char *fileName, char *fileType)
 {
 	FILE *file;
 	 
@@ -22,12 +22,12 @@ FILE *createFile(char *fileName, char *fileType)
 }
 
 
-/* create object file, contains the assembly lines in base 16. */
-void createObjectFile(char *fileName,int *instrucLinesArr, int IC, int DC)
+/* create object file, contains the assembly lines in base 16 */
+void ObjectFile(char *fileName,int *instrucLinesArr, int IC, int DC)
 {
 	int i;
 	FILE *file;
-	file = createFile(fileName, ".ob");
+	file = createNewFile(fileName, ".ob");
 
 	/* write IC into the file */
 	
@@ -50,8 +50,75 @@ void createObjectFile(char *fileName,int *instrucLinesArr, int IC, int DC)
 	fclose(file);
 }
 
-/* create a file with addresses where externals values appear in the code */
-void createEntryFile(char *fileName)
+
+/* creates the entry file, contains the addresses of entry labels in base 10 */
+void EntriesFile(char *fileName)
 {
+	FILE *file;
+	symbols_table *tempLabel = labelList;
+
+	/* if there are entry labels */
+	if (g_numOfEntries)
+	{	
+
+		file = createNewFile(fileName, ".ent");
+
+		do 
+		{
+			if (!strcmp(tempLabel->type_of_symbol,"entry"))// check if the label type is entry
+			{
+				fprintf(file, "%s\t\t", tempLabel->label);
+				writeInBase10(file, tempLabel->value, 6);
+				fprintf(file, "\n");
+			}
+
+			tempLabel = tempLabel->next; //pass to the next label
+
+		} while (tempLabel); // stop while the next is Null.
+
+		fclose(file);
+
+	}
 
 }
+
+
+/* creates the extern file, contains the addresses for the extern labels in base 10 */
+void ExternFile(char *fileName)
+{
+	FILE *file;
+	symbols_table *tempLabel = labelList;
+
+	/* if there are extern labels */
+	if (g_numOfExterns)
+	{	
+
+		file = createNewFile(fileName, ".ext");
+
+		do 
+		{
+			if (!strcmp(tempLabel->type_of_symbol,"extern"))// check if the label type is extern
+			{
+				fprintf(file, "%s\t\t", tempLabel->label);
+				writeInBase10(file, tempLabel->value, 6);
+				fprintf(file, "\n");
+			}
+
+			tempLabel = (tempLabel->next); //pass to the next label
+
+		} while (tempLabel); // stop while the next is Null.
+
+		fclose(file);
+
+	}
+
+}
+
+
+
+
+
+
+
+
+
