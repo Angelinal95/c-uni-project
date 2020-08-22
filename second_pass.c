@@ -13,10 +13,6 @@ func_table func_table_1[] = {
 
 };
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 16e5b84ec84e16380e5cb79c3c337ce7f58eaa43
 void completeLabelAddress(int IC) 
 {
     symbols_table *tempLabel = labelList;
