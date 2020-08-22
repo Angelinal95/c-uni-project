@@ -3,10 +3,7 @@
 #include <stdio.h>
 #include <mm_malloc.h>
 
-
 #define INITIAL_ADDRESS 100
-
-
 
 /*---------------------structers------------------------*/
 typedef struct
@@ -52,12 +49,12 @@ typedef struct instruction_line
 
 typedef struct
 {
-    char *opcode;
-    char *adress_mode_src;
-    char *operand_src;
-    char *adress_mode_dest;
-    char *operand_dest;
-    char *funct;
+    int *opcode;
+    int *adress_mode_src;
+    int *operand_src;
+    int *adress_mode_dest;
+    int *operand_dest;
+    int *funct;
     int A;
     int R;
     int E;
@@ -69,8 +66,7 @@ int IC = 100;
 int DC = 0;
 int max_row_len = 80;
 int line_num; //the line number we're at
-int error ;    //global variable to mark an errors
-
+int error;    //global variable to mark an errors
 
 /*------------------------functions----------------------------*/
 
