@@ -3,10 +3,7 @@
 #include <stdio.h>
 #include <mm_malloc.h>
 
-
 #define INITIAL_ADDRESS 100
-
-
 
 /*---------------------structers------------------------*/
 typedef struct
@@ -22,6 +19,7 @@ typedef struct
     char *label;
     char *value;
     char *type_of_symbol;
+    int address;
 
 }symbols_table;
 
@@ -110,6 +108,8 @@ int error = 0;    //global variable to mark an errors
 int g_numOfEntries = 0;
 int g_numOfExterns =0;
 symbols_table *labelList; // pointer to head of label list 
+int line_num; //the line number we're at
+
 
 /*------------------------functions----------------------------*/
 

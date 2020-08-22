@@ -1,5 +1,6 @@
 #include "MAIN.h"
 #include "error_check.h"
+#include "auxiliary_functions.h"
 
 struct command_line *command_line_list;
 struct instruction_line *instruction_line_list;
@@ -9,8 +10,7 @@ int count_i_lines = 0;
 int count_symbols = 0;
 struct symbols_table *pointer_to_row;
 
-
- int main_pass(char *filename)
+int main_pass(char *filename)
 {
     FILE *fd;
     int line_count = 0;
@@ -131,18 +131,23 @@ struct symbols_table *pointer_to_row;
                 }
                 i++;
             }
+
             if (i < 16)
             {
                 int j = 0;
-                char *operand_src;
-                char *operand_dest;
+                ++IC;
+                operand *operand_src = NULL;
+                operand *operand_dest = NULL;
                 token = strtok(NULL, s);
                 while (token != NULL)
                 {
                     if (j == 0)
                     {
-
-                        operand_src = token;
+                        operand_src->Addressing_Mode = kind_of_addressing(token);
+                        if ((operand_src->Addressing_Mode) == 4)
+                        {
+                            /*there's an error*/
+                        }
                     }
                     else if ((j == 1) && (strcmp(token, ',') != 0))
                     {
@@ -151,7 +156,12 @@ struct symbols_table *pointer_to_row;
 
                     else if (j == 2)
                     {
-                        operand_dest = token;
+
+                        operand_dest->Addressing_Mode = kind_of_addressing(token);
+                        if ((operand_dest->Addressing_Mode) == 4)
+                        {
+                            /*there's an error*/
+                        }
                     }
 
                     j++;
@@ -224,49 +234,44 @@ int search_row_in_symbol_table(struct symbols_table *symbols_list, char *temp_la
     return 0;
 }
 
-int is_Instant()
+int kind_of_addressing(operand *op, char *token)
 {
 
-    return 0;
-}
-int is_Direct()
-{
+    //checking if it's Instant addressing
 
-    return 0;
-}
-int is_Relative()
-{
-
-    return 0;
-}
-int is_register()
-{
-
-    return 0;
-}
-
-operand *build_operand()
-{
-    operand *new_operand;
-    if (is_Instant() == 1)
+    if (token[0] == '#')
     {
+        token = &token[1];
+        if (/*check if it's a valid number*/)
+        {
+            op->operand_value = token;
+            return 0;
+        }
+        return 4;
     }
-    else if (is_Direct() == 1)
-    {
-    }
-    else if (is_Relative() == 1)
-    {
-    }
-    else if (is_register() == 1)
-    {
-    }
-    else
-    {
+    //checking if it's Direct addressing
 
-        /*error - complete it*/
+    if (token)
+    {
+        op->operand_value = token;
+        return 1;
+    }
+    //checking if it's Relative addressing
+
+    if (token[0] == '&')
+    {
+        token = &token[1];
+        op->operand_value = token;
+        return 2;
+    }
+    //checking if it's Direct register addressing
+    if (token[0] == 'r')
+    {
+        op->operand_value = token;
+        return 3;
     }
 
-    return new_operand;
+    return 4;
 }
 
 /*/* Adds the number to the g_dataArr and increases DC. Returns if it succeeded

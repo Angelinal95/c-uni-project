@@ -15,17 +15,24 @@ func_table func_table_1[] = {
 
 void completeLabelAddress(int IC) 
 {
-    symbols_table* tempLabel = labelList;
+    symbols_table *tempLabel = labelList;
 
 	/* Search in the array for .entry / .data / .string label */
-	while (tempLabel.next)
-    {
-        /* code */
-    }
-     (i = 0; i < g_labelNum; i++) {
-		if (g_labelArr[i].isData || g_labelArr[i].isMatrix) {
-			/* Increase the address */
-			g_labelArr[i].address += FIRST_ADDRESS + IC;
+	while (tempLabel->next)
+    {    
+		if (!strcmp(tempLabel->type_of_symbol,"entry"))
+        {
+            if (!tempLabel->address)
+            {
+			    /* Increase the address */
+			    tempLabel->address += INITIAL_ADDRESS + IC;
+            }
 		}
-	}
+        else if (!strcmp(tempLabel->type_of_symbol,"data") || !(tempLabel->type_of_symbol,"string"))
+        {
+			/* Increase the address */
+			tempLabel->address += INITIAL_ADDRESS + IC;
+		}
+    }
+
 }
