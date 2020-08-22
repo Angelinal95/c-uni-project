@@ -20,6 +20,7 @@ typedef struct
     char *value;
     char *type_of_symbol;
     int address;
+    int line;
 
 }symbols_table;
 
@@ -107,7 +108,8 @@ int line_num = 0; //the line number we're at
 int error = 0;    //global variable to mark an errors
 int g_numOfEntries = 0;
 int g_numOfExterns =0;
-symbols_table *labelList; // pointer to head of label list 
+symbols_table *labelList; // pointer to head of label list
+symbols_table *entryLabelsList;
 int line_num; //the line number we're at
 
 

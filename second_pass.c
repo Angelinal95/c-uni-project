@@ -18,7 +18,7 @@ void completeLabelAddress(int IC)
     symbols_table *tempLabel = labelList;
 
 	/* Search in the array for .entry / .data / .string label */
-	while (tempLabel->next)
+	while (tempLabel)
     {    
 		if (!strcmp(tempLabel->type_of_symbol,"entry"))
         {
@@ -33,6 +33,50 @@ void completeLabelAddress(int IC)
 			/* Increase the address */
 			tempLabel->address += INITIAL_ADDRESS + IC;
 		}
+
+        tempLabel = tempLabel->next;
     }
 
 }
+
+
+/* check if there is an illegal entry label */
+int countIllegalEntries() 
+{
+	int errorFlag = 0 ;
+	symbols_table *entryLabel = entryLabelsList;
+    symbols_table *labelToComper = labelList;
+
+	while (entryLabel) 
+    {
+        if(!defined_label(entryLabel->label, entryLabel->line))
+        {
+            show_error(undifinedLabel, entryLabel->line);
+            errorFlag++;
+        }
+        else
+        {
+        
+            while (labelToComper)
+            {
+                if (!strcmp(entryLabel->label, labelToComper->label))
+                {
+			        if (!strcmp(labelToComper->type_of_symbol, "exstern")) 
+                    {
+				        printError("error in line: %d The parameter .entry can't be external label.", entryLabel->line);
+				        errorFlag++;
+			    
+                    }
+                }
+            
+                labelToComper = labelToComper->next;
+            }
+            
+        }
+
+        entryLabel = entryLabel->next;
+
+	}
+    return errorFlag;
+}
+
