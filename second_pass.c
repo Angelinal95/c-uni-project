@@ -1,6 +1,9 @@
 #include "MAIN.h"
 #include "error_check.h"
 
+typedef enum {A = 4, R = 2, E = 1} val_A_R_E;
+
+
 typedef struct
 {
     char *func_name;
@@ -15,7 +18,7 @@ func_table func_table_1[] = {
 
 void completeLabelAddress(int IC) 
 {
-    symbols_table *tempLabel = labelList;
+    symbols_table *tempLabel = symbols_list;
 
 	/* Search in the array for .entry / .data / .string label */
 	while (tempLabel)
@@ -45,7 +48,7 @@ int countIllegalEntries()
 {
 	int errorFlag = 0 ;
 	symbols_table *entryLabel = entryLabelsList;
-    symbols_table *labelToComper = labelList;
+    symbols_table *labelToComper = symbols_list;
 
 	while (entryLabel) 
     {
@@ -82,7 +85,7 @@ int countIllegalEntries()
 
 int entryLabelAlreadyInList(char *entryLabelName) 
 {
-    symbols_table *tempEntryLabel = labelList;
+    symbols_table *tempEntryLabel = symbols_list;
 
 	while (tempEntryLabel) 
     {
@@ -95,6 +98,119 @@ int entryLabelAlreadyInList(char *entryLabelName)
 	}
 	return FALSE;
 }
+
+
+/* if label exist return pointer to the label in symbols_table ,or NULL if label not found. */
+ symbols_table *searchLabel(char *labelName) 
+ {
+	symbols_table *tempLabel = symbols_list;
+
+	
+	while (tempLabel) 
+    {
+		if (!strcmp(labelName, tempLabel->label)) 
+        {
+		    return tempLabel;
+		}
+
+        tempLabel = tempLabel->next;
+	}
+	
+	return NULL;
+}
+
+
+/* If operand is a label, update the value to be the address of the label. */
+int ifOpIsLabel(operand *op, int lineNum) 
+{
+    symbols_table *label;
+
+	if (op->Addressing_Mode == 1) 
+    {
+		label = searchLabel(op->operand_value);
+
+		/* Check if label != NULL */
+		if (!label) 
+        {
+            show_error(undifinedLabel, line_num);
+            return FALSE;
+		}
+
+		op->operand_value = label->address;
+	}
+
+	return TRUE;
+}
+
+/* Returns the int value of a memory word. */
+int getNumFromMemoryWord(memWordCode memory) 
+{
+
+	unsigned int intBitMask = ~0;
+	intBitMask >>= ((sizeof(int) * ONE_BYTE_SIZE) - ONE_WORD_SIZE);/* int of '1' in all 24 first bits, all the rest bits '0' */
+
+	/* make only 24 bits to use */
+	intBitMask = intBitMask & ((memory.wordVal.number << 3) + memory.A_R_E);
+	return intBitMask;
+}
+
+
+/* return the addressing_Mode of the operand */
+int returnModeOpType(operand op) 
+{
+	
+	if (op.Addressing_Mode == NULL) //if operand type == NULL return 0;
+    {
+        return 0;		
+	}
+
+    return (int) op.Addressing_Mode; // else , operand type == (0 or 1 or 2 or 3) return the number in Addressing_Mode
+}
+
+
+int regNum(operand op)
+{
+    int numOP;
+
+	if (op.operand_value == NULL) //if operand == NULL return 0;
+    {
+        return 0;		
+	}
+    for (numOP = 0; numOP < 8; numOP++)
+    {
+        if ((int)op.operand_value == numOP)
+        {
+            return numOP;
+        }
+    }
+    return 0;
+
+}
+
+
+
+memWordCode createCommandMemWord(command_line line) 
+{
+	memWordCode commandToPush = { 0 };
+
+	/* fills the bits inside the word memory */
+	commandToPush.A_R_E = line.A_R_E; 
+    commandToPush.wordVal.instructionBits.funct = line.cmd->funct;
+	commandToPush.wordVal.instructionBits.opcode = line.cmd->opcode;
+	commandToPush.wordVal.instructionBits.regSrc = regNum(*line.operand_src);
+	commandToPush.wordVal.instructionBits.regDest = regNum(*line.operand_dest);
+    commandToPush.wordVal.instructionBits.modeSrc = returnModeOpType(*line.operand_src);
+    commandToPush.wordVal.instructionBits.modeDest = returnModeOpType(*line.operand_dest);
+
+	return commandToPush;
+}
+
+
+
+
+
+
+
 
 
 

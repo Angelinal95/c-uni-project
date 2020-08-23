@@ -2,15 +2,14 @@
 #include "error_check.h"
 #include "auxiliary_functions.h"
 
-struct command_line *command_line_list;
-struct instruction_line *instruction_line_list;
-struct symbols_table *symbols_list;
+command_line *command_line_list;
+instruction_line *instruction_line_list;
+
 int count_c_lines = 0;
 int count_i_lines = 0;
 int count_symbols = 0;
-struct symbols_table *pointer_to_row;
-int IC = 100;
-int DC = 0;
+symbols_table *pointer_to_row;
+
 
 int main_pass(char *filename)
 {
@@ -34,7 +33,7 @@ int main_pass(char *filename)
     {
         line_count++;
         error = 0;
-        struct symbols_table *symbols_table = NULL;
+        symbols_table *symbols_table = NULL;
         token = strtok(temp, s);
 
         //checking if the length of the line is more than 80 characters
@@ -185,7 +184,7 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
                 else if (j == 2)
                 {
 
-                    temp_for_addresse = kind_of_addressing(operand_dest, token, temp_label, temp_com_or_inst);
+                    temp_for_address = kind_of_addressing(operand_dest, token, temp_label, temp_com_or_inst);
                     if ((temp_for_address) == 4)
                     {
                         show_error(invalidAddressingMode, line_num);
@@ -205,7 +204,7 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
                 token = strtok(NULL, s);
             }
 
-            if ((j==2)&&((i>13)||(i<5))
+            if ((j==2)&&((i>13)||(i<5)))
             {
                 show_error(littleOperands, line_num);
                 return 0;
@@ -297,11 +296,11 @@ int skip_white_space(char *token)
 }
 
 /*get the adress of the label*/
-int search_row_in_symbol_table(struct symbols_table *symbols_list, char *temp_label, struct symbols_table *pointer_to_row)
+int search_row_in_symbol_table(symbols_table *symbols_list, char *temp_label, symbols_table *pointer_to_row)
 {
     while (symbols_list->value != NULL)
     {
-        if (strcmp(temp_label, symbols_list.label) == 0)
+        if (strcmp(temp_label, symbols_list->label) == 0)
         {
             pointer_to_row = &symbols_list;
             return 1; /*if label was found*/

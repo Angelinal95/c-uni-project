@@ -4,12 +4,15 @@
 #include <mm_malloc.h>
 
 #define INITIAL_ADDRESS 100
+#define ONE_BYTE_SIZE 8
+#define ONE_WORD_SIZE 24
 
 /*---------------------structers------------------------*/
 typedef struct
 {
     unsigned int Addressing_Mode;
     char *operand_value;
+
 
 } operand;
 
@@ -40,6 +43,8 @@ typedef struct
     operand *operand_src;
     operand *operand_dest;
     command_line *next;
+    int cLine;
+    unsigned int A_R_E;
 
 } command_line;
 
@@ -55,7 +60,7 @@ typedef struct
 
 typedef struct
 {
-    int address;    // the IC in this
+    int address;    // the IC in this line of tne code
     int numOfWords; //A number of words that the instruction occupies in the machine code.
     char *opcode;
     char *adress_mode_src;
@@ -72,11 +77,11 @@ typedef struct
 /* ****************************** structer to use in the Second Read ******************************/
 typedef struct fullMemoryWord /* 24 bits */
 {
-    unsigned int E : 1;
-    unsigned int R : 1;
-    unsigned int A : 1;
-    union memWordType {
-        struct instructionBits
+    unsigned int A_R_E : 3;
+ 
+    union memWordType 
+    {
+        struct
         {
             unsigned int funct : 5;
             unsigned int regDest : 3;
@@ -87,15 +92,11 @@ typedef struct fullMemoryWord /* 24 bits */
 
         } instructionBits;
 
-        struct dataBits
-        {
-            unsigned int number : 21
+        unsigned int number : 21
 
-        } dataBits;
+    } wordVal;
 
-    } wordType;
-
-} memWordcode;
+} memWordCode;
 
 /*-----------------------global variables-----------------------*/
 
@@ -104,9 +105,12 @@ int line_num = 0; //the line number we're at
 int error = 0;    //global variable to mark an errors
 int g_numOfEntries = 0;
 int g_numOfExterns = 0;
-symbols_table *labelList; // pointer to head of label list
+
 symbols_table *entryLabelsList;
 int line_num; //the line number we're at
+int IC = INITIAL_ADDRESS;
+int DC = 0;
+symbols_table *symbols_list;// pointer to head of label list
 
 /*------------------------functions----------------------------*/
 

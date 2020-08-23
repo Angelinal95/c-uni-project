@@ -3,11 +3,18 @@
 int main(int argc, char *argv[])
 {
     int i, numOfErrors = 0;
+    FILE * file;
 
     if (argc >= 1)
     {
+
         for (i = 1; i < argc; i++)
         {
+            if (!(file = fopen(argv[i], "r"))) 
+            {
+		        printf("Cant open the file: %s.as \n", argv[i]);
+                continue;
+            }
             /* First Read */
             numOfErrors += first_pass(argv[i]);
 
