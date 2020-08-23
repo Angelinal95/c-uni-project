@@ -262,11 +262,6 @@ int check_entry_label(char *entry, int line)
     }
 }
 
-int check_adress(char *adress, int line)
-{
-    return 0;
-}
-
 int name_function(char *nameFunc, int line)
 {
     int found, i; // boolean found/not found.
@@ -288,11 +283,6 @@ int name_function(char *nameFunc, int line)
 
     show_error(function, line); // this is not a valid function
     return FALSE;
-}
-
-int valid_variable(char *var, int line)
-{
-    return 0;
 }
 
 int valid_directive(char *directive, int line)
@@ -321,11 +311,6 @@ int valid_directive(char *directive, int line)
     }
 }
 
-int valid_data(char *data, int line)
-{
-    return 0;
-}
-
 int valid_string(char *string, int line)
 {
     int i, firstChar;
@@ -350,11 +335,6 @@ int valid_string(char *string, int line)
         }
         return TRUE; //this is a valid string
     }
-}
-
-int defined_label(char *label, int line)
-{
-    return 0;
 }
 
 int valid_label(char *label, int line)
@@ -443,4 +423,30 @@ int lebalInComment(char *label, int line)
         return FALSE;
     }
     return TRUE;
+}
+
+/*checking if the label has been already defined*/
+int defined_label(char *label, symbols_table *symbols_list)
+{
+    symbols_table *temp = &symbols_list;
+
+    while (symbols_list != NULL)
+    {
+        if (strcmp(symbols_list[0].label, label) == 0)
+        {
+
+            return 1;
+        }
+        symbols_list = &symbols_list[1];
+    }
+
+    symbols_list = &temp;
+    return 0;
+}
+
+/*for the second pass. In case there's a label that is defined extern but is actually defined in this file
+and vide versa*/
+int check_adress(char *adress, int line)
+{
+    return 0;
 }

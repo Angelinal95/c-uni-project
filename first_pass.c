@@ -17,6 +17,7 @@ int main_pass(char *filename)
     FILE *fd;
     int line_count = 0;
     char temp[81];
+    char temp_1[81];
     const char s[2] = " ";
     char *token;
 
@@ -37,7 +38,8 @@ int main_pass(char *filename)
         token = strtok(temp, s);
 
         //checking if the length of the line is more than 80 characters
-        if (temp[81] != '/n')
+
+        if ((temp[81] != '/n') && (fgets(temp_1, max_row_len + 1, fd) != NULL))
         {
             show_error(20, line_count);
         }
@@ -203,6 +205,30 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
                 token = strtok(NULL, s);
             }
 
+            if ((j==2)&&((i>13)||(i<5))
+            {
+                show_error(littleOperands, line_num);
+                return 0;
+            }
+            else if((j==1)&&(i>4))
+            {
+                if (i < 14)
+                {
+                    show_error(manyOperands, line_num);
+                }
+                else
+                {
+                    show_error(littleOperands, line_num);
+                }
+
+                return 0;
+            }
+            
+            else if((j==0)&&(i<14)){
+                show_error(manyOperands, line_num);
+                return 0;
+            }
+
             insert_into_command_list(count_c_lines, temp, pointer_to_row, symbols_list, operand_src, operand_dest, command_line_list);
             count_c_lines++;
         }
@@ -215,23 +241,32 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
 
     if (temp_label != NULL)
     {
-        if (strcmp(temp_com_or_ins, "code") == 0)
+        if (defined_label(temp_label, symbols_list) != 1)
         {
-            insert_into_symbols_table(count_symbols, temp_label, IC, temp_com_or_ins, symbols_list);
-            count_symbols++;
+
+            if (strcmp(temp_com_or_ins, "code") == 0)
+            {
+                insert_into_symbols_table(count_symbols, temp_label, IC, temp_com_or_ins, symbols_list);
+                count_symbols++;
+            }
+            else
+            {
+                if (flag_for_extern == 1)
+                {
+                    insert_into_symbols_table(count_symbols, temp_label, 0, temp_com_or_ins, symbols_list);
+                }
+
+                else
+                {
+                    insert_into_symbols_table(count_symbols, temp_label, DC, temp_com_or_ins, symbols_list);
+                }
+                count_symbols++;
+            }
         }
         else
         {
-            if (flag_for_extern == 1)
-            {
-                insert_into_symbols_table(count_symbols, temp_label, 0, temp_com_or_ins, symbols_list);
-            }
-
-            else
-            {
-                insert_into_symbols_table(count_symbols, temp_label, DC, temp_com_or_ins, symbols_list);
-            }
-            count_symbols++;
+            show_error(labelExists, line_num);
+            return 0;
         }
     }
 }

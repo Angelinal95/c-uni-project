@@ -70,8 +70,41 @@ insert_into_command_list(int count_c_lines, command *pointer_to_com, char *point
     return 0;
 }
 
-int erase_table()
+void erase_symbol_table(struct symbols_table *symbols_list)
 {
+    struct symbols_table *np, *u;
 
-    return 0;
+    while (symbols_list != NULL)
+    {
+        np = &symbols_list[0];
+        u = np->next;
+        free(np);
+        symbols_list = u;
+    }
+}
+
+void erase_command_list(command_line *command_line_list)
+{
+    struct command_line *np, *u;
+
+    while (command_line_list != NULL)
+    {
+        np = &symbols_list[0];
+        u = np->next;
+        free(np);
+        command_line_list = u;
+    }
+}
+
+void erase_instruction_list(struct instruction_line *instruction_line_list)
+{
+    struct instruction_line *np, *u;
+
+    while (instruction_line_list != NULL)
+    {
+        np = &instruction_line_list[0];
+        u = np->next;
+        free(np);
+        instruction_line_list = u;
+    }
 }
