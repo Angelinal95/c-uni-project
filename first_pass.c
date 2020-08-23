@@ -2,16 +2,11 @@
 #include "error_check.h"
 #include "auxiliary_functions.h"
 
-<<<<<<< HEAD
-command_line *command_line_list;
-instruction_line *instruction_line_list;
-
-=======
->>>>>>> 0f6d64c68f6aaf357091f5553d9406f06991e3e8
 int count_c_lines = 0;
 int count_i_lines = 0;
 int count_symbols = 0;
-symbols_table *pointer_to_row;
+symbols_table *pointer_to_row = NULL;
+const char s[2] = " ";
 
 int main_pass(char *filename)
 {
@@ -19,7 +14,7 @@ int main_pass(char *filename)
     int line_count = 0;
     char temp[81];
     char temp_1[81];
-    const char s[2] = " ";
+
     char *token;
 
     fd = fopen(filename, "r");
@@ -77,7 +72,6 @@ int go_through_line(char *token, symbols_table *symbols_table)
     char *temp_label = NULL;
     int flag_for_extern = 0;
     char *temp_com_or_inst;
-    symbols_table *pointer_to_row = NULL;
 
     //checking if there's a label and taking care of it
     if (strchr(token, ':') != NULL)
@@ -104,7 +98,7 @@ int go_through_line(char *token, symbols_table *symbols_table)
             while (token != NULL)
             {
                 token = strtok(NULL, s);
-                if (valid_number(token) == TRUE)
+                if (valid_number(token, line_num) == TRUE)
                 {
                     count_i_lines++;
                     DC++;
@@ -116,18 +110,32 @@ int go_through_line(char *token, symbols_table *symbols_table)
                     return 0;
                 }
             }
-            insert_into_instruction_list(count_i_lines, ".data", pointer_to_row, temp_arr_for_data, instruction_line_list, search_row_in_symbol_table());
+            if (search_row_in_symbol_table(temp_label, pointer_to_row) == 1)
+            {
+                insert_into_instruction_list(count_i_lines, ".data", pointer_to_row, temp_arr_for_data, instruction_line_list, pointer_to_row);
+            }
+            else
+            {
+            }
+            insert_into_instruction_list(count_i_lines, ".data", pointer_to_row, temp_arr_for_data, instruction_line_list, NULL);
         }
 
         else if (strcmp(token, ".string") == 0)
         {
             token = strtok(NULL, s);
 
-            if (valid_string(token) == TRUE)
+            if (valid_string(token, line_num) == TRUE)
             {
                 token = strtok(NULL, s);
+                if (search_row_in_symbol_table(temp_label, pointer_to_row) == 1)
+                {
+                    insert_into_instruction_list(count_i_lines, ".string", pointer_to_row, token, instruction_line_list, pointer_to_row);
+                }
+                else
+                {
+                    insert_into_instruction_list(count_i_lines, ".string", pointer_to_row, token, instruction_line_list, NULL);
+                }
 
-                insert_into_instruction_list(count_i_lines, ".string", pointer_to_row, token, instruction_line_list, search_row_in_symbol_table());
                 count_i_lines++;
 
                 DC = DC + strlen(token) + 1;
@@ -140,21 +148,27 @@ int go_through_line(char *token, symbols_table *symbols_table)
 
         else if (strcmp(token, ".extern") == 0)
         {
-            insert_into_instruction_list(count_i_lines, ".string", pointer_to_row, token, instruction_line_list, search_row_in_symbol_table());
+
             token = strtok(NULL, s);
-<<<<<<< HEAD
             flag_for_extern = 1;
-=======
-            if((check_extern_label(token, line_num)==TRUE){
-                insert_into_instruction_list(count_i_lines, ".extern", pointer_to_row, token, instruction_line_list, search_row_in_symbol_table());
+            if ((check_extern_label(token, line_num) == TRUE))
+            {
+                if (search_row_in_symbol_table(temp_label, pointer_to_row) == 1)
+                {
+                    insert_into_instruction_list(count_i_lines, ".extern", pointer_to_row, token, instruction_line_list, pointer_to_row);
+                }
+                else
+                {
+                    insert_into_instruction_list(count_i_lines, ".extern", pointer_to_row, token, instruction_line_list, NULL);
+                }
+
                 token = strtok(NULL, s);
                 flag_for_extern = 1;
-
             }
-            else{
+            else
+            {
                 return 0;
             }
->>>>>>> 0f6d64c68f6aaf357091f5553d9406f06991e3e8
         }
         /*if it's an .entry */
         else
@@ -284,28 +298,28 @@ int go_through_line(char *token, symbols_table *symbols_table)
         if (defined_label(temp_label, symbols_list) != 1)
         {
 
-            if (strcmp(temp_com_or_ins, "code") == 0)
+            if (strcmp(temp_com_or_inst, "code") == 0)
             {
-                insert_into_symbols_table(count_symbols, temp_label, IC, temp_com_or_ins, symbols_list);
+                insert_into_symbols_table(count_symbols, temp_label, IC, temp_com_or_inst, symbols_list);
                 count_symbols++;
             }
             else
             {
                 if (flag_for_extern == 1)
                 {
-                    insert_into_symbols_table(count_symbols, temp_label, 0, temp_com_or_ins, symbols_list);
+                    insert_into_symbols_table(count_symbols, temp_label, 0, temp_com_or_inst, symbols_list);
                 }
 
                 else
                 {
-                    insert_into_symbols_table(count_symbols, temp_label, DC, temp_com_or_ins, symbols_list);
+                    insert_into_symbols_table(count_symbols, temp_label, DC, temp_com_or_inst, symbols_list);
                 }
                 count_symbols++;
             }
         }
         else
-        { /*function to delete line in instruction or command*/
-            if (strcmp(temp_com_or_ins, "data") == 0)
+        {
+            if (strcmp(temp_com_or_inst, "data") == 0)
             {
                 erase_instruction_line();
             }
@@ -319,14 +333,13 @@ int go_through_line(char *token, symbols_table *symbols_table)
         }
     }
 }
-}
 
 //determine if it's a command line or a instruction line
 int check_if_com_or_inst(char *token)
 {
 
     //if it's an instruction
-    if (strchr(str, '.') != NULL)
+    if (strchr(token, '.') != NULL)
     {
         return 1;
     }
@@ -346,7 +359,7 @@ int skip_white_space(char *token)
 }
 
 /*get the adress of the label*/
-int search_row_in_symbol_table(symbols_table *symbols_list, char *temp_label, symbols_table *pointer_to_row)
+int search_row_in_symbol_table(char *temp_label, symbols_table *pointer_to_row)
 {
     while (symbols_list->value != NULL)
     {
