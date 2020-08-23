@@ -73,7 +73,7 @@ insert_into_command_list(int count_c_lines, command *pointer_to_com, char *point
 
 void erase_symbol_table(symbols_table *symbols_list)
 {
-    struct symbols_table *np, *u;
+    symbols_table *np, *u;
 
     while (symbols_list != NULL)
     {
@@ -90,7 +90,7 @@ void erase_command_list(command_line *command_line_list)
 
     while (command_line_list != NULL)
     {
-        np = &symbols_list[0];
+        np = &command_line_list[0];
         u = np->next;
         free(np);
         command_line_list = u;
