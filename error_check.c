@@ -120,10 +120,6 @@ void show_error(errorType typeName, int line_num)
     case invalidAddressingMode:
         printf("error in line: %d, invalid addressing mode.\n\n");
         break;
-
-    case invalidFunc:
-        printf("error in line: %d, invalid function.\n\n");
-        break;
     }
 }
 
@@ -262,7 +258,7 @@ int check_entry_label(char *entry, int line)
     }
 }
 
-int name_function(char *nameFunc, int line)
+/*int name_function(char *nameFunc, int line)
 {
     int found, i; // boolean found/not found.
 
@@ -309,7 +305,7 @@ int valid_directive(char *directive, int line)
         show_error(incorrectStatement, line);
         return FALSE;
     }
-}
+}*/
 
 int valid_string(char *string, int line)
 {
@@ -397,7 +393,7 @@ int valid_label(char *label, int line)
     }
 }
 
-int OnlySpacesAfterCode(char *str, int line)
+/*int OnlySpacesAfterCode(char *str, int line)
 {
     int i;
 
@@ -423,7 +419,7 @@ int lebalInComment(char *label, int line)
         return FALSE;
     }
     return TRUE;
-}
+}*/
 
 /*checking if the label has been already defined*/
 int defined_label(char *label, symbols_table *symbols_list)

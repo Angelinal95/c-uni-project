@@ -81,7 +81,7 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
     //checking if there's a label and taking care of it
     if (strchr(token, ':') != NULL)
     {
-        if (legal_label(token) == 1)
+        if (valid_label(token, line_num) == 1)
         {
             temp_label = token;
             token = strtok(NULL, s);
@@ -99,7 +99,7 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
             while (token != NULL)
             {
                 token = strtok(NULL, s);
-                if (valid_data(token))
+                if (valid_number(token))
                 {
                     count_i_lines++;
                     DC++;
@@ -178,7 +178,7 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
                 }
                 else if ((j == 1) && (strcmp(token, ',') != 0))
                 {
-                    show_error(invalidFunc, line_num);
+                    show_error(function, line_num);
                     return 0;
                 }
 
@@ -347,7 +347,7 @@ int kind_of_addressing(operand *op, char *token, char *temp_label, char *temp_co
     }
 
     //checking if it's Direct register addressing
-    if ((token[0] == 'r') && (token[1] < 7) && (token[1] > 0))
+    if (valid_register(token, line_num))
     {
         op->operand_value = token;
         op->Addressing_Mode = 3;
