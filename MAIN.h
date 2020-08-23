@@ -110,6 +110,7 @@ symbols_table *entryLabelsList;
 int line_num;                //the line number we're at
 symbols_table *symbols_list; // pointer to head of label list
 command_line *command_line_list;
+instruction_line *instruction_line_list;
 /*------------------------functions----------------------------*/
 
 /*------------------------Register List ------------------------*/
