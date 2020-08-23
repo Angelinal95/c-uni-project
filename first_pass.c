@@ -54,10 +54,7 @@ int main_pass(char *filename)
         return 0;
     }
 
-    int ICF = IC;
-    int DCF = DC;
-
-    second_pass(symbols_list, instruction_line_list, command_line_list, ICF, DCF);
+    second_pass();
 }
 //checking if it's an empty line or a comment line
 int ignore_line(char *token)
