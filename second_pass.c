@@ -188,8 +188,7 @@ int regNum(operand op)
 }
 
 
-
-memWordCode lineMemoryWord(command_line line) 
+memWordCode lineMemWordCode(command_line line) 
 {
 	memWordCode memory = { 0 };
     symbols_table *label = NULL;
@@ -271,13 +270,33 @@ void pushdataToMemory(int *wordMemoryArr, int *memCount, int DC)
 
 }
 
+void updateDataLabelsAddress(int IC) 
+{
+	instruction_line *instLine = instruction_line_list;
+    symbols_table *label = symbols_list;
+
+	while (instLine) 
+    {
+        label = searchLabel(instLine->label);
+		if(label)
+        {
+            label->address += INITIAL_ADDRESS + IC;//Increase the address 
+        }
+
+        instLine = instLine->next;
+	
+    }
+}
+
 
 /* Reads second time. */
 /* It converts all the lines into the memory. */
-int second_pass(int* wordMemoryArr, command_line *arrLines, int lineNum, int IC, int DC) 
+void second_pass() 
 {
-	 int error, memCount = 0, i;
-
+    int *wordMemoryArr = (int*)malloc(sizeof(int) * (IC+DC-INITIAL_ADDRESS));
+	int error, memCount = 0, i;
+    command_line *line = command_line_list;
+    memWordCode memory;
 	
 	updateDataLabelsAddress(IC); // update the operand if it label 
 
@@ -285,17 +304,17 @@ int second_pass(int* wordMemoryArr, command_line *arrLines, int lineNum, int IC,
 	error += countIllegalEntries(); // Check for illegal entries 
 
 	
-	for (i = 0; i < lineNum; i++) // Add line in to the memory
+	for (i = 0; i < (IC+DC-INITIAL_ADDRESS); i++) // Add line in to the memory
     {
-		if (!addLineToMemory(wordMemoryArr, &memCount, (arrLines + i))) // if found error while adding line to memory 
-        {
-			error++;
-		}
+
+		memory = lineMemWordCode(*line);
+        addWordToMemory(wordMemoryArr, memCount, memory);
+       
 	}
 	
-	addDataToMemory(wordMemoryArr, &memCount, DC);// Add data to the end of memory
+	pushdataToMemory(wordMemoryArr, &memCount, DC);// Add data to the end of memory
 
-    return error;
+    
 }
 
 

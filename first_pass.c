@@ -14,7 +14,6 @@ int main_pass(char *filename)
     int line_count = 0;
     char temp[81];
     char temp_1[81];
-
     char *token;
 
     fd = fopen(filename, "r");
@@ -26,10 +25,8 @@ int main_pass(char *filename)
     }
 
     while (fgets(temp, max_row_len + 1, fd) != NULL)
-
     {
         line_count++;
-        error = 0;
         symbols_table *symbols_table = NULL;
         token = strtok(temp, s);
 
@@ -38,6 +35,7 @@ int main_pass(char *filename)
         if ((temp[81] != '/n') && (fgets(temp_1, max_row_len + 1, fd) != NULL))
         {
             show_error(20, line_count);
+            error++;
         }
         else
         {
@@ -47,15 +45,13 @@ int main_pass(char *filename)
             }
         }
 
-        fclose(filename);
-
-        second_pass();
-
-        return 0;
     }
+    fclose(filename);
 
-    second_pass();
+    return error;
+
 }
+
 //checking if it's an empty line or a comment line
 int ignore_line(char *token)
 {

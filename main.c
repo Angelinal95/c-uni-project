@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[])
 {
-    int i, numOfErrors = 0;
+    int i;
     FILE * file;
 
     if (argc >= 1)
@@ -16,16 +16,16 @@ int main(int argc, char *argv[])
                 continue;
             }
             /* First Read */
-            numOfErrors += first_pass(argv[i]);
+             main_pass(argv[i]);
 
-            if (!numOfErrors)
+            if (!error)
             {
                 /* Second Read */
-                numOfErrors += secondPass(argv[i]);
+                 secondPass(argv[i]);
             }
 
             /* If there are no errors */
-	        if (!numOfErrors)
+	        if (!error)
 	        {
 		        /* Create all the output files */
 		        ObjectFile(argv[i], IC, DC/*, memoryArr*/);

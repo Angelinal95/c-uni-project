@@ -103,8 +103,8 @@ int line_num = 0; //the line number we're at
 int error = 0;    //global variable to mark an errors
 int g_numOfEntries = 0;
 int g_numOfExterns = 0;
-int IC = INITIAL_ADDRESS;
-int DC = 0;
+int IC = INITIAL_ADDRESS; 
+int DC = 0; //num of data in the assembly code
 int line_num;                //the line number we're at
 command_line *command_line_list;
 instruction_line *instruction_line_list;
@@ -132,7 +132,7 @@ int ifOpIsLabel(operand *, int);
 int returnIntMemoryWord(memWordCode);
 int returnModeOpType(operand);
 int regNum(operand);
-memWordCode lineMemoryWord(command_line);
+memWordCode lineMemWordCode(command_line);
 void addWordToMemory(int *, int *, memWordCode);
 void pushdataToMemory(int *, int *, int);
 int secondFileRead(int *, command_line *, int, int, int);
