@@ -2,8 +2,6 @@
 #include "error_check.h"
 #include "auxiliary_functions.h"
 
-instruction_line *instruction_line_list;
-
 int count_c_lines = 0;
 int count_i_lines = 0;
 int count_symbols = 0;
@@ -77,10 +75,14 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
     //checking if there's a label and taking care of it
     if (strchr(token, ':') != NULL)
     {
-        if (valid_label(token, line_num) == 1)
+        if (valid_label(token, line_num) == TRUE)
         {
             temp_label = token;
             token = strtok(NULL, s);
+        }
+        else
+        {
+            return 0;
         }
     }
 
@@ -95,11 +97,16 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
             while (token != NULL)
             {
                 token = strtok(NULL, s);
-                if (valid_number(token))
+                if (valid_number(token) == TRUE)
                 {
                     count_i_lines++;
                     DC++;
                     temp_arr_for_data = (int *)calloc(token, sizeof(int));
+                }
+                else
+                {
+
+                    return 0;
                 }
             }
             insert_into_instruction_list(count_i_lines, ".data", pointer_to_row, temp_arr_for_data, instruction_line_list, search_row_in_symbol_table());
@@ -109,7 +116,7 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
         {
             token = strtok(NULL, s);
 
-            if (valid_string(token))
+            if (valid_string(token) == TRUE)
             {
                 token = strtok(NULL, s);
 
@@ -118,16 +125,23 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
 
                 DC = DC + strlen(token) + 1;
             }
+            else
+            {
+                return 0;
+            }
         }
 
         else if (strcmp(token, ".extern") == 0)
         {
             token = strtok(NULL, s);
-            if((check_extern_label(token, line_num)){
+            if((check_extern_label(token, line_num)==TRUE){
                 insert_into_instruction_list(count_i_lines, ".extern", pointer_to_row, token, instruction_line_list, search_row_in_symbol_table());
                 token = strtok(NULL, s);
                 flag_for_extern = 1;
 
+            }
+            else{
+                return 0;
             }
         }
         /*if it's an .entry */
@@ -208,17 +222,22 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
             if ((j == 2) && ((i > 13) || (i < 5)))
             {
                 show_error(littleOperands, line_num);
+                erase_operand(operand_src);
                 return 0;
             }
-            else if ((j == 1) && (i > 4))
+            else if (j == 1)
             {
-                if (i < 14)
+                if (i < 5)
                 {
                     show_error(manyOperands, line_num);
+
+                    erase_operand(operand_src);
+                    erase_operand(operand_dest);
                 }
-                else
+                else if (i > 14)
                 {
                     show_error(littleOperands, line_num);
+                    erase_operand(operand_src);
                 }
 
                 return 0;
@@ -227,6 +246,13 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
             else if ((j == 0) && (i < 14))
             {
                 show_error(manyOperands, line_num);
+                erase_operand(operand_src);
+                if (i < 5)
+                {
+
+                    erase_operand(operand_dest);
+                }
+
                 return 0;
             }
 
@@ -265,7 +291,16 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
             }
         }
         else
-        {
+        { /*function to delete line in instruction or command*/
+            if (strcmp(temp_com_or_ins, "data") == 0)
+            {
+                erase_instruction_line();
+            }
+            else
+            {
+                erase_command_line();
+            }
+
             show_error(labelExists, line_num);
             return 0;
         }
