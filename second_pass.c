@@ -251,8 +251,8 @@ void pushdataToMemory(int *wordMemoryArr, int *memCount, int DC)
 	for (i = 0; i < DC; i++) //Add each int from g_dataArr to the end of memoryArr 
     { 
 		if (*wordMemoryArr) {
-			/* The mask makes sure we only use the first "TEN BITS" bits */
-			wordMemoryArr[(*memCount)++] = intBitMask & g_dataArr[i];
+			
+			wordMemoryArr[(*memCount)++] = intBitMask & g_dataArr[i];// makes sure we only use the first bits 
 		} 
         else //dont have  more space in wordMemoryArr
         {
@@ -262,9 +262,9 @@ void pushdataToMemory(int *wordMemoryArr, int *memCount, int DC)
 }
 
 
-/* Reads the data from the first read for the second time. */
+/* Reads second time. */
 /* It converts all the lines into the memory. */
-int secondFileRead(int* wordMemoryArr, command_line *arrLines, int lineNum, int IC, int DC) 
+int second_pass(int* wordMemoryArr, command_line *arrLines, int lineNum, int IC, int DC) 
 {
 	 int error, memCount = 0, i;
 
