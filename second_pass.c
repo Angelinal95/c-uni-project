@@ -80,3 +80,21 @@ int countIllegalEntries()
     return errorFlag;
 }
 
+int entryLabelAlreadyInList(char *entryLabelName) 
+{
+    symbols_table *tempEntryLabel = labelList;
+
+	while (tempEntryLabel) 
+    {
+		if (!strcmp(entryLabelName, tempEntryLabel->label))
+        {
+			return TRUE;
+		}
+
+        tempEntryLabel = tempEntryLabel->next;
+	}
+	return FALSE;
+}
+
+
+
