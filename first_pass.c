@@ -13,7 +13,6 @@ int count_i_lines = 0;
 int count_symbols = 0;
 symbols_table *pointer_to_row;
 
-
 int main_pass(char *filename)
 {
     FILE *fd;
@@ -232,7 +231,7 @@ int go_through_line(char *token, symbols_table *symbols_table)
                 token = strtok(NULL, s);
             }
 
-            if ((j==2)&&((i>13)||(i<5)))
+            if ((j == 2) && ((i > 13) || (i < 5)))
             {
                 show_error(littleOperands, line_num);
 
@@ -240,11 +239,7 @@ int go_through_line(char *token, symbols_table *symbols_table)
 
                 return 0;
             }
-<<<<<<< HEAD
-            else if((j==1)&&(i>4))
-=======
             else if (j == 1)
->>>>>>> 0f6d64c68f6aaf357091f5553d9406f06991e3e8
             {
                 if (i < 5)
                 {
@@ -260,8 +255,9 @@ int go_through_line(char *token, symbols_table *symbols_table)
 
                 return 0;
             }
-            
-            else if((j==0)&&(i<14)){
+
+            else if ((j == 0) && (i < 14))
+            {
                 show_error(manyOperands, line_num);
                 free(operand_src);
                 if (i < 5)
