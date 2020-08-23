@@ -43,7 +43,7 @@ int main_pass(char *filename)
         {
             if (ignore_line(token) == 0)
             {
-                go_through_line(token, symbols_table);
+                go_through_line(token);
             }
         }
 
@@ -67,7 +67,7 @@ int ignore_line(char *token)
 }
 
 //analyzing what's in the current line
-int go_through_line(char *token, symbols_table *symbols_table)
+int go_through_line(char *token)
 {
     char *temp_label = NULL;
     int flag_for_extern = 0;
@@ -117,12 +117,12 @@ int go_through_line(char *token, symbols_table *symbols_table)
             }
             if (search_row_in_symbol_table(temp_label, pointer_to_row) == 1)
             {
-                insert_into_instruction_list(count_i_lines, ".data", pointer_to_row, temp_arr_for_data, instruction_line_list, pointer_to_row);
+                insert_into_instruction_list(count_i_lines, ".data", temp_arr_for_data, pointer_to_row);
             }
             else
             {
 
-                insert_into_instruction_list(count_i_lines, ".data", pointer_to_row, temp_arr_for_data, instruction_line_list, NULL);
+                insert_into_instruction_list(count_i_lines, ".data", temp_arr_for_data, NULL);
             }
         }
         else if (strcmp(token, ".string") == 0)
@@ -139,11 +139,11 @@ int go_through_line(char *token, symbols_table *symbols_table)
                 }
                 if (search_row_in_symbol_table(temp_label, pointer_to_row) == 1)
                 {
-                    insert_into_instruction_list(count_i_lines, ".string", pointer_to_row, token, instruction_line_list, pointer_to_row);
+                    insert_into_instruction_list(count_i_lines, ".string", token, pointer_to_row);
                 }
                 else
                 {
-                    insert_into_instruction_list(count_i_lines, ".string", pointer_to_row, token, instruction_line_list, NULL);
+                    insert_into_instruction_list(count_i_lines, ".string", token, NULL);
                 }
 
                 count_i_lines++;
@@ -170,11 +170,11 @@ int go_through_line(char *token, symbols_table *symbols_table)
             {
                 if (search_row_in_symbol_table(temp_label, pointer_to_row) == 1)
                 {
-                    insert_into_instruction_list(count_i_lines, ".extern", pointer_to_row, token, instruction_line_list, pointer_to_row);
+                    insert_into_instruction_list(count_i_lines, ".extern", token, pointer_to_row);
                 }
                 else
                 {
-                    insert_into_instruction_list(count_i_lines, ".extern", pointer_to_row, token, instruction_line_list, NULL);
+                    insert_into_instruction_list(count_i_lines, ".extern", token, NULL);
                 }
 
                 token = strtok(NULL, s);
@@ -302,7 +302,7 @@ int go_through_line(char *token, symbols_table *symbols_table)
 
                 add_symbol(temp_label, temp_com_or_inst, flag_for_extern);
             }
-            insert_into_command_list(count_c_lines, temp, pointer_to_row, symbols_list, operand_src, operand_dest, command_line_list);
+            insert_into_command_list(count_c_lines, temp, pointer_to_row, operand_src, operand_dest);
             count_c_lines++;
         }
         else

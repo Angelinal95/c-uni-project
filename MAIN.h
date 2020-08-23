@@ -78,7 +78,8 @@ typedef struct fullMemoryWord /* 24 bits */
 {
     unsigned int A_R_E : 3;
 
-    union memWordType {
+    union memWordType
+    {
         struct
         {
             unsigned int funct : 5;
@@ -111,7 +112,38 @@ int line_num;                //the line number we're at
 symbols_table *symbols_list; // pointer to head of label list
 command_line *command_line_list;
 instruction_line *instruction_line_list;
-/*------------------------functions----------------------------*/
+
+/*------------------------functions - first pass----------------------------*/
+int main_pass(char *);            //function going through the text
+int ignore_line(char *);          //checking if we should ignore the line
+int go_through_line(char *);      //analyzing a single line
+int check_if_com_or_inst(char *); //check if it's a command or an instruction
+int skip_white_space(char *);
+int search_row_in_symbol_table(char *, symbols_table *);   //looking for the adress of the label in the symbols list
+int kind_of_addressing(operand *, char *, char *, char *); //checking the type if the addressing
+int add_symbol(char *, char *, int);                       //adding a symbol to the symbols list
+
+/*------------------------functions - symbols----------------------------*/
+int insert_into_symbol_table(int, char *, int, char *);                     //adding a node into the linked list for the symbol table
+int insert_into_instruction_list(int, char *, char *, char *);              //adding a node into the linked list for the instruction list
+int insert_into_command_list(int, command *, char *, operand *, operand *); //adding a node into the linked list for the  command list
+void erase_symbol_table();                                                  //erase the whole symbol table
+void erase_command_list();                                                  //erase the whole command list
+void erase_instruction_list();                                              //erase the whole instruction list
+void erase_instruction_line();                                              //erase a node in the instruction list
+void erase_command_line();                                                  //erase a node in the command list
+
+/*------------------------functions - second pass----------------------------*/
+
+void completeLabelAddress(int IC);
+int countIllegalEntries();
+int entryLabelAlreadyInList(char *entryLabelName);
+symbols_table *searchLabel(char *labelName);
+int ifOpIsLabel(operand *op, int lineNum);
+int getNumFromMemoryWord(memWordCode memory);
+int regNum(operand op);
+memWordCode createCommandMemWord(command_line line);
+memWordCode MemoryWord(command_line line);
 
 /*------------------------Register List ------------------------*/
 

@@ -1,7 +1,7 @@
 #include "MAIN.h"
 #include "error_check.h"
 
-int insert_into_symbol_table(int count_symbols, char *symbol_name, int num, char *type_of_symbol, symbols_table *symbols_list)
+int insert_into_symbol_table(int count_symbols, char *symbol_name, int num, char *type_of_symbol)
 {
     symbols_table *new_label;
     new_label = (symbols_table *)malloc(sizeof(symbols_table));
@@ -24,7 +24,7 @@ int insert_into_symbol_table(int count_symbols, char *symbol_name, int num, char
     return 0;
 }
 
-insert_into_instruction_list(int count_i_lines, char *type_of_inst, char *info, char *pointer_to_row_in_symbol_table, instruction_line *instruction_line_list)
+int insert_into_instruction_list(int count_i_lines, char *type_of_inst, char *info, char *pointer_to_row_in_symbol_table)
 {
     instruction_line *new_inst_line;
     new_inst_line = (struct instruction_line *)malloc(sizeof(instruction_line));
@@ -47,7 +47,7 @@ insert_into_instruction_list(int count_i_lines, char *type_of_inst, char *info, 
     return 0;
 }
 
-insert_into_command_list(int count_c_lines, command *pointer_to_com, char *pointer_to_row_in_symbol_table, operand *operand_src, operand *operand_dest, command_line *command_line_list)
+int insert_into_command_list(int count_c_lines, command *pointer_to_com, char *pointer_to_row_in_symbol_table, operand *operand_src, operand *operand_dest)
 {
     int i = 0;
     command_line *new_command_line;
