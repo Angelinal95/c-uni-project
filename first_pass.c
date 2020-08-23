@@ -110,16 +110,21 @@ int go_through_line(char *token, symbols_table *symbols_table)
                     return 0;
                 }
             }
+            if (temp_label != NULL)
+            {
+
+                add_symbol(temp_label, temp_com_or_inst, flag_for_extern);
+            }
             if (search_row_in_symbol_table(temp_label, pointer_to_row) == 1)
             {
                 insert_into_instruction_list(count_i_lines, ".data", pointer_to_row, temp_arr_for_data, instruction_line_list, pointer_to_row);
             }
             else
             {
-            }
-            insert_into_instruction_list(count_i_lines, ".data", pointer_to_row, temp_arr_for_data, instruction_line_list, NULL);
-        }
 
+                insert_into_instruction_list(count_i_lines, ".data", pointer_to_row, temp_arr_for_data, instruction_line_list, NULL);
+            }
+        }
         else if (strcmp(token, ".string") == 0)
         {
             token = strtok(NULL, s);
@@ -127,6 +132,11 @@ int go_through_line(char *token, symbols_table *symbols_table)
             if (valid_string(token, line_num) == TRUE)
             {
                 token = strtok(NULL, s);
+                if (temp_label != NULL)
+                {
+
+                    add_symbol(temp_label, temp_com_or_inst, flag_for_extern);
+                }
                 if (search_row_in_symbol_table(temp_label, pointer_to_row) == 1)
                 {
                     insert_into_instruction_list(count_i_lines, ".string", pointer_to_row, token, instruction_line_list, pointer_to_row);
@@ -151,6 +161,11 @@ int go_through_line(char *token, symbols_table *symbols_table)
 
             token = strtok(NULL, s);
             flag_for_extern = 1;
+            if (temp_label != NULL)
+            {
+
+                add_symbol(temp_label, temp_com_or_inst, flag_for_extern);
+            }
             if ((check_extern_label(token, line_num) == TRUE))
             {
                 if (search_row_in_symbol_table(temp_label, pointer_to_row) == 1)
@@ -282,53 +297,17 @@ int go_through_line(char *token, symbols_table *symbols_table)
 
                 return 0;
             }
+            if (temp_label != NULL)
+            {
 
+                add_symbol(temp_label, temp_com_or_inst, flag_for_extern);
+            }
             insert_into_command_list(count_c_lines, temp, pointer_to_row, symbols_list, operand_src, operand_dest, command_line_list);
             count_c_lines++;
         }
         else
         {
             show_error(invalidFunc, line_num);
-            return 0;
-        }
-    }
-
-    if (temp_label != NULL)
-    {
-        if (defined_label(temp_label, symbols_list) != 1)
-        {
-
-            if (strcmp(temp_com_or_inst, "code") == 0)
-            {
-                insert_into_symbols_table(count_symbols, temp_label, IC, temp_com_or_inst, symbols_list);
-                count_symbols++;
-            }
-            else
-            {
-                if (flag_for_extern == 1)
-                {
-                    insert_into_symbols_table(count_symbols, temp_label, 0, temp_com_or_inst, symbols_list);
-                }
-
-                else
-                {
-                    insert_into_symbols_table(count_symbols, temp_label, DC, temp_com_or_inst, symbols_list);
-                }
-                count_symbols++;
-            }
-        }
-        else
-        {
-            if (strcmp(temp_com_or_inst, "data") == 0)
-            {
-                erase_instruction_line();
-            }
-            else
-            {
-                erase_command_line();
-            }
-
-            show_error(labelExists, line_num);
             return 0;
         }
     }
@@ -416,4 +395,46 @@ int kind_of_addressing(operand *op, char *token, char *temp_label, char *temp_co
     }
 
     return 4;
+}
+
+int add_symbol(char *temp_label, char *temp_com_or_inst, int flag_for_extern)
+{
+
+    if (defined_label(temp_label, symbols_list) != 1)
+    {
+
+        if (strcmp(temp_com_or_inst, "code") == 0)
+        {
+            insert_into_symbols_table(count_symbols, temp_label, IC, temp_com_or_inst, symbols_list);
+            count_symbols++;
+        }
+        else
+        {
+            if (flag_for_extern == 1)
+            {
+                insert_into_symbols_table(count_symbols, temp_label, 0, temp_com_or_inst, symbols_list);
+            }
+
+            else
+            {
+                insert_into_symbols_table(count_symbols, temp_label, DC, temp_com_or_inst, symbols_list);
+            }
+            count_symbols++;
+        }
+    }
+    else
+    {
+        if (strcmp(temp_com_or_inst, "data") == 0)
+        {
+            erase_instruction_line();
+        }
+        else
+        {
+            erase_command_line();
+        }
+
+        show_error(labelExists, line_num);
+        return 1;
+    }
+    return 0;
 }
