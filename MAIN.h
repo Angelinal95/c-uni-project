@@ -56,22 +56,6 @@ typedef struct
 
 } instruction_line;
 
-typedef struct
-{
-    int address;    // the IC in this line of tne code
-    int numOfWords; //A number of words that the instruction occupies in the machine code.
-    int *opcode;
-    char *adress_mode_src;
-    char *operand_src;
-    char *adress_mode_dest;
-    char *operand_dest;
-    int *funct;
-    int A;
-    int R;
-    int E;
-    int anotherValue; //if one of the registers == 0, and A == 1. so its a number in this instruction.
-} full_instruction;
-
 /* ****************************** structer to use in the Second Read ******************************/
 typedef struct fullMemoryWord /* 24 bits */
 {
