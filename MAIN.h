@@ -13,7 +13,6 @@ typedef struct
     unsigned int Addressing_Mode;
     char *operand_value;
 
-
 } operand;
 
 typedef struct
@@ -62,12 +61,12 @@ typedef struct
 {
     int address;    // the IC in this line of tne code
     int numOfWords; //A number of words that the instruction occupies in the machine code.
-    char *opcode;
+    int *opcode;
     char *adress_mode_src;
     char *operand_src;
     char *adress_mode_dest;
     char *operand_dest;
-    char *funct;
+    int *funct;
     int A;
     int R;
     int E;
@@ -78,9 +77,8 @@ typedef struct
 typedef struct fullMemoryWord /* 24 bits */
 {
     unsigned int A_R_E : 3;
- 
-    union memWordType 
-    {
+
+    union memWordType {
         struct
         {
             unsigned int funct : 5;
@@ -110,7 +108,7 @@ symbols_table *entryLabelsList;
 int line_num; //the line number we're at
 int IC = INITIAL_ADDRESS;
 int DC = 0;
-symbols_table *symbols_list;// pointer to head of label list
+symbols_table *symbols_list; // pointer to head of label list
 
 /*------------------------functions----------------------------*/
 
