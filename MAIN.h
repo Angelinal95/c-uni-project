@@ -51,8 +51,7 @@ typedef struct
 {
     char *label; /*A pointer to the symbol_table*/
     char *type_of_inst;
-
-    char *info;
+    int *info;
     instruction_line *next;
 
 } instruction_line;
@@ -106,13 +105,14 @@ int g_numOfEntries = 0;
 int g_numOfExterns = 0;
 int IC = INITIAL_ADDRESS;
 int DC = 0;
-
-symbols_table *entryLabelsList;
 int line_num;                //the line number we're at
-symbols_table *symbols_list; // pointer to head of label list
 command_line *command_line_list;
 instruction_line *instruction_line_list;
+symbols_table *entryLabelsList;
+symbols_table *symbols_list; // pointer to head of label list
+
 /*------------------------functions - first pass----------------------------*/
+
 int main_pass(char *); //going through a text file
 int ignore_line(char *);
 int go_through_line(char *);      //analyzng eache character throught the line
@@ -121,7 +121,9 @@ int skip_white_space(char *);
 int search_row_in_symbol_table(char *, symbols_table *);   //searching for the adress of a specific label
 int kind_of_addressing(operand *, char *, char *, char *); //checking the type od addressing
 int add_symbol(char *, char *, int);                       //adding a new symbol to the symbols list
+
 /*------------------------functions - second pass----------------------------*/
+
 void completeLabelAddress(int);
 int countIllegalEntries();
 int entryLabelAlreadyInList(char *);
@@ -134,7 +136,9 @@ memWordCode lineMemoryWord(command_line);
 void addWordToMemory(int *, int *, memWordCode);
 void pushdataToMemory(int *, int *, int);
 int secondFileRead(int *, command_line *, int, int, int);
+
 /*------------------------functions - symbols----------------------------*/
+
 int insert_into_symbol_table(int count_symbols, char *symbol_name, int num, char *type_of_symbol);                                                           //inserting a new node to the linked list of symbols
 int insert_into_instruction_list(int count_i_lines, char *type_of_inst, char *info, char *pointer_to_row_in_symbol_table);                                   //inserting a new node to the linked list of instructions
 int insert_into_command_list(int count_c_lines, command *pointer_to_com, char *pointer_to_row_in_symbol_table, operand *operand_src, operand *operand_dest); //inserting a new node to the linked list of commands

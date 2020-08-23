@@ -215,27 +215,34 @@ memWordCode lineMemoryWord(command_line line)
         {
             memory.A_R_E = E;
             memory.wordVal.number = 0;
+            return memory;
         }
         else
         {
             memory.A_R_E = R;
             memory.wordVal.number = label->address ;
+            return memory;
         }
         
     }
-    memory.wordVal.number = command_line_list->;
+    else
+    {
+        memory.A_R_E = R;
+        memory.wordVal.number = command_line_list->operand_src->operand_value;
+    }
 
 	return memory;
 }
 
 
 
-void addWordToMemory(int *memoryWordArr, int *memCoun, memWordCode memory) {
+void addWordToMemory(int *wordMemoryArr, int *memCount, memWordCode memory) {
 	
-	if (*memCoun < ((IC+DC)-INITIAL_ADDRESS)) //There is space in the array
+	if (*memCount < ((IC+DC)-INITIAL_ADDRESS)) //There is space in the array
     {
 		
-		memoryWordArr[(*memCoun)++] = returnIntMemoryWord(memory);// Add the memory word
+		*(wordMemoryArr + (*memCount)) = returnIntMemoryWord(memory);// Add the memory word
+        *(memCount)++;
 	}
 }
 
@@ -245,20 +252,23 @@ void pushdataToMemory(int *wordMemoryArr, int *memCount, int DC)
 {
 	int i;
 	unsigned int intBitMask = ~0;
+    symbols_table *label;
 
 	intBitMask >>= ((sizeof(int) * ONE_BYTE_SIZE) - ONE_WORD_SIZE);/* int of '1' in all 24 first bits, all the rest bits '0' */
 
 	for (i = 0; i < DC; i++) //Add each int from g_dataArr to the end of memoryArr 
     { 
-		if (*wordMemoryArr) {
-			
-			wordMemoryArr[(*memCount)++] = intBitMask & g_dataArr[i];// makes sure we only use the first bits 
-		} 
-        else //dont have  more space in wordMemoryArr
+        if (!strcmp(instruction_line_list->type_of_inst, "external"))// if external pass
         {
-			return;
-		}
+            continue;
+        }
+      
+        label = searchLabel(instruction_line_list->label);
+		*(wordMemoryArr + (*memCount)) = intBitMask & (label->address);// makes sure we only use the first bits 
+        *(memCount)++;	
+        
 	}
+
 }
 
 
