@@ -103,11 +103,11 @@ int line_num = 0; //the line number we're at
 int error = 0;    //global variable to mark an errors
 int g_numOfEntries = 0;
 int g_numOfExterns = 0;
-
-symbols_table *entryLabelsList;
-int line_num; //the line number we're at
 int IC = INITIAL_ADDRESS;
 int DC = 0;
+
+symbols_table *entryLabelsList;
+int line_num;                //the line number we're at
 symbols_table *symbols_list; // pointer to head of label list
 
 /*------------------------functions----------------------------*/
