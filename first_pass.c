@@ -8,8 +8,8 @@ instruction_line *instruction_line_list;
 int count_c_lines = 0;
 int count_i_lines = 0;
 int count_symbols = 0;
-symbols_table *pointer_to_row;
-
+symbols_table *pointer_to_row = NULL;
+char s[2] = " ";
 
 int main_pass(char *filename)
 {
@@ -17,7 +17,6 @@ int main_pass(char *filename)
     int line_count = 0;
     char temp[81];
     char temp_1[81];
-    const char s[2] = " ";
     char *token;
 
     fd = fopen(filename, "r");
@@ -75,7 +74,6 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
     char *temp_label = NULL;
     int flag_for_extern = 0;
     char *temp_com_or_inst;
-    struct symbols_table *pointer_to_row = NULL;
 
     //checking if there's a label and taking care of it
     if (strchr(token, ':') != NULL)
@@ -204,12 +202,12 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
                 token = strtok(NULL, s);
             }
 
-            if ((j==2)&&((i>13)||(i<5)))
+            if ((j == 2) && ((i > 13) || (i < 5)))
             {
                 show_error(littleOperands, line_num);
                 return 0;
             }
-            else if((j==1)&&(i>4))
+            else if ((j == 1) && (i > 4))
             {
                 if (i < 14)
                 {
@@ -222,8 +220,9 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
 
                 return 0;
             }
-            
-            else if((j==0)&&(i<14)){
+
+            else if ((j == 0) && (i < 14))
+            {
                 show_error(manyOperands, line_num);
                 return 0;
             }

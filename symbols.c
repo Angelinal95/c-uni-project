@@ -1,10 +1,10 @@
 #include "MAIN.h"
 #include "error_check.h"
 
-int insert_into_symbol_table(int count_symbols, char *symbol_name, int num, char *type_of_symbol, struct symbols_table *symbols_list)
+int insert_into_symbol_table(int count_symbols, char *symbol_name, int num, char *type_of_symbol, symbols_table *symbols_list)
 {
-    struct symbols_table *new_label;
-    new_label = (struct symbols_table *)malloc(sizeof(symbols_table));
+    symbols_table *new_label;
+    new_label = (symbols_table *)malloc(sizeof(symbols_table));
 
     new_label->label = symbol_name;
     new_label->value = num;
@@ -24,10 +24,11 @@ int insert_into_symbol_table(int count_symbols, char *symbol_name, int num, char
     return 0;
 }
 
-insert_into_instruction_list(int count_i_lines, char *type_of_inst, char *info, char *pointer_to_row_in_symbol_table, struct instruction_line *instruction_line_list)
+insert_into_instruction_list(int count_i_lines, char *type_of_inst, char *info, char *pointer_to_row_in_symbol_table, instruction_line *instruction_line_list)
 {
-    struct instruction_line *new_inst_line;
+    instruction_line *new_inst_line;
     new_inst_line = (struct instruction_line *)malloc(sizeof(instruction_line));
+
     new_inst_line->label = pointer_to_row_in_symbol_table;
     new_inst_line->type_of_inst = type_of_inst;
     new_inst_line->info = info;
@@ -49,7 +50,7 @@ insert_into_instruction_list(int count_i_lines, char *type_of_inst, char *info, 
 insert_into_command_list(int count_c_lines, command *pointer_to_com, char *pointer_to_row_in_symbol_table, operand *operand_src, operand *operand_dest, command_line *command_line_list)
 {
     int i = 0;
-    struct command_line *new_command_line;
+    command_line *new_command_line;
     new_command_line = (command_line *)malloc(sizeof(command_line));
     new_command_line->label = pointer_to_row_in_symbol_table;
     new_command_line->operand_src = operand_src;
@@ -70,7 +71,7 @@ insert_into_command_list(int count_c_lines, command *pointer_to_com, char *point
     return 0;
 }
 
-void erase_symbol_table(struct symbols_table *symbols_list)
+void erase_symbol_table(symbols_table *symbols_list)
 {
     struct symbols_table *np, *u;
 
@@ -85,7 +86,7 @@ void erase_symbol_table(struct symbols_table *symbols_list)
 
 void erase_command_list(command_line *command_line_list)
 {
-    struct command_line *np, *u;
+    command_line *np, *u;
 
     while (command_line_list != NULL)
     {
@@ -96,9 +97,9 @@ void erase_command_list(command_line *command_line_list)
     }
 }
 
-void erase_instruction_list(struct instruction_line *instruction_line_list)
+void erase_instruction_list(instruction_line *instruction_line_list)
 {
-    struct instruction_line *np, *u;
+    instruction_line *np, *u;
 
     while (instruction_line_list != NULL)
     {
