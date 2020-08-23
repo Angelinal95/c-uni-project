@@ -13,7 +13,7 @@ typedef struct
 
 } operand;
 
-typedef struct 
+typedef struct
 {
     symbols_table *next;
     char *label;
@@ -22,7 +22,7 @@ typedef struct
     int address;
     int line;
 
-}symbols_table;
+} symbols_table;
 
 typedef struct
 {
@@ -33,7 +33,7 @@ typedef struct
 
 } command;
 
-typedef struct 
+typedef struct
 {
     char *label;        /*A pointer to the symbol_table*/
     const command *cmd; /* A pointer to the command in g_cmdArr */
@@ -41,21 +41,21 @@ typedef struct
     operand *operand_dest;
     command_line *next;
 
-}command_line;
+} command_line;
 
-typedef struct 
+typedef struct
 {
     char *label; /*A pointer to the symbol_table*/
     char *type_of_inst;
 
     char *info;
-     instruction_line *next;
+    instruction_line *next;
 
-}instruction_line;
+} instruction_line;
 
 typedef struct
 {
-    int address; // the IC in this
+    int address;    // the IC in this
     int numOfWords; //A number of words that the instruction occupies in the machine code.
     char *opcode;
     char *adress_mode_src;
@@ -69,49 +69,44 @@ typedef struct
     int anotherValue; //if one of the registers == 0, and A == 1. so its a number in this instruction.
 } full_instruction;
 
-
 /* ****************************** structer to use in the Second Read ******************************/
-typedef struct fullMemoryWord/* 24 bits */
+typedef struct fullMemoryWord /* 24 bits */
 {
-    unsigned int E :1;
-    unsigned int R :1;
-    unsigned int A :1;
-    union memWordType
-    {
+    unsigned int E : 1;
+    unsigned int R : 1;
+    unsigned int A : 1;
+    union memWordType {
         struct instructionBits
         {
-            unsigned int funct :5;
-            unsigned int regDest :3;
-            unsigned int modeDest :2;
-            unsigned int regSrc :3;
-            unsigned int modeSrc :2;
-            unsigned int opcode :6;
+            unsigned int funct : 5;
+            unsigned int regDest : 3;
+            unsigned int modeDest : 2;
+            unsigned int regSrc : 3;
+            unsigned int modeSrc : 2;
+            unsigned int opcode : 6;
 
-        }instructionBits;
+        } instructionBits;
 
         struct dataBits
         {
-            unsigned int number :21
+            unsigned int number : 21
 
-        }dataBits;
+        } dataBits;
 
-    }wordType;   
+    } wordType;
 
 } memWordcode;
 
 /*-----------------------global variables-----------------------*/
 
-int IC = 100;
-int DC = 0;
 int max_row_len = 80;
 int line_num = 0; //the line number we're at
 int error = 0;    //global variable to mark an errors
 int g_numOfEntries = 0;
-int g_numOfExterns =0;
+int g_numOfExterns = 0;
 symbols_table *labelList; // pointer to head of label list
 symbols_table *entryLabelsList;
 int line_num; //the line number we're at
-
 
 /*------------------------functions----------------------------*/
 

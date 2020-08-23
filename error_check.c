@@ -69,7 +69,7 @@ void show_error(errorType typeName, int line_num)
         printf("error in line: %d, label is already defined as being external\n\n", line_num);
         break;
 
-    /*case labelIsInternal:
+        /*case labelIsInternal:
             printf("error in line: %d, label is already defined as being internal.\n\n", line_num);
             break;*/
 
@@ -101,7 +101,7 @@ void show_error(errorType typeName, int line_num)
         printf("error in line: %d, too many opcodes in the same line\n\n", line_num);
         break;
 
-    case notValidRegister: 
+    case notValidRegister:
         printf("error in line: %d, not a valid register\n\n", line_num);
         break;
 
@@ -116,6 +116,14 @@ void show_error(errorType typeName, int line_num)
     case invalidData:
         printf("error in line: %d, invalid data.\n\n");
         break;
+
+    case invalidAddressingMode:
+        printf("error in line: %d, invalid addressing mode.\n\n");
+        break;
+
+    case invalidFunc:
+        printf("error in line: %d, invalid function.\n\n");
+        break;
     }
 }
 
@@ -125,20 +133,20 @@ int valid_number(char *checkNum, int line)
 
     checkNum += count_spaces(checkNum); // skip the spaces in the begining of checkNum
 
-    if (*checkNum == '#') 
+    if (*checkNum == '#')
     {
         checkNum++;
 
-        if ((*checkNum == '-') || (*checkNum == '+') || ((*checkNum >= '0' ) && (*checkNum <= '9')))
+        if ((*checkNum == '-') || (*checkNum == '+') || ((*checkNum >= '0') && (*checkNum <= '9')))
 
-        for (i=1; i <= strlen(checkNum); i++)
-        {
-            if ((checkNum[i] < '0') || (checkNum[i] > '9'))
+            for (i = 1; i <= strlen(checkNum); i++)
             {
-                show_error(notNumber, line);
-                return FALSE; /*error*/
-            }  
-        }
+                if ((checkNum[i] < '0') || (checkNum[i] > '9'))
+                {
+                    show_error(notNumber, line);
+                    return FALSE; /*error*/
+                }
+            }
         return TRUE; /* is a valid number*/
     }
     else
@@ -162,36 +170,36 @@ int check_extern_label(char *strExtern, int line)
 {
     int i, indexLabel = strspn(strExtern, ".extern"), word = 0;
 
-
     i = indexLabel;
 
-    if (*(strExtern+i) == ' ')
+    if (*(strExtern + i) == ' ')
     {
         i++;
-    
-        while (*(strExtern+i) != '\0')
+
+        while (*(strExtern + i) != '\0')
         {
-            if (*(strExtern+i) == ' ') 
+            if (*(strExtern + i) == ' ')
             {
                 i++;
-                continue;    
+                continue;
             }
             else
             {
-                while (*(strExtern+i) != ' ' && *(strExtern+i) != '\0' )
+                while (*(strExtern + i) != ' ' && *(strExtern + i) != '\0')
                 {
                     i++;
                 }
                 word++;
-            } 
+            }
         }
         if (word == 1)
         {
-            if( (valid_label(strExtern+indexLabel, line)) /*&& (!(defined_label(strExtern+indexLabel, line)) )*/)
+            if ((valid_label(strExtern + indexLabel, line)) /*&& (!(defined_label(strExtern+indexLabel, line)) )*/)
             {
                 return TRUE;
-            } 
-            else return FALSE;
+            }
+            else
+                return FALSE;
         }
 
         else //(word == 0) || (word > 1)
@@ -204,43 +212,42 @@ int check_extern_label(char *strExtern, int line)
     {
         return FALSE;
     }
-    
 }
 
 int check_entry_label(char *entry, int line)
 {
     int i, indexLabel = strspn(entry, ".entry"), word = 0;
 
-
     i = indexLabel;
 
-    if (*(entry+i) == ' ')
+    if (*(entry + i) == ' ')
     {
         i++;
-    
-        while (*(entry+i) != '\0')
+
+        while (*(entry + i) != '\0')
         {
-            if (*(entry+i) == ' ') 
+            if (*(entry + i) == ' ')
             {
                 i++;
-                continue;    
+                continue;
             }
             else
             {
-                while (*(entry+i) != ' ' && *(entry+i) != '\0' )
+                while (*(entry + i) != ' ' && *(entry + i) != '\0')
                 {
                     i++;
                 }
                 word++;
-            } 
+            }
         }
         if (word == 1)
         {
-            if(valid_label(entry+indexLabel, line) && defined_label(entry+indexLabel, line))
+            if (valid_label(entry + indexLabel, line) && defined_label(entry + indexLabel, line))
             {
                 return TRUE;
-            } 
-            else return FALSE;
+            }
+            else
+                return FALSE;
         }
 
         else //(word == 0) || (word > 1)
@@ -253,7 +260,6 @@ int check_entry_label(char *entry, int line)
     {
         return FALSE;
     }
-
 }
 
 int check_adress(char *adress, int line)
@@ -263,24 +269,23 @@ int check_adress(char *adress, int line)
 
 int name_function(char *nameFunc, int line)
 {
-    int found,i;  // boolean found/not found.
+    int found, i; // boolean found/not found.
 
-    // deal with empty strings case. 
+    // deal with empty strings case.
     if (*nameFunc == '\0')
     {
         show_error(function, line);
         return FALSE;
-    } 
+    }
 
-    for (i=0; command_list[i].name != NULL; i++)
+    for (i = 0; command_list[i].name != NULL; i++)
     {
-        if(!strcmp(nameFunc, command_list[i].name))
+        if (!strcmp(nameFunc, command_list[i].name))
         {
             return i; //return the index of the function in command_list
         }
-
     }
-    
+
     show_error(function, line); // this is not a valid function
     return FALSE;
 }
@@ -293,25 +298,25 @@ int valid_variable(char *var, int line)
 int valid_directive(char *directive, int line)
 {
 
-    if(strcmp(directive, ".data") == 0)
+    if (strcmp(directive, ".data") == 0)
     {
         return TRUE;
     }
-    else if (strcmp(directive,".string") == 0)
+    else if (strcmp(directive, ".string") == 0)
     {
         return TRUE;
     }
-    else if (strcmp(directive,".entry") == 0)
+    else if (strcmp(directive, ".entry") == 0)
     {
         return TRUE;
-    }   
-    else if (strcmp(directive,".extern") == 0)
+    }
+    else if (strcmp(directive, ".extern") == 0)
     {
         return TRUE;
     }
     else
     {
-        show_error(incorrectStatement,line);
+        show_error(incorrectStatement, line);
         return FALSE;
     }
 }
@@ -324,27 +329,26 @@ int valid_data(char *data, int line)
 int valid_string(char *string, int line)
 {
     int i, firstChar;
-    char firstAssci=32, lastAssci=127;
-    
+    char firstAssci = 32, lastAssci = 127;
 
     firstChar = count_spaces(string);
 
-    if((string[firstChar] != ' " ') || (string[strlen(string)] != ' " '))// the first and last character in string need to be a : "
+    if ((string[firstChar] != ' " ') || (string[strlen(string)] != ' " ')) // the first and last character in string need to be a : "
     {
         show_error(missingQuotation, line);
-        return FALSE;// not valid string
+        return FALSE; // not valid string
     }
     else
     {
-        for(i = firstChar ; i <= strlen(string) ; i++)
+        for (i = firstChar; i <= strlen(string); i++)
         {
-            if((string[i] < firstAssci) && (string[i] > lastAssci))//if the characters not valid (ASSCI)
+            if ((string[i] < firstAssci) && (string[i] > lastAssci)) //if the characters not valid (ASSCI)
             {
                 show_error(notString, line);
-                return FALSE;//not valid string
+                return FALSE; //not valid string
             }
         }
-        return TRUE;  //this is a valid string
+        return TRUE; //this is a valid string
     }
 }
 
@@ -355,22 +359,22 @@ int defined_label(char *label, int line)
 
 int valid_label(char *label, int line)
 {
-    int i, firstCharIndex=0, lengthLabel = strlen(label);
+    int i, firstCharIndex = 0, lengthLabel = strlen(label);
     char tempLabel[LABEL_LENGTH];
     firstCharIndex = count_spaces(label); //Checks for white characters at the beginning of the string
 
-    if(defined_label(label, line))
+    if (defined_label(label, line))
     {
         show_error(labelExists, line);
         return FALSE;
     }
-    else if ((lengthLabel-firstCharIndex) > LABEL_LENGTH) //Checks the length of the label starting with the first letter
+    else if ((lengthLabel - firstCharIndex) > LABEL_LENGTH) //Checks the length of the label starting with the first letter
     {
         show_error(longLabel, line);
         return FALSE;
     }
 
-    else if (*(label+lengthLabel-1) != ':')
+    else if (*(label + lengthLabel - 1) != ':')
     {
         show_error(invalidLabel, line);
         return FALSE;
@@ -378,60 +382,57 @@ int valid_label(char *label, int line)
 
     label += firstCharIndex;
 
-    if(isRegister(label))
+    if (isRegister(label))
     {
         show_error(savedWord, line);
         return FALSE;
-        
     }
     if (name_function(label, line) == FALSE)
     {
         /* Checks if the label starts with a letter */
-        if((*label >= 'A') && (*label <= 'Z') || (*label >= 'a') && (*label <= 'z'))
+        if ((*label >= 'A') && (*label <= 'Z') || (*label >= 'a') && (*label <= 'z'))
         {
-            for (i=1 ; i <= strlen(label) ; i++) //A loop starts from the second character.
+            for (i = 1; i <= strlen(label); i++) //A loop starts from the second character.
             {
-                if(label[i] == ' ')//Check that there is no space in the middle of the label
+                if (label[i] == ' ') //Check that there is no space in the middle of the label
                 {
-                 show_error(whiteSpace, line);
+                    show_error(whiteSpace, line);
                     return FALSE;
                 }
 
-                else if(((label[i] > '9') && (label[i] < 'A')) || ((label[i] > 'Z') && (label[i] < 'a' )) || (label[i] > 'z'))//Check that the characters after the first character are letters or numbers
+                else if (((label[i] > '9') && (label[i] < 'A')) || ((label[i] > 'Z') && (label[i] < 'a')) || (label[i] > 'z')) //Check that the characters after the first character are letters or numbers
                 {
                     show_error(invalidLabel, line);
                     return FALSE;
                 }
             }
-            return TRUE; //valid label 
-
+            return TRUE; //valid label
         }
     }
     /* the first character is not a letter */
-    else 
+    else
     {
         show_error(savedWord, line);
         return FALSE;
     }
-    
 }
 
 int OnlySpacesAfterCode(char *str, int line)
 {
     int i;
 
-    for (i=0; *(str+i) == ' '; i++);
+    for (i = 0; *(str + i) == ' '; i++)
+        ;
 
-    if(*(str+i) == '\0')
+    if (*(str + i) == '\0')
     {
         return TRUE;
     }
-    else 
+    else
     {
         show_error(incorrectStatement, line);
         return FALSE;
     }
-    
 }
 
 int lebalInComment(char *label, int line)
@@ -443,4 +444,3 @@ int lebalInComment(char *label, int line)
     }
     return TRUE;
 }
-

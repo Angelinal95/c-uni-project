@@ -9,6 +9,8 @@ int count_c_lines = 0;
 int count_i_lines = 0;
 int count_symbols = 0;
 struct symbols_table *pointer_to_row;
+int IC = 100;
+int DC = 0;
 
 int main_pass(char *filename)
 {
@@ -54,144 +56,185 @@ int main_pass(char *filename)
         return 0;
     }
 
-    //checking if it's an empty line or a comment line
-    int ignore_line(char *token)
-    {
+    int ICF = IC;
+    int DCF = DC;
 
-        return ((skip_white_space(token) == NULL) || (strcmp(token, ";") == 0));
+    second_pass(symbols_list, instruction_line_list, command_line_list, ICF, DCF);
+}
+//checking if it's an empty line or a comment line
+int ignore_line(char *token)
+{
+
+    return ((skip_white_space(token) == NULL) || (strcmp(token, ";") == 0));
+}
+
+//analyzing what's in the current line
+int go_through_line(char *token, struct symbols_table *symbols_table)
+{
+    char *temp_label = NULL;
+    int flag_for_extern = 0;
+    char *temp_com_or_inst;
+    struct symbols_table *pointer_to_row = NULL;
+
+    //checking if there's a label and taking care of it
+    if (strchr(token, ':') != NULL)
+    {
+        if (legal_label(token) == 1)
+        {
+            temp_label = token;
+            token = strtok(NULL, s);
+        }
     }
 
-    //analyzing what's in the current line
-    int go_through_line(char *token, struct symbols_table *symbols_table)
+    if (check_if_com_or_inst(token) == 1)
     {
-        char *temp_label = NULL;
-        char *temp_com_or_inst;
-        struct symbols_table *pointer_to_row = NULL;
+        temp_com_or_inst = "data";
 
-        //checking if there's a label and taking care of it
-        if (strchr(token, ':') != NULL)
+        if (strcmp(token, ".data") == 0)
         {
-            if (legal_label(token) == 1)
-            {
-                temp_label = token;
-                token = strtok(NULL, s);
-            }
-        }
-
-        if (check_if_com_or_inst(token) == 1)
-        {
-            temp_com_or_inst = "data";
-
-            if (strcmp(token, ".data") == 0)
+            token = strtok(NULL, s);
+            int *temp_arr_for_data = NULL;
+            while (token != NULL)
             {
                 token = strtok(NULL, s);
                 if (valid_data(token))
                 {
-                    token = strtok(NULL, s);
-                    insert_into_instruction_list(count_i_lines, ".data", pointer_to_row, token, instruction_line_list, search_row_in_symbol_table());
                     count_i_lines++;
+                    DC++;
+                    temp_arr_for_data = (int *)calloc(token, sizeof(int));
                 }
             }
+            insert_into_instruction_list(count_i_lines, ".data", pointer_to_row, temp_arr_for_data, instruction_line_list, search_row_in_symbol_table());
+        }
 
-            else if (strcmp(token, ".string") == 0)
+        else if (strcmp(token, ".string") == 0)
+        {
+            token = strtok(NULL, s);
+
+            if (valid_string(token))
             {
                 token = strtok(NULL, s);
 
-                if (valid_string(token))
-                {
-                    token = strtok(NULL, s);
-                    insert_into_instruction_list(count_i_lines, ".string", pointer_to_row, token, instruction_line_list, search_row_in_symbol_table());
-                    count_i_lines++;
-                }
-            }
+                insert_into_instruction_list(count_i_lines, ".string", pointer_to_row, token, instruction_line_list, search_row_in_symbol_table());
+                count_i_lines++;
 
-            else if (strcmp(token, ".extern") == 0)
-            {
-                token = strtok(NULL, s)
-            }
-            /*if it's a .entry */
-            else
-            {
-                return 0;
+                DC = DC + strlen(token) + 1;
             }
         }
 
+        else if (strcmp(token, ".extern") == 0)
+        {
+            insert_into_instruction_list(count_i_lines, ".string", pointer_to_row, token, instruction_line_list, search_row_in_symbol_table());
+            token = strtok(NULL, s);
+            flag_for_extern = 1;
+        }
+        /*if it's an .entry */
         else
         {
-            temp_com_or_inst = "code";
-            command *temp;
-            int i = 0;
-            while (command_list[i].name != NULL)
+            return 0;
+        }
+    }
+
+    else
+    {
+        temp_com_or_inst = "code";
+        command *temp;
+        int i = 0;
+        while (command_list[i].name != NULL)
+        {
+            if (strcmp(token, command_list[i].name) == 0)
             {
-                if (strcmp(token, command_list[i].name) == 0)
-                {
-                    temp = &command_list[i];
+                temp = &command_list[i];
 
-                    break;
-                }
-                i++;
+                break;
             }
-
-            if (i < 16)
-            {
-                int j = 0;
-                ++IC;
-                operand *operand_src = NULL;
-                operand *operand_dest = NULL;
-                token = strtok(NULL, s);
-                while (token != NULL)
-                {
-                    if (j == 0)
-                    {
-                        operand_src->Addressing_Mode = kind_of_addressing(token);
-                        if ((operand_src->Addressing_Mode) == 4)
-                        {
-                            /*there's an error*/
-                        }
-                    }
-                    else if ((j == 1) && (strcmp(token, ',') != 0))
-                    {
-                        /*there's an error - func doesn't exist*/
-                    }
-
-                    else if (j == 2)
-                    {
-
-                        operand_dest->Addressing_Mode = kind_of_addressing(token);
-                        if ((operand_dest->Addressing_Mode) == 4)
-                        {
-                            /*there's an error*/
-                        }
-                    }
-
-                    j++;
-                    token = strtok(NULL, s);
-                }
-
-                insert_into_command_list(count_c_lines, temp, pointer_to_row, symbols_list, operand_src, operand_dest, command_line_list);
-                count_c_lines++;
-            }
-            else
-            {
-                /*there's an error - func doesn't exist*/
-                return 0;
-            }
+            i++;
         }
 
-        if (temp_label != NULL)
+        if (i < 16)
         {
-            if (strcmp(temp_com_or_ins, "code") == 0)
+            int j = 0;
+            int temp_for_address = 0;
+            ++IC;
+            operand *operand_src = NULL;
+            operand *operand_dest = NULL;
+            token = strtok(NULL, s);
+            while (token != NULL)
             {
-                insert_into_symbols_table(count_symbols, temp_label, IC, temp_com_or_ins, symbols_list);
-                count_symbols++;
+                if (j == 0)
+                {
+                    temp_for_address = kind_of_addressing(operand_src, token, temp_label, temp_com_or_inst);
+                    if (temp_for_address == 4)
+                    {
+                        show_error(invalidAddressingMode, line_num);
+                        return 0;
+                    }
+                    if ((operand_src->Addressing_Mode) != 3)
+                    {
+                        IC = IC + 2;
+                    }
+                }
+                else if ((j == 1) && (strcmp(token, ',') != 0))
+                {
+                    show_error(invalidFunc, line_num);
+                    return 0;
+                }
+
+                else if (j == 2)
+                {
+
+                    temp_for_addresse = kind_of_addressing(operand_dest, token, temp_label, temp_com_or_inst);
+                    if ((temp_for_address) == 4)
+                    {
+                        show_error(invalidAddressingMode, line_num);
+                        return 0;
+                    }
+                    if (((operand_dest->Addressing_Mode) == 0) || ((operand_dest->Addressing_Mode) == 2))
+                    {
+                        IC = IC + 2;
+                    }
+                    if ((operand_dest->Addressing_Mode) == 1)
+                    {
+                        IC = IC + 1;
+                    }
+                }
+
+                j++;
+                token = strtok(NULL, s);
             }
+
+            insert_into_command_list(count_c_lines, temp, pointer_to_row, symbols_list, operand_src, operand_dest, command_line_list);
+            count_c_lines++;
+        }
+        else
+        {
+            show_error(invalidFunc, line_num);
+            return 0;
+        }
+    }
+
+    if (temp_label != NULL)
+    {
+        if (strcmp(temp_com_or_ins, "code") == 0)
+        {
+            insert_into_symbols_table(count_symbols, temp_label, IC, temp_com_or_ins, symbols_list);
+            count_symbols++;
+        }
+        else
+        {
+            if (flag_for_extern == 1)
+            {
+                insert_into_symbols_table(count_symbols, temp_label, 0, temp_com_or_ins, symbols_list);
+            }
+
             else
             {
                 insert_into_symbols_table(count_symbols, temp_label, DC, temp_com_or_ins, symbols_list);
-                count_symbols++;
             }
+            count_symbols++;
         }
     }
+}
 }
 
 //determine if it's a command line or a instruction line
@@ -234,7 +277,7 @@ int search_row_in_symbol_table(struct symbols_table *symbols_list, char *temp_la
     return 0;
 }
 
-int kind_of_addressing(operand *op, char *token)
+int kind_of_addressing(operand *op, char *token, char *temp_label, char *temp_com_or_inst)
 {
 
     //checking if it's Instant addressing
@@ -242,33 +285,37 @@ int kind_of_addressing(operand *op, char *token)
     if (token[0] == '#')
     {
         token = &token[1];
-        if (/*check if it's a valid number*/)
+        if (valid_number(token, line_num) == TRUE)
         {
             op->operand_value = token;
-            return 0;
+            op->Addressing_Mode = 0;
         }
         return 4;
     }
-    //checking if it's Direct addressing
 
-    if (token)
-    {
-        op->operand_value = token;
-        return 1;
-    }
-    //checking if it's Relative addressing
+    if (temp_label != NULL)
+    { //checking if it's Direct addressing
+        if (strcmp(temp_com_or_inst, "data") == 0)
+        {
+            op->operand_value = token;
+            op->Addressing_Mode = 1;
+        }
+        //checking if it's Relative addressing
 
-    if (token[0] == '&')
-    {
-        token = &token[1];
-        op->operand_value = token;
-        return 2;
+        else if (token[0] == '&')
+        {
+            token = &token[1];
+            op->operand_value = token;
+            op->Addressing_Mode = 2;
+        }
+        return 4;
     }
+
     //checking if it's Direct register addressing
-    if (token[0] == 'r')
+    if ((token[0] == 'r') && (token[1] < 7) && (token[1] > 0))
     {
         op->operand_value = token;
-        return 3;
+        op->Addressing_Mode = 3;
     }
 
     return 4;
