@@ -143,7 +143,7 @@ int ifOpIsLabel(operand *op, int lineNum)
 }
 
 /* Returns the int value of a memory word. */
-int getNumFromMemoryWord(memWordCode memory) 
+int returnIntMemoryWord(memWordCode memory) 
 {
 
 	unsigned int intBitMask = ~0;
@@ -189,23 +189,7 @@ int regNum(operand op)
 
 
 
-memWordCode createCommandMemWord(command_line line) 
-{
-	memWordCode commandToPush = { 0 };
-
-	/* fills the bits inside the word memory */
-    commandToPush.wordVal.instructionBits.funct = line.cmd->funct;
-	commandToPush.wordVal.instructionBits.opcode = line.cmd->opcode;
-	commandToPush.wordVal.instructionBits.regSrc = regNum(*line.operand_src);
-	commandToPush.wordVal.instructionBits.regDest = regNum(*line.operand_dest);
-    commandToPush.wordVal.instructionBits.modeSrc = returnModeOpType(*line.operand_src);
-    commandToPush.wordVal.instructionBits.modeDest = returnModeOpType(*line.operand_dest);
-
-	return commandToPush;
-}
-
-
-memWordCode MemoryWord(command_line line) 
+memWordCode lineMemoryWord(command_line line) 
 {
 	memWordCode memory = { 0 };
     symbols_table *label = NULL;
@@ -220,6 +204,7 @@ memWordCode MemoryWord(command_line line)
 	    memory.wordVal.instructionBits.regDest = regNum(*line.operand_dest);
         memory.wordVal.instructionBits.modeSrc = returnModeOpType(*line.operand_src);
         memory.wordVal.instructionBits.modeDest = returnModeOpType(*line.operand_dest);
+        return memory;
 	} 
 
     label = searchLabel(line.label);
@@ -238,11 +223,70 @@ memWordCode MemoryWord(command_line line)
         }
         
     }
-    memory.wordVal.number = ;
+    memory.wordVal.number = command_line_list->;
 
 	return memory;
 }
 
+
+
+void addWordToMemory(int *memoryWordArr, int *memCoun, memWordCode memory) {
+	
+	if (*memCoun < ((IC+DC)-INITIAL_ADDRESS)) //There is space in the array
+    {
+		
+		memoryWordArr[(*memCoun)++] = returnIntMemoryWord(memory);// Add the memory word
+	}
+}
+
+
+
+void pushdataToMemory(int *wordMemoryArr, int *memCount, int DC) 
+{
+	int i;
+	unsigned int intBitMask = ~0;
+
+	intBitMask >>= ((sizeof(int) * ONE_BYTE_SIZE) - ONE_WORD_SIZE);/* int of '1' in all 24 first bits, all the rest bits '0' */
+
+	for (i = 0; i < DC; i++) //Add each int from g_dataArr to the end of memoryArr 
+    { 
+		if (*wordMemoryArr) {
+			/* The mask makes sure we only use the first "TEN BITS" bits */
+			wordMemoryArr[(*memCount)++] = intBitMask & g_dataArr[i];
+		} 
+        else //dont have  more space in wordMemoryArr
+        {
+			return;
+		}
+	}
+}
+
+
+/* Reads the data from the first read for the second time. */
+/* It converts all the lines into the memory. */
+int secondFileRead(int* wordMemoryArr, command_line *arrLines, int lineNum, int IC, int DC) 
+{
+	 int error, memCount = 0, i;
+
+	
+	updateDataLabelsAddress(IC); // update the operand if it label 
+
+	
+	error += countIllegalEntries(); // Check for illegal entries 
+
+	
+	for (i = 0; i < lineNum; i++) // Add line in to the memory
+    {
+		if (!addLineToMemory(wordMemoryArr, &memCount, (arrLines + i))) // if found error while adding line to memory 
+        {
+			error++;
+		}
+	}
+	
+	addDataToMemory(wordMemoryArr, &memCount, DC);// Add data to the end of memory
+
+    return error;
+}
 
 
 
