@@ -55,7 +55,7 @@ void ObjectFile(char *fileName,int *instrucLinesArr, int IC, int DC)
 void EntriesFile(char *fileName)
 {
 	FILE *file;
-	symbols_table *tempLabel = labelList;
+	symbols_table *tempLabel = symbols_list;
 
 	/* if there are entry labels */
 	if (g_numOfEntries)
@@ -87,7 +87,7 @@ void EntriesFile(char *fileName)
 void ExternFile(char *fileName)
 {
 	FILE *file;
-	symbols_table *tempLabel = labelList;
+	symbols_table *tempLabel = symbols_list;
 
 	/* if there are extern labels */
 	if (g_numOfExterns)
