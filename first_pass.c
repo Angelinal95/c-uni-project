@@ -122,9 +122,13 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
 
         else if (strcmp(token, ".extern") == 0)
         {
-            insert_into_instruction_list(count_i_lines, ".string", pointer_to_row, token, instruction_line_list, search_row_in_symbol_table());
             token = strtok(NULL, s);
-            flag_for_extern = 1;
+            if((check_extern_label(token, line_num)){
+                insert_into_instruction_list(count_i_lines, ".extern", pointer_to_row, token, instruction_line_list, search_row_in_symbol_table());
+                token = strtok(NULL, s);
+                flag_for_extern = 1;
+
+            }
         }
         /*if it's an .entry */
         else
