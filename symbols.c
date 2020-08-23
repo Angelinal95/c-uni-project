@@ -71,7 +71,7 @@ insert_into_command_list(int count_c_lines, command *pointer_to_com, char *point
     return 0;
 }
 
-void erase_symbol_table(symbols_table *symbols_list)
+void erase_symbol_table()
 {
     symbols_table *np, *u;
 
@@ -84,7 +84,7 @@ void erase_symbol_table(symbols_table *symbols_list)
     }
 }
 
-void erase_command_list(command_line *command_line_list)
+void erase_command_list()
 {
     command_line *np, *u;
 
@@ -97,7 +97,7 @@ void erase_command_list(command_line *command_line_list)
     }
 }
 
-void erase_instruction_list(instruction_line *instruction_line_list)
+void erase_instruction_list()
 {
     instruction_line *np, *u;
 
@@ -114,28 +114,18 @@ void erase_instruction_line()
 {
     instruction_line *np, *u;
 
-    while (instruction_line_list != NULL)
-    {
-        np = &instruction_line_list[0];
-        u = np->next;
-        free(np);
-        instruction_line_list = u;
-    }
+    np = &instruction_line_list[0];
+    u = np->next;
+    free(np);
+    instruction_line_list = u;
 }
 
 void erase_command_line()
 {
     command_line *np, *u;
 
-    while (command_line_list != NULL)
-    {
-        np = &command_line_list[0];
-        u = np->next;
-        free(np);
-        command_line_list = u;
-    }
-}
-
-void erase_operand(operand *operand_temp)
-{
+    np = &command_line_list[0];
+    u = np->next;
+    free(np);
+    command_line_list = u;
 }

@@ -222,7 +222,9 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
             if ((j == 2) && ((i > 13) || (i < 5)))
             {
                 show_error(littleOperands, line_num);
-                erase_operand(operand_src);
+
+                free(operand_src);
+
                 return 0;
             }
             else if (j == 1)
@@ -230,14 +232,13 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
                 if (i < 5)
                 {
                     show_error(manyOperands, line_num);
-
-                    erase_operand(operand_src);
-                    erase_operand(operand_dest);
+                    free(operand_src);
+                    free(operand_dest);
                 }
                 else if (i > 14)
                 {
                     show_error(littleOperands, line_num);
-                    erase_operand(operand_src);
+                    free(operand_src);
                 }
 
                 return 0;
@@ -246,11 +247,11 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
             else if ((j == 0) && (i < 14))
             {
                 show_error(manyOperands, line_num);
-                erase_operand(operand_src);
+                free(operand_src);
                 if (i < 5)
                 {
 
-                    erase_operand(operand_dest);
+                    free(operand_dest);
                 }
 
                 return 0;
