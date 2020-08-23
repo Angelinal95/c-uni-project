@@ -2,11 +2,17 @@
 #include "error_check.h"
 #include "auxiliary_functions.h"
 
+<<<<<<< HEAD
+command_line *command_line_list;
+instruction_line *instruction_line_list;
+
+=======
+>>>>>>> 0f6d64c68f6aaf357091f5553d9406f06991e3e8
 int count_c_lines = 0;
 int count_i_lines = 0;
 int count_symbols = 0;
-symbols_table *pointer_to_row = NULL;
-char s[2] = " ";
+symbols_table *pointer_to_row;
+
 
 int main_pass(char *filename)
 {
@@ -14,6 +20,7 @@ int main_pass(char *filename)
     int line_count = 0;
     char temp[81];
     char temp_1[81];
+    const char s[2] = " ";
     char *token;
 
     fd = fopen(filename, "r");
@@ -66,11 +73,12 @@ int ignore_line(char *token)
 }
 
 //analyzing what's in the current line
-int go_through_line(char *token, struct symbols_table *symbols_table)
+int go_through_line(char *token, symbols_table *symbols_table)
 {
     char *temp_label = NULL;
     int flag_for_extern = 0;
     char *temp_com_or_inst;
+    symbols_table *pointer_to_row = NULL;
 
     //checking if there's a label and taking care of it
     if (strchr(token, ':') != NULL)
@@ -133,7 +141,11 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
 
         else if (strcmp(token, ".extern") == 0)
         {
+            insert_into_instruction_list(count_i_lines, ".string", pointer_to_row, token, instruction_line_list, search_row_in_symbol_table());
             token = strtok(NULL, s);
+<<<<<<< HEAD
+            flag_for_extern = 1;
+=======
             if((check_extern_label(token, line_num)==TRUE){
                 insert_into_instruction_list(count_i_lines, ".extern", pointer_to_row, token, instruction_line_list, search_row_in_symbol_table());
                 token = strtok(NULL, s);
@@ -143,6 +155,7 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
             else{
                 return 0;
             }
+>>>>>>> 0f6d64c68f6aaf357091f5553d9406f06991e3e8
         }
         /*if it's an .entry */
         else
@@ -219,7 +232,7 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
                 token = strtok(NULL, s);
             }
 
-            if ((j == 2) && ((i > 13) || (i < 5)))
+            if ((j==2)&&((i>13)||(i<5)))
             {
                 show_error(littleOperands, line_num);
 
@@ -227,7 +240,11 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
 
                 return 0;
             }
+<<<<<<< HEAD
+            else if((j==1)&&(i>4))
+=======
             else if (j == 1)
+>>>>>>> 0f6d64c68f6aaf357091f5553d9406f06991e3e8
             {
                 if (i < 5)
                 {
@@ -243,9 +260,8 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
 
                 return 0;
             }
-
-            else if ((j == 0) && (i < 14))
-            {
+            
+            else if((j==0)&&(i<14)){
                 show_error(manyOperands, line_num);
                 free(operand_src);
                 if (i < 5)
@@ -281,7 +297,7 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
             {
                 if (flag_for_extern == 1)
                 {
-                    insert_into_symbols_table(count_symbols, temp_label, 0, "external", symbols_list);
+                    insert_into_symbols_table(count_symbols, temp_label, 0, temp_com_or_ins, symbols_list);
                 }
 
                 else

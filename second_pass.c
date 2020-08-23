@@ -123,7 +123,7 @@ int entryLabelAlreadyInList(char *entryLabelName)
 /* If operand is a label, update the value to be the address of the label. */
 int ifOpIsLabel(operand *op, int lineNum) 
 {
-    symbols_table *label;
+    symbols_table *label = NULL;
 
 	if (op->Addressing_Mode == 1) 
     {
@@ -194,7 +194,6 @@ memWordCode createCommandMemWord(command_line line)
 	memWordCode commandToPush = { 0 };
 
 	/* fills the bits inside the word memory */
-	commandToPush.A_R_E = line.A_R_E; 
     commandToPush.wordVal.instructionBits.funct = line.cmd->funct;
 	commandToPush.wordVal.instructionBits.opcode = line.cmd->opcode;
 	commandToPush.wordVal.instructionBits.regSrc = regNum(*line.operand_src);
@@ -205,6 +204,44 @@ memWordCode createCommandMemWord(command_line line)
 	return commandToPush;
 }
 
+
+memWordCode MemoryWord(command_line line) 
+{
+	memWordCode memory = { 0 };
+    symbols_table *label = NULL;
+
+	if ((line.operand_dest != NULL) && (line.operand_src != NULL)) 
+    {
+		memory.A_R_E = A; /* absolute */
+        	/* fills the bits inside the word memory */
+        memory.wordVal.instructionBits.funct = line.cmd->funct;
+	    memory.wordVal.instructionBits.opcode = line.cmd->opcode;
+	    memory.wordVal.instructionBits.regSrc = regNum(*line.operand_src);
+	    memory.wordVal.instructionBits.regDest = regNum(*line.operand_dest);
+        memory.wordVal.instructionBits.modeSrc = returnModeOpType(*line.operand_src);
+        memory.wordVal.instructionBits.modeDest = returnModeOpType(*line.operand_dest);
+	} 
+
+    label = searchLabel(line.label);
+
+    if (label != NULL)
+    {
+        if (symbols_list->type_of_symbol == "external" || symbols_list->value == '0')
+        {
+            memory.A_R_E = E;
+            memory.wordVal.number = 0;
+        }
+        else
+        {
+            memory.A_R_E = R;
+            memory.wordVal.number = label->address ;
+        }
+        
+    }
+    memory.wordVal.number = ;
+
+	return memory;
+}
 
 
 
