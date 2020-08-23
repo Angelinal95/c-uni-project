@@ -2,7 +2,6 @@
 #include "error_check.h"
 #include "auxiliary_functions.h"
 
-command_line *command_line_list;
 instruction_line *instruction_line_list;
 
 int count_c_lines = 0;
