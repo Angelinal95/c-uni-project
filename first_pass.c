@@ -254,7 +254,7 @@ int go_through_line(char *token, struct symbols_table *symbols_table)
             {
                 if (flag_for_extern == 1)
                 {
-                    insert_into_symbols_table(count_symbols, temp_label, 0, temp_com_or_ins, symbols_list);
+                    insert_into_symbols_table(count_symbols, temp_label, 0, "external", symbols_list);
                 }
 
                 else
