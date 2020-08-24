@@ -229,9 +229,9 @@ int go_through_line(char *token)
         temp_com_or_inst = "code";
         command *temp;
         int i = 0;
-        while (command_list[i].name != NULL)
+        while (command_list[i] != NULL)
         {
-            if (strcmp(token, command_list[i].name) == 0)
+            if (strcmp(token, command_list[i]) == 0)
             {
                 temp = &command_list[i]; //a pointer to the command
 
