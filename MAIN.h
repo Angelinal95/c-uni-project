@@ -81,19 +81,7 @@ typedef struct fullMemoryWord /* 24 bits */
 
 } memWordCode;
 
-/*-----------------------global variables-----------------------*/
-
-int max_row_len = 80; // ????????? copy this to main.c file ???????????
-int line_num = 0; //the line number we're at  ????????? copy this to main.c file ???????????
-int error = 0;    //global variable to mark an errors
-int g_numOfEntries = 0;/*?????????? no need ?????????????*/
-int g_numOfExterns = 0;/*?????????? no need ?????????????*/
-int IC = INITIAL_ADDRESS;   //????????? copy this to main.c file ???????????
-int DC = 0; //num of data in the assembly code       ????????? copy this to main.c file ???????????
-command_line *command_line_list;   // ????????? copy this to main.c file ???????????
-instruction_line *instruction_line_list;  //????????? copy this to main.c file ???????????
-// use in second pass  
-symbols_table *symbols_list; // pointer to head of label list
+int error = 0;
 
 /*------------------------functions - first pass----------------------------*/
 
@@ -117,18 +105,18 @@ int regNum(operand);
 memWordCode lineMemWordCode(command_line);
 void addWordToMemory(int *, int *, memWordCode);
 void pushdataToMemory(symbols_table *, int *, int *, int);
-void second_pass(int *, symbols_table *, symbols_table *, int *, int , int);
+void second_pass(int *, symbols_table *, symbols_table *, int *, int, int);
 
 /*------------------------functions - symbols----------------------------*/
 
-int insert_into_symbol_table(int count_symbols, char *symbol_name, int num, char *type_of_symbol);                                                           //inserting a new node to the linked list of symbols
-int insert_into_instruction_list(int count_i_lines, char *type_of_inst, char *info, char *pointer_to_row_in_symbol_table);                                   //inserting a new node to the linked list of instructions
-int insert_into_command_list(int count_c_lines, command *pointer_to_com, char *pointer_to_row_in_symbol_table, operand *operand_src, operand *operand_dest); //inserting a new node to the linked list of commands
-void erase_symbol_table();                                                                                                                                   //erasing the whole symbols list
-void erase_command_list();                                                                                                                                   //erasing the whole command list
-void erase_instruction_list();                                                                                                                               //erasing the whole instruction list
-void erase_instruction_line();                                                                                                                               //erasing the current node from the instruction line
-void erase_command_line();                                                                                                                                   //erasing the current node from the command line
+int insert_into_symbols_table(int, char *, int, char *, symbols_table *);                   //inserting a new node to the linked list of symbols
+int insert_into_instruction_list(int, char *, char *, char *, instruction_line *);          //inserting a new node to the linked list of instructions
+int insert_into_command_list(int, command *, char *, operand *, operand *, command_line *); //inserting a new node to the linked list of commands
+void erase_symbol_table(symbols_table *);                                                   //erasing the whole symbols list
+void erase_command_list(command_line *);                                                    //erasing the whole command list
+void erase_instruction_list(instruction_line *);                                            //erasing the whole instruction list
+void erase_instruction_line(instruction_line *);                                            //erasing the current node from the instruction line
+void erase_command_line(command_line *);                                                    //erasing the current node from the command line
 
 /*------------------------Register List ------------------------*/
 

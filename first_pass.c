@@ -7,6 +7,12 @@ int count_i_lines = 0;
 int count_symbols = 0;
 symbols_table *pointer_to_row = NULL;
 const char s[2] = " ";
+int IC = INITIAL_ADDRESS;
+int DC = 0; //num of data in the assembly code
+command_line *command_line_list = NULL;
+instruction_line *instruction_line_list = NULL;
+symbols_table *symbols_list = NULL;
+int line_num = 0; //the line number we're at
 
 int main_pass(char *filename)
 {
@@ -24,7 +30,7 @@ int main_pass(char *filename)
         return 1;
     }
 
-    while (fgets(temp, max_row_len + 1, fd) != NULL)
+    while (fgets(temp, 80 + 1, fd) != NULL)
     {
         line_count++;
         symbols_table *symbols_table = NULL;
@@ -32,7 +38,7 @@ int main_pass(char *filename)
 
         //checking if the length of the line is more than 80 characters
 
-        if ((temp[81] != '/n') && (fgets(temp_1, max_row_len + 1, fd) != NULL))
+        if ((temp[81] != '/n') && (fgets(temp_1, 80 + 1, fd) != NULL))
         {
             show_error(20, line_count);
             error++;
@@ -44,12 +50,10 @@ int main_pass(char *filename)
                 go_through_line(token);
             }
         }
-
     }
     fclose(filename);
 
     return error;
-
 }
 
 //checking if it's an empty line or a comment line
@@ -110,12 +114,12 @@ int go_through_line(char *token)
             }
             if (search_row_in_symbol_table(temp_label, pointer_to_row) == 1)
             {
-                insert_into_instruction_list(count_i_lines, ".data", temp_arr_for_data, pointer_to_row);
+                insert_into_instruction_list(count_i_lines, ".data", temp_arr_for_data, pointer_to_row, instruction_line_list);
             }
             else
             {
 
-                insert_into_instruction_list(count_i_lines, ".data", temp_arr_for_data, NULL);
+                insert_into_instruction_list(count_i_lines, ".data", temp_arr_for_data, NULL, instruction_line_list);
             }
         }
         else if (strcmp(token, ".string") == 0)
@@ -132,11 +136,11 @@ int go_through_line(char *token)
                 }
                 if (search_row_in_symbol_table(temp_label, pointer_to_row) == 1)
                 {
-                    insert_into_instruction_list(count_i_lines, ".string", token, pointer_to_row);
+                    insert_into_instruction_list(count_i_lines, ".string", token, pointer_to_row, instruction_line_list);
                 }
                 else
                 {
-                    insert_into_instruction_list(count_i_lines, ".string", token, NULL);
+                    insert_into_instruction_list(count_i_lines, ".string", token, NULL, instruction_line_list);
                 }
 
                 count_i_lines++;
@@ -163,11 +167,11 @@ int go_through_line(char *token)
             {
                 if (search_row_in_symbol_table(temp_label, pointer_to_row) == 1)
                 {
-                    insert_into_instruction_list(count_i_lines, ".extern", token, pointer_to_row);
+                    insert_into_instruction_list(count_i_lines, ".extern", token, pointer_to_row, instruction_line_list);
                 }
                 else
                 {
-                    insert_into_instruction_list(count_i_lines, ".extern", token, NULL);
+                    insert_into_instruction_list(count_i_lines, ".extern", token, NULL, instruction_line_list);
                 }
 
                 token = strtok(NULL, s);
@@ -295,7 +299,7 @@ int go_through_line(char *token)
 
                 add_symbol(temp_label, temp_com_or_inst, flag_for_extern);
             }
-            insert_into_command_list(count_c_lines, temp, pointer_to_row, operand_src, operand_dest);
+            insert_into_command_list(count_c_lines, temp, pointer_to_row, operand_src, operand_dest, command_line_list);
             count_c_lines++;
         }
         else
@@ -419,11 +423,11 @@ int add_symbol(char *temp_label, char *temp_com_or_inst, int flag_for_extern)
     {
         if (strcmp(temp_com_or_inst, "data") == 0)
         {
-            erase_instruction_line();
+            erase_instruction_line(instruction_line_list);
         }
         else
         {
-            erase_command_line();
+            erase_command_line(command_line_list);
         }
 
         show_error(labelExists, line_num);
