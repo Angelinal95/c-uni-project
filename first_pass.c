@@ -40,7 +40,7 @@ int main_pass(char *filename)
 
         if ((temp[81] != '/n') && (fgets(temp_1, 80 + 1, fd) != NULL))
         {
-            show_error(20, line_count);
+            show_error(longRow, line_count);
             error++;
         }
         else
@@ -66,9 +66,9 @@ int ignore_line(char *token)
 //analyzing what's in the current line
 int go_through_line(char *token)
 {
-    char *temp_label = NULL;
+    char *temp_label = NULL; //name of the label
     int flag_for_extern = 0;
-    char *temp_com_or_inst;
+    char *temp_com_or_inst; //to know if it's a command or an instruction
 
     //checking if there's a label and taking care of it
     if (strchr(token, ':') != NULL)
