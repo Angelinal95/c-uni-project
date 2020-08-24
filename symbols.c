@@ -1,7 +1,7 @@
 #include "MAIN.h"
 #include "error_check.h"
 
-int insert_into_symbols_table(int count_symbols, char *symbol_name, int num, char *type_of_symbol, symbols_table *symbols_list)
+int insert_into_symbols_table(int count_symbols, char *symbol_name, int num, char *type_of_symbol, symbols_table *symbols_list, int L)
 {
     symbols_table *new_label;
     new_label = (symbols_table *)malloc(sizeof(symbols_table));
@@ -9,7 +9,7 @@ int insert_into_symbols_table(int count_symbols, char *symbol_name, int num, cha
     new_label->label = symbol_name;
     new_label->value = num;
     new_label->type_of_symbol = type_of_symbol;
-
+    new_label->L = L;
     if (count_symbols == 0)
     {
         new_label->next = NULL;

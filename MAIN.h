@@ -87,9 +87,8 @@ int error = 0;
 
 int main_pass(char *); //going through a text file
 int ignore_line(char *);
-int go_through_line(char *);      //analyzng eache character throught the line
-int check_if_com_or_inst(char *); //checking if it's a command or an instruction
-int skip_white_space(char *);
+int go_through_line(char *);                               //analyzng eache character throught the line
+int check_if_com_or_inst(char *);                          //checking if it's a command or an instruction
 int search_row_in_symbol_table(char *, symbols_table *);   //searching for the adress of a specific label
 int kind_of_addressing(operand *, char *, char *, char *); //checking the type od addressing
 int add_symbol(char *, char *, int);                       //adding a new symbol to the symbols list
@@ -109,7 +108,7 @@ void second_pass(int *, symbols_table *, symbols_table *, int *, int, int);
 
 /*------------------------functions - symbols----------------------------*/
 
-int insert_into_symbols_table(int, char *, int, char *, symbols_table *);                   //inserting a new node to the linked list of symbols
+int insert_into_symbols_table(int, char *, int, char *, symbols_table *, int);              //inserting a new node to the linked list of symbols
 int insert_into_instruction_list(int, char *, char *, char *, instruction_line *);          //inserting a new node to the linked list of instructions
 int insert_into_command_list(int, command *, char *, operand *, operand *, command_line *); //inserting a new node to the linked list of commands
 void erase_symbol_table(symbols_table *);                                                   //erasing the whole symbols list

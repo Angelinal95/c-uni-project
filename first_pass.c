@@ -13,6 +13,7 @@ command_line *command_line_list = NULL;
 instruction_line *instruction_line_list = NULL;
 symbols_table *symbols_list = NULL;
 int line_num = 0; //the line number we're at
+int L = 0;
 
 int main_pass(char *filename)
 {
@@ -33,7 +34,6 @@ int main_pass(char *filename)
     while (fgets(temp, 80 + 1, fd) != NULL)
     {
         line_count++;
-        symbols_table *symbols_table = NULL;
         token = strtok(temp, s);
 
         //checking if the length of the line is more than 80 characters
@@ -60,7 +60,7 @@ int main_pass(char *filename)
 int ignore_line(char *token)
 {
 
-    return ((skip_white_space(token) == NULL) || (strcmp(token, ";") == 0));
+    return (strcmp(token, ";") == 0);
 }
 
 //analyzing what's in the current line
@@ -210,6 +210,7 @@ int go_through_line(char *token)
             int j = 0;
             int temp_for_address = 0;
             ++IC;
+            ++L;
             operand *operand_src = NULL;
             operand *operand_dest = NULL;
             token = strtok(NULL, s);
@@ -226,6 +227,7 @@ int go_through_line(char *token)
                     if ((operand_src->Addressing_Mode) != 3)
                     {
                         IC = IC + 2;
+                        L = L + 2;
                     }
                 }
                 else if ((j == 1) && (strcmp(token, ',') != 0))
@@ -246,10 +248,12 @@ int go_through_line(char *token)
                     if (((operand_dest->Addressing_Mode) == 0) || ((operand_dest->Addressing_Mode) == 2))
                     {
                         IC = IC + 2;
+                        L = L + 2;
                     }
                     if ((operand_dest->Addressing_Mode) == 1)
                     {
                         IC = IC + 1;
+                        L = L + 1;
                     }
                 }
 
@@ -323,17 +327,6 @@ int check_if_com_or_inst(char *token)
     return 0;
 };
 
-int skip_white_space(char *token)
-{
-    char temp = *token;
-    while ((isspace() != 0) && (token != NULL))
-    {
-        token = ++token;
-        temp = *token;
-    }
-    return 0;
-}
-
 /*get the adress of the label*/
 int search_row_in_symbol_table(char *temp_label, symbols_table *pointer_to_row)
 {
@@ -402,21 +395,22 @@ int add_symbol(char *temp_label, char *temp_com_or_inst, int flag_for_extern)
 
         if (strcmp(temp_com_or_inst, "code") == 0)
         {
-            insert_into_symbols_table(count_symbols, temp_label, IC, temp_com_or_inst, symbols_list);
+            insert_into_symbols_table(count_symbols, temp_label, IC, temp_com_or_inst, symbols_list, L);
             count_symbols++;
         }
         else
         {
             if (flag_for_extern == 1)
             {
-                insert_into_symbols_table(count_symbols, temp_label, 0, temp_com_or_inst, symbols_list);
+                insert_into_symbols_table(count_symbols, temp_label, 0, temp_com_or_inst, symbols_list, L);
             }
 
             else
             {
-                insert_into_symbols_table(count_symbols, temp_label, DC, temp_com_or_inst, symbols_list);
+                insert_into_symbols_table(count_symbols, temp_label, DC, temp_com_or_inst, symbols_list, L);
             }
             count_symbols++;
+            L = 0;
         }
     }
     else
@@ -429,7 +423,7 @@ int add_symbol(char *temp_label, char *temp_com_or_inst, int flag_for_extern)
         {
             erase_command_line(command_line_list);
         }
-
+        L = 0;
         show_error(labelExists, line_num);
         return 1;
     }
