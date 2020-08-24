@@ -1,4 +1,4 @@
-#include "MAIN.h"
+
 #include "error_check.h"
 
 int insert_into_symbols_table(int count_symbols, char *symbol_name, char *values, char *type_of_symbol, struct symbols_table *symbols_list, int L, int ad)
