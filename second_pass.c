@@ -31,13 +31,23 @@ void completeLabelAddress(int IC, int DC, symbols_table *EntryTemp, symbols_tabl
         {
             /* Increase the address */
             tempLabel->address = tempLabel->L + IC;
-            dataTable->value = tempLabel->value;
-            dataTable->address = tempLabel->L + IC;
-            if (i < DC)
+            while (tempLabel->value)
             {
-                dataTable = (dataTable + i);
-                i++;
+
+                dataTable->value = tempLabel->value;
+                dataTable->address = tempLabel->L + IC;
+                tempLabel->value++;
+
+                if (i < DC)
+                {
+                    dataTable = (dataTable + i);
+                    i++;
+                }
+                else return;
             }
+
+            
+            
         }
 
         tempLabel = tempLabel->next;
@@ -46,13 +56,18 @@ void completeLabelAddress(int IC, int DC, symbols_table *EntryTemp, symbols_tabl
     {
         if(instruction_line_list->label == NULL)
         {
-            
-            dataTable->value = instruction_line_list->info;
-            
-            if (i < DC)
+            while(instruction_line_list->info)
             {
-                dataTable = (dataTable + i);
-                i++;
+
+                dataTable->value = instruction_line_list->info;
+                instruction_line_list->info++;
+            
+                if (i < DC)
+                {
+                    dataTable = (dataTable + i);
+                    i++;
+                }
+                else return;
             }
 
         }
