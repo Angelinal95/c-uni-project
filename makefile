@@ -22,6 +22,6 @@ error_check.o: error_check.c error_check.h
 			gcc -c -ansi -Wall -pedantic error_check.c -o error_check.o
 
 
-auxiliary_function.o: auxiliary_function.c auxiliary_function.h MAIN.h
-					gcc -c -ansi -Wall -pedantic auxiliary_function.c -o auxiliary_function.o
+auxiliary_function.o: auxiliary_functions.c auxiliary_functions.h MAIN.h
+					gcc -c -ansi -Wall -pedantic auxiliary_functions.c -o auxiliary_functions.o
 
