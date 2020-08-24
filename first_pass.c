@@ -55,9 +55,9 @@ int main_pass(char *filename)
     fclose(filename);
 
     if (!error)
-        second_pass(filename ,IC, DC, error, symbols_table *LabelList, command_line *comLine) ;
-
-    
+    {
+        second_pass(filename, IC, DC, error, symbols_list, command_line_list, instruction_line_list);
+    }
 }
 
 //checking if it's an empty line or a comment line
