@@ -82,11 +82,11 @@ void show_error(errorType typeName, int line_num)
         break;
 
     case tokenLength:
-        printf("error in line: %d, token's length is higher than %d\n\n", line_num, max_row_len);
+        printf("error in line: %d, token's length is higher than %d\n\n", line_num, 80);
         break;
 
     case longRow:
-        printf("error in line: %d, row too long(more than %d characters)\n\n", line_num, max_row_len);
+        printf("error in line: %d, row too long(more than %d characters)\n\n", line_num, 80);
         break;
 
     case invalidAdress:
@@ -339,7 +339,7 @@ int valid_label(char *label, int line)
     char tempLabel[LABEL_LENGTH];
     firstCharIndex = count_spaces(label); //Checks for white characters at the beginning of the string
 
-    if (defined_label((label+firstCharIndex), line))
+    if (defined_label((label + firstCharIndex), line))
     {
         show_error(labelExists, line);
         return FALSE;
