@@ -4,19 +4,7 @@
 typedef enum {A = 4, R = 2, E = 1} val_A_R_E;
 
 
-typedef struct
-{
-    char *func_name;
-    int func_num;
-    int op_code;
-} func_table;
-
-func_table func_table_1[] = {
-    {"mov", NULL, 0}, {"cmp", NULL, 1}, {"add", 1, 2}, {"sub", 2, 2}, {"lea", NULL, 4}, {"clr", 1, 5}, {"not", 2, 5}, {"inc", 3, 5}, {"dec", 4, 5}, {"jmp", 1, 9}, {"bne", 2, 9}, {"jsr", 3, 9}, {"red", NULL, 12}, {"prn", NULL, "13"}, {"rts", NULL, 14}, {"stop", NULL, 15}
-
-};
-
-symbols_table *completeLabelAddress(int IC,int DC, symbols_table *EntryTemp, symbols_table *dataTable,symbols_table *tempLabel) 
+void completeLabelAddress(int IC,int DC, symbols_table *EntryTemp, symbols_table *dataTable,symbols_table *tempLabel) 
 {
     int i = 0;
 
@@ -95,22 +83,6 @@ int countIllegalEntries(symbols_table *entryLabel, int *numOfEntries)
     return errorFlag;
 }
 
-int entryLabelAlreadyInList(char *entryLabelName) 
-{
-    symbols_table *tempEntryLabel = symbols_list;
-
-	while (tempEntryLabel) 
-    {
-		if (!strcmp(entryLabelName, tempEntryLabel->label))
-        {
-			return TRUE;
-		}
-
-        tempEntryLabel = tempEntryLabel->next;
-	}
-	return FALSE;
-}
-
 
 /* if label exist return pointer to the label in symbols_table ,or NULL if label not found. */
  symbols_table *searchLabel(char *labelName) 
@@ -131,28 +103,6 @@ int entryLabelAlreadyInList(char *entryLabelName)
 	return NULL;
 }
 
-
-/* If operand is a label, update the value to be the address of the label. */
-int ifOpIsLabel(operand *op, int lineNum) 
-{
-    symbols_table *label = NULL;
-
-	if (op->Addressing_Mode == 1) 
-    {
-		label = searchLabel(op->operand_value);
-
-		/* Check if label != NULL */
-		if (!label) 
-        {
-            show_error(undifinedLabel, line_num);
-            return FALSE;
-		}
-
-		op->operand_value = label->address;
-	}
-
-	return TRUE;
-}
 
 /* Returns the int value of a memory word. */
 int returnIntMemoryWord(memWordCode memory) 
@@ -281,24 +231,6 @@ void pushdataToMemory(symbols_table *dataTable ,int *wordMemoryArr, int *memCoun
 
 }
 
-void updateDataLabelsAddress(int IC) 
-{
-	instruction_line *instLine = instruction_line_list;
-    symbols_table *label = symbols_list;
-
-	while (instLine) 
-    {
-        label = searchLabel(instLine->label);
-		if(label)
-        {
-            label->address += INITIAL_ADDRESS + IC;//Increase the address 
-        }
-
-        instLine = instLine->next;
-	
-    }
-}
-
 
 /* Reads second time. */
 /* It converts all the lines into the memory. */
@@ -311,7 +243,7 @@ void second_pass(int *wordMemoryArr, symbols_table *entryLabelList, symbols_tabl
     symbols_table *LabelList = symbols_list;
     symbols_table *dataTable = (symbols_table *)malloc(sizeof(symbols_table)*DC);
 	
-	dataTable = completeLabelAddress(IC, DC, entryLabelList, dataTable, LabelList); // update the operand if it label 
+    completeLabelAddress(IC, DC, entryLabelList, dataTable, LabelList); // update the operand if it label 
 
 	error += countIllegalEntries(entryLabelList, numOfEntries); // Check for illegal entries 
 

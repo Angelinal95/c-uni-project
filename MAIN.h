@@ -108,11 +108,9 @@ int add_symbol(char *, char *, int);                       //adding a new symbol
 
 /*------------------------functions - second pass----------------------------*/
 
-symbols_table *completeLabelAddress(int ,int , symbols_table *, symbols_table *,symbols_table *);
+void completeLabelAddress(int ,int , symbols_table *, symbols_table *,symbols_table *);
 int countIllegalEntries(symbols_table *, int *);
-int entryLabelAlreadyInList(char *);
 symbols_table *searchLabel(char *);
-int ifOpIsLabel(operand *, int);
 int returnIntMemoryWord(memWordCode);
 int returnModeOpType(operand);
 int regNum(operand);
