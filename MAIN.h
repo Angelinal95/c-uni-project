@@ -93,16 +93,17 @@ int add_symbol(char *, char *, int, char *);               //adding a new symbol
 
 /*------------------------functions - second pass----------------------------*/
 
-void completeLabelAddress(int, int, symbols_table *, symbols_table *, symbols_table *, int *numOfEntries);
-int countIllegalEntries(symbols_table *, int *);
-symbols_table *searchLabel(char *);
-int returnIntMemoryWord(memWordCode);
-int returnModeOpType(operand);
-int regNum(operand);
-memWordCode lineMemWordCode(command_line);
-void addWordToMemory(int *, int *, memWordCode);
-void pushdataToMemory(symbols_table *, int *, int *, int);
-void second_pass(char *fileName, int IC, int DC, int error, symbols_table *LabelList, command_line *line, instruction_line *);
+void completeLabelAddress(int IC, int DC, symbols_table *EntryTemp, symbols_table *dataTable, symbols_table *tempLabel, int *numOfEntries);
+int countIllegalEntries(symbols_table *entryLabel, int *numOfEntries, symbols_table *LabelList);
+symbols_table *searchLabel(char *labelName, symbols_table *LabelList);
+int returnIntMemoryWord(memWordCode memory);
+int returnModeOpType(operand op);
+int regNum(operand op);
+memWordCode lineMemWordCode(command_line line, symbols_table *LabelList);
+void addWordToMemory(int *wordMemoryArr, int *memCount, memWordCode memory, int IC, int DC);
+void pushdataToMemory(symbols_table *dataTable, int *wordMemoryArr, int *memCount, int DC);
+void second_pass(char *fileName, int IC, int DC, int error, symbols_table *LabelList, command_line *comLine, instruction_line *instruction_line_list);
+
 
 /*------------------------functions - symbols----------------------------*/
 

@@ -219,8 +219,7 @@ void pushdataToMemory(symbols_table *dataTable, int *wordMemoryArr, int *memCoun
 void second_pass(char *fileName, int IC, int DC, int error, symbols_table *LabelList, command_line *comLine, instruction_line *instruction_line_list)
 {
     int *wordMemoryArr; //for the second pass to print the output files
-    int i;
-    int numOfExtern = 0;                                                         //use in second read
+    int i; //use in second read
     int numOfEntries = 0;                                                        //use in second read
     symbols_table *entryLabels = (symbols_table *)malloc(sizeof(symbols_table)); //use in second read
     symbols_table *dataArr;                                                      //use in the second read
@@ -229,9 +228,9 @@ void second_pass(char *fileName, int IC, int DC, int error, symbols_table *Label
     symbols_table *dataTable = (symbols_table *)malloc(sizeof(symbols_table) * DC);
     wordMemoryArr = (int *)malloc(sizeof(int) * (IC + DC - INITIAL_ADDRESS));
 
-    completeLabelAddress(IC, DC, entryLabels, dataTable, LabelList, numOfEntries); // update the operand if it label
+    completeLabelAddress(IC, DC, entryLabels, dataTable, LabelList, &numOfEntries); // update the operand if it label
 
-    error += countIllegalEntries(entryLabels, numOfEntries); // Check for illegal entries
+    error += countIllegalEntries(entryLabels, &numOfEntries, LabelList); // Check for illegal entries
 
     for (i = 0; i < (IC + DC - INITIAL_ADDRESS); i++) // Add line in to the memory
     {
@@ -247,7 +246,7 @@ void second_pass(char *fileName, int IC, int DC, int error, symbols_table *Label
     {
         /* Create all the output files */
         ObjectFile(fileName, IC, DC, wordMemoryArr, dataArr);
-        ExternFile(fileName, LabelList, numOfExtern /*, linesArr, numOflines*/);
+        ExternFile(fileName, LabelList /*, linesArr, numOflines*/);
         EntriesFile(fileName, numOfEntries);
         printf("success, output files for \"%s.as\" created.\n", fileName);
     }
