@@ -41,7 +41,7 @@ typedef enum error_type
 
 void show_error(errorType, int);            /*Prints an appropriate error message by error type*/
 int valid_label(char *, int);               /*Checks if the label is written legally*/
-int defined_label(char *, symbols_table *); /*When using a label in a command,
+int defined_label(char *, struct symbols_table *); /*When using a label in a command,
                                  we will check that such a label has been defined.*/
 int valid_number(char *, int);              /*Checks whether the number is integer (positive / negative)*/
 int valid_string(char *, int);              /*Checks if the string is valid*/

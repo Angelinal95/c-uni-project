@@ -422,9 +422,9 @@ int lebalInComment(char *label, int line)
 }*/
 
 /*checking if the label has been already defined*/
-int defined_label(char *label, symbols_table *symbols_list)
+int defined_label(char *label, struct symbols_table *symbols_list)
 {
-    symbols_table *temp = &symbols_list;
+    struct symbols_table *temp = &symbols_list;
 
     while (symbols_list != NULL)
     {

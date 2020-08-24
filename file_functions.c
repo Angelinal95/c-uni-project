@@ -25,7 +25,7 @@ FILE *createNewFile(char *fileName, char *fileType)
 
 
 /* create object file, contains the assembly lines in base 16 */
-void ObjectFile(char *fileName,int IC, int DC,int *instrucLinesArr, symbols_table *dataArr)
+void ObjectFile(char *fileName,int IC, int DC,int *instrucLinesArr, struct symbols_table *dataArr)
 {
 	int i, val;
 	FILE *file;
@@ -53,10 +53,10 @@ void ObjectFile(char *fileName,int IC, int DC,int *instrucLinesArr, symbols_tabl
 
 
 /* creates the entry file, contains the addresses of entry labels in base 10 */
-void EntriesFile(char *fileName, int *numOfEntries, symbols_table *symbolList)
+void EntriesFile(char *fileName, int *numOfEntries, struct symbols_table *symbolList)
 {
 	FILE *file;
-	symbols_table *tempLabel = symbolList;
+	struct symbols_table *tempLabel = symbolList;
 
 	
 	if (tempLabel->label)// if there are entry labels 
@@ -85,7 +85,7 @@ void EntriesFile(char *fileName, int *numOfEntries, symbols_table *symbolList)
 
 
 /* creates the extern file, contains the addresses for the extern labels in base 10 */
-void ExternFile(char *fileName, symbols_table *tempLabel, int *numOfExtern)
+void ExternFile(char *fileName, struct symbols_table *tempLabel, int *numOfExtern)
 {
 	FILE *file;
 
