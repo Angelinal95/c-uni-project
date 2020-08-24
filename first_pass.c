@@ -1,4 +1,4 @@
-#include "MAIN.h"
+
 #include "error_check.h"
 #include "auxiliary_functions.h"
 
