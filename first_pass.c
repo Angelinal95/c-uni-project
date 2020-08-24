@@ -193,7 +193,7 @@ int go_through_line(char *token)
             if (temp_label != NULL)
             {
 
-                add_symbol(temp_label, temp_com_or_inst, flag_for_extern);
+                add_symbol(temp_label, temp_com_or_inst, flag_for_extern, NULL);
             }
             if ((check_extern_label(token, line_num) == TRUE))
             {
