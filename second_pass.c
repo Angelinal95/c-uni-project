@@ -8,7 +8,7 @@ typedef enum
     E = 1
 } val_A_R_E;
 
-void completeLabelAddress(int IC, int DC, symbols_table *EntryTemp, symbols_table *dataTable, symbols_table *tempLabel, int *numOfEntries)
+void completeLabelAddress(int IC, int DC, symbols_table *EntryTemp, symbols_table *dataTable, symbols_table *tempLabel, int *numOfEntries, instruction_line *instruction_line_list)
 {
     int i = 0;
 
@@ -42,6 +42,22 @@ void completeLabelAddress(int IC, int DC, symbols_table *EntryTemp, symbols_tabl
 
         tempLabel = tempLabel->next;
     }
+    while (instruction_line_list)
+    {
+        if(instruction_line_list->label == NULL)
+        {
+            
+            dataTable->value = instruction_line_list->info;
+            
+            if (i < DC)
+            {
+                dataTable = (dataTable + i);
+                i++;
+            }
+
+        }
+    }
+    
 }
 
 /* check if there is an illegal entry label */
@@ -228,7 +244,7 @@ void second_pass(char *fileName, int IC, int DC, int error, symbols_table *Label
     symbols_table *dataTable = (symbols_table *)malloc(sizeof(symbols_table) * DC);
     wordMemoryArr = (int *)malloc(sizeof(int) * (IC + DC - INITIAL_ADDRESS));
 
-    completeLabelAddress(IC, DC, entryLabels, dataTable, LabelList, &numOfEntries); // update the operand if it label
+    completeLabelAddress(IC, DC, entryLabels, dataTable, LabelList, &numOfEntries, instruction_line_list); // update the operand if it label
 
     error += countIllegalEntries(entryLabels, &numOfEntries, LabelList); // Check for illegal entries
 

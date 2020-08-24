@@ -93,7 +93,7 @@ int add_symbol(char *, char *, int, char *);               //adding a new symbol
 
 /*------------------------functions - second pass----------------------------*/
 
-void completeLabelAddress(int IC, int DC, symbols_table *EntryTemp, symbols_table *dataTable, symbols_table *tempLabel, int *numOfEntries);
+void completeLabelAddress(int IC, int DC, symbols_table *EntryTemp, symbols_table *dataTable, symbols_table *tempLabel, int *numOfEntries, instruction_line *instruction_line_list);
 int countIllegalEntries(symbols_table *entryLabel, int *numOfEntries, symbols_table *LabelList);
 symbols_table *searchLabel(char *labelName, symbols_table *LabelList);
 int returnIntMemoryWord(memWordCode memory);
