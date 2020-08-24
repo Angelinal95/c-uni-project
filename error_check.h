@@ -5,39 +5,7 @@
 #define TRUE 1
 #define FALSE 0
 
-typedef enum error_type
-{
-    function,
-    manyOperands,
-    littleOperands,
-    typeOperand,
-    typeDestination,
-    destinationNotFound,
-    sourceNotFound,
-    incorrectStatement,
-    labelExists,
-    savedWord,
-    whiteSpace,
-    missingQuotation,
-    undifinedLabel,
-    labelIsStatement,
-    labelInstruction,
-    labelIsExternal,
-    labelIsInternal,
-    notNumber,
-    notString,
-    tokenLength,
-    longRow,
-    invalidAdress,
-    manyLabelsSameRow,
-    manyOpcodeSameLine,
-    notValidRegister,
-    longLabel,
-    invalidLabel,
-    invalidData,
-    invalidAddressingMode,
-    invalidFunc
-} errorType;
+typedef enum error_type{function,manyOperands,littleOperands,typeOperand,typeDestination,destinationNotFound,sourceNotFound,incorrectStatement,labelExists,savedWord,whiteSpace,missingQuotation,undifinedLabel,labelIsStatement,labelInstruction,labelIsExternal,labelIsInternal,notNumber,notString,tokenLength,longRow,invalidAdress,manyLabelsSameRow,manyOpcodeSameLine,notValidRegister,longLabel,invalidLabel,invalidData,invalidAddressingMode,invalidFunc} errorType;
 
 void show_error(errorType, int);            /*Prints an appropriate error message by error type*/
 int valid_label(char *, int);               /*Checks if the label is written legally*/
