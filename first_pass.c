@@ -38,7 +38,7 @@ int main_pass(char *filename)
 
         //checking if the length of the line is more than 80 characters
 
-        if ((temp[81] != '/n') && (fgets(temp_1, 80 + 1, fd) != NULL))
+        if ((temp[81] != '\n') && (fgets(temp_1, 80 + 1, fd) != NULL))
         {
             show_error(longRow, line_count);
             error++;
@@ -84,6 +84,7 @@ int go_through_line(char *token)
         }
     }
 
+    //taking care of an instruction line
     if (check_if_com_or_inst(token) == 1)
     {
         temp_com_or_inst = "data";
@@ -92,15 +93,17 @@ int go_through_line(char *token)
         {
             token = strtok(NULL, s);
             int *temp_arr_for_data = NULL;
-            while (token != NULL)
+            while (strcmp(token, "\n") != 0)
             {
                 token = strtok(NULL, s);
                 if (valid_number(token, line_num) == TRUE)
                 {
                     count_i_lines++;
                     DC++;
-                    temp_arr_for_data = (int *)calloc(token, sizeof(int));
+                    L++;
+                    // temp_arr_for_data = (int *)calloc(token, sizeof(int));
                 }
+
                 else
                 {
 
@@ -128,7 +131,7 @@ int go_through_line(char *token)
 
             if (valid_string(token, line_num) == TRUE)
             {
-                token = strtok(NULL, s);
+
                 if (temp_label != NULL)
                 {
 
@@ -173,9 +176,6 @@ int go_through_line(char *token)
                 {
                     insert_into_instruction_list(count_i_lines, ".extern", token, NULL, instruction_line_list);
                 }
-
-                token = strtok(NULL, s);
-                flag_for_extern = 1;
             }
             else
             {
