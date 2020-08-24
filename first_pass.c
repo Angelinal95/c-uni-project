@@ -105,9 +105,13 @@ int go_through_line(char *token)
                 int flag_minus = 0;
                 while (strcmp(token, "0") != 0)
                 {
-                    if ((token[j] != ',') && (token[j] != ' '))
+                    if ((token[j] != ' '))
                     {
-                        if (token[j] != '-')
+                        if (token[j] != ',')
+                        {
+                            temp_arr_for_data[j] = token[j];
+                        }
+                        else if (token[j] != '-')
                         {
                             flag_minus = 1;
                         }
@@ -118,15 +122,17 @@ int go_through_line(char *token)
                             {
                                 temp_arr_for_data[j] == "-";
                                 j++;
+                                temp_arr_for_data[j] = token[j];
+                                DC++;
+                                L++;
+                                flag_minus = 0;
                             }
                             else
                             {
                                 temp_arr_for_data[j] = token[j];
+                                DC++;
+                                L++;
                             }
-
-                            DC++;
-                            L++;
-                            flag_minus = 0;
                         }
 
                         else
@@ -227,7 +233,7 @@ int go_through_line(char *token)
         {
             if (strcmp(token, command_list[i].name) == 0)
             {
-                temp = &command_list[i];
+                temp = &command_list[i]; //a pointer to the command
 
                 break;
             }
@@ -289,7 +295,7 @@ int go_through_line(char *token)
                 j++;
                 token = strtok(NULL, s);
             }
-
+            //tests to see if the number of operands is ok
             if ((j == 2) && ((i > 13) || (i < 5)))
             {
                 show_error(littleOperands, line_num);
@@ -340,6 +346,7 @@ int go_through_line(char *token)
             show_error(invalidFunc, line_num);
             return 0;
         }
+        L = 0;
     }
 }
 
