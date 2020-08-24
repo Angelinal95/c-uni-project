@@ -3,7 +3,7 @@
 
 #define LABEL_LENGTH 31
 #define TRUE 1
-#define FALSE -1
+#define FALSE 0
 
 typedef enum error_type
 {
