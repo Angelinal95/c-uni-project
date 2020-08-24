@@ -8,7 +8,7 @@ typedef enum
     E = 1
 } val_A_R_E;
 
-void completeLabelAddress(int IC, int DC, symbols_table *EntryTemp, symbols_table *dataTable, symbols_table *tempLabel, int *numOfEntries, instruction_line *instruction_line_list)
+void completeLabelAddress(int IC, int DC, struct symbols_table *EntryTemp, struct symbols_table *dataTable, struct symbols_table *tempLabel, int *numOfEntries, struct instruction_line *instruction_line_list)
 {
     int i = 0;
 
@@ -22,7 +22,7 @@ void completeLabelAddress(int IC, int DC, symbols_table *EntryTemp, symbols_tabl
                 /* Increase the address */
                 EntryTemp->address = tempLabel->address;
                 EntryTemp->label = tempLabel->label;
-                EntryTemp->next = (symbols_table *)malloc(sizeof(symbols_table));
+                EntryTemp->next = (struct symbols_table *)malloc(sizeof(struct symbols_table));
                 EntryTemp = EntryTemp->next;
                 (*numOfEntries)++;
             }
@@ -43,43 +43,40 @@ void completeLabelAddress(int IC, int DC, symbols_table *EntryTemp, symbols_tabl
                     dataTable = (dataTable + i);
                     i++;
                 }
-                else return;
+                else
+                    return;
             }
-
-            
-            
         }
 
         tempLabel = tempLabel->next;
     }
     while (instruction_line_list)
     {
-        if(instruction_line_list->label == NULL)
+        if (instruction_line_list->label == NULL)
         {
-            while(instruction_line_list->info)
+            while (instruction_line_list->info)
             {
 
                 dataTable->value = instruction_line_list->info;
                 instruction_line_list->info++;
-            
+
                 if (i < DC)
                 {
                     dataTable = (dataTable + i);
                     i++;
                 }
-                else return;
+                else
+                    return;
             }
-
         }
     }
-    
 }
 
 /* check if there is an illegal entry label */
-int countIllegalEntries(symbols_table *entryLabel, int *numOfEntries, symbols_table *LabelList)
+int countIllegalEntries(struct symbols_table *entryLabel, int *numOfEntries, struct symbols_table *LabelList)
 {
     int errorFlag = 0;
-    symbols_table *labelToComper = LabelList;
+    struct symbols_table *labelToComper = LabelList;
 
     while (entryLabel->label)
     {
@@ -114,9 +111,9 @@ int countIllegalEntries(symbols_table *entryLabel, int *numOfEntries, symbols_ta
 }
 
 /* if label exist return pointer to the label in symbols_table ,or NULL if label not found. */
-symbols_table *searchLabel(char *labelName, symbols_table *LabelList)
+struct symbols_table *searchLabel(char *labelName, struct symbols_table *LabelList)
 {
-    symbols_table *tempLabel = LabelList;
+    struct symbols_table *tempLabel = LabelList;
 
     while (tempLabel)
     {
@@ -173,10 +170,10 @@ int regNum(operand op)
     return 0;
 }
 
-memWordCode lineMemWordCode(command_line line, symbols_table *LabelList)
+memWordCode lineMemWordCode(struct command_line line, struct symbols_table *LabelList)
 {
     memWordCode memory = {0};
-    symbols_table *Tlabel = NULL;
+    struct symbols_table *Tlabel = NULL;
 
     if ((line.operand_dest != NULL) && (line.operand_src != NULL))
     {
@@ -228,7 +225,7 @@ void addWordToMemory(int *wordMemoryArr, int *memCount, memWordCode memory, int 
     }
 }
 
-void pushdataToMemory(symbols_table *dataTable, int *wordMemoryArr, int *memCount, int DC)
+void pushdataToMemory(struct symbols_table *dataTable, int *wordMemoryArr, int *memCount, int DC)
 {
     int i, val;
     unsigned int intBitMask = ~0;
@@ -247,16 +244,16 @@ void pushdataToMemory(symbols_table *dataTable, int *wordMemoryArr, int *memCoun
 
 /* Reads second time. */
 /* It converts all the lines into the memory. */
-void second_pass(char *fileName, int IC, int DC, int error, symbols_table *LabelList, command_line *comLine, instruction_line *instruction_line_list)
+void second_pass(char *fileName, int IC, int DC, int error, struct symbols_table *LabelList, struct command_line *comLine, struct instruction_line *instruction_line_list)
 {
-    int *wordMemoryArr; //for the second pass to print the output files
-    int i; //use in second read
-    int numOfEntries = 0;                                                        //use in second read
-    symbols_table *entryLabels = (symbols_table *)malloc(sizeof(symbols_table)); //use in second read
-    symbols_table *dataArr;                                                      //use in the second read
+    int *wordMemoryArr;                                                                               //for the second pass to print the output files
+    int i;                                                                                            //use in second read
+    int numOfEntries = 0;                                                                             //use in second read
+    struct symbols_table *entryLabels = (struct symbols_table *)malloc(sizeof(struct symbols_table)); //use in second read
+    struct symbols_table *dataArr;                                                                    //use in the second read
     int memCount = 0;
     memWordCode memory;
-    symbols_table *dataTable = (symbols_table *)malloc(sizeof(symbols_table) * DC);
+    struct symbols_table *dataTable = (struct symbols_table *)malloc(sizeof(struct symbols_table) * DC);
     wordMemoryArr = (int *)malloc(sizeof(int) * (IC + DC - INITIAL_ADDRESS));
 
     completeLabelAddress(IC, DC, entryLabels, dataTable, LabelList, &numOfEntries, instruction_line_list); // update the operand if it label
