@@ -23,6 +23,7 @@ typedef struct
     char *type_of_symbol;
     int address;
     int line;
+    int L;
 
 } symbols_table;
 
@@ -82,17 +83,16 @@ typedef struct fullMemoryWord /* 24 bits */
 
 /*-----------------------global variables-----------------------*/
 
-int max_row_len = 80;
-int line_num = 0; //the line number we're at
+int max_row_len = 80; // ????????? copy this to main.c file ???????????
+int line_num = 0; //the line number we're at  ????????? copy this to main.c file ???????????
 int error = 0;    //global variable to mark an errors
-int g_numOfEntries = 0;
-int g_numOfExterns = 0;
-int IC = INITIAL_ADDRESS; 
-int DC = 0; //num of data in the assembly code
-int line_num;                //the line number we're at
-command_line *command_line_list;
-instruction_line *instruction_line_list;
-symbols_table *entryLabelsList;
+int g_numOfEntries = 0;/*?????????? no need ?????????????*/
+int g_numOfExterns = 0;/*?????????? no need ?????????????*/
+int IC = INITIAL_ADDRESS;   //????????? copy this to main.c file ???????????
+int DC = 0; //num of data in the assembly code       ????????? copy this to main.c file ???????????
+command_line *command_line_list;   // ????????? copy this to main.c file ???????????
+instruction_line *instruction_line_list;  //????????? copy this to main.c file ???????????
+// use in second pass  
 symbols_table *symbols_list; // pointer to head of label list
 
 /*------------------------functions - first pass----------------------------*/
@@ -108,8 +108,8 @@ int add_symbol(char *, char *, int);                       //adding a new symbol
 
 /*------------------------functions - second pass----------------------------*/
 
-void completeLabelAddress(int);
-int countIllegalEntries();
+symbols_table *completeLabelAddress(int ,int , symbols_table *, symbols_table *,symbols_table *);
+int countIllegalEntries(symbols_table *, int *);
 int entryLabelAlreadyInList(char *);
 symbols_table *searchLabel(char *);
 int ifOpIsLabel(operand *, int);
@@ -118,8 +118,8 @@ int returnModeOpType(operand);
 int regNum(operand);
 memWordCode lineMemWordCode(command_line);
 void addWordToMemory(int *, int *, memWordCode);
-void pushdataToMemory(int *, int *, int);
-int secondFileRead(int *, command_line *, int, int, int);
+void pushdataToMemory(symbols_table *, int *, int *, int);
+void second_pass(int *, symbols_table *, symbols_table *, int *, int , int);
 
 /*------------------------functions - symbols----------------------------*/
 

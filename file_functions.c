@@ -1,4 +1,6 @@
+#include <stdlib.h>
 #include "file_functions.h"
+
 
 
 /* Create a new file by selecting a name and extension */
@@ -23,23 +25,22 @@ FILE *createNewFile(char *fileName, char *fileType)
 
 
 /* create object file, contains the assembly lines in base 16 */
-void ObjectFile(char *fileName,int *instrucLinesArr, int IC, int DC)
+void ObjectFile(char *fileName,int IC, int DC,int *instrucLinesArr, symbols_table *dataArr)
 {
-	int i;
+	int i, val;
 	FILE *file;
 	file = createNewFile(fileName, ".ob");
 
 	/* write IC into the file */
 	
-	fprintf(file, "%d\t\t", IC);
+	fprintf(file, "%d\t\t", ((INITIAL_ADDRESS - IC - DC) + 1)); // print the num of lines in the assembly code
 
     /* write DC into the file */
     fprintf(file, "%d\n", DC);
 
-	/* Print all of memoryArr */
-	for (i = 0; i < IC + DC; i++)
+	/* Print all the code line */
+	for (i = 0; i < (IC - DC); i++)
 	{
-        
 		writeInBase10(file, INITIAL_ADDRESS + i, 6);
 		fprintf(file, "\t\t");
 		writeInBase16(file, instrucLinesArr[i], 6);
@@ -52,13 +53,13 @@ void ObjectFile(char *fileName,int *instrucLinesArr, int IC, int DC)
 
 
 /* creates the entry file, contains the addresses of entry labels in base 10 */
-void EntriesFile(char *fileName)
+void EntriesFile(char *fileName, int *numOfEntries)
 {
 	FILE *file;
 	symbols_table *tempLabel = symbols_list;
 
-	/* if there are entry labels */
-	if (g_numOfEntries)
+	
+	if (tempLabel->label)// if there are entry labels 
 	{	
 
 		file = createNewFile(fileName, ".ent");
@@ -68,13 +69,13 @@ void EntriesFile(char *fileName)
 			if (!strcmp(tempLabel->type_of_symbol,"entry"))// check if the label type is entry
 			{
 				fprintf(file, "%s\t\t", tempLabel->label);
-				writeInBase10(file, tempLabel->value, 6);
+				writeInBase10(file, tempLabel->address, 6);
 				fprintf(file, "\n");
 			}
 
 			tempLabel = tempLabel->next; //pass to the next label
 
-		} while (tempLabel); // stop while the next is Null.
+		} while (tempLabel->label); // stop while no more entry label
 
 		fclose(file);
 
@@ -84,13 +85,12 @@ void EntriesFile(char *fileName)
 
 
 /* creates the extern file, contains the addresses for the extern labels in base 10 */
-void ExternFile(char *fileName)
+void ExternFile(char *fileName, symbols_table *tempLabel, int *numOfExtern)
 {
 	FILE *file;
-	symbols_table *tempLabel = symbols_list;
 
 	/* if there are extern labels */
-	if (g_numOfExterns)
+	if (*numOfExtern)
 	{	
 
 		file = createNewFile(fileName, ".ext");
@@ -100,13 +100,13 @@ void ExternFile(char *fileName)
 			if (!strcmp(tempLabel->type_of_symbol,"extern"))// check if the label type is extern
 			{
 				fprintf(file, "%s\t\t", tempLabel->label);
-				writeInBase10(file, tempLabel->value, 6);
+				writeInBase10(file, tempLabel->address, 6);
 				fprintf(file, "\n");
 			}
 
 			tempLabel = (tempLabel->next); //pass to the next label
 
-		} while (tempLabel); // stop while the next is Null.
+		} while (tempLabel->label); // stop while the next is Null.
 
 		fclose(file);
 

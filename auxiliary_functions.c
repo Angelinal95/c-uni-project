@@ -1,5 +1,4 @@
 
-#include "MAIN.h"
 #include "auxiliary_functions.h"
 
 int count_spaces(char *string)

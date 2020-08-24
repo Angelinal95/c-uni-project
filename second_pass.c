@@ -16,9 +16,9 @@ func_table func_table_1[] = {
 
 };
 
-void completeLabelAddress(int IC) 
+symbols_table *completeLabelAddress(int IC,int DC, symbols_table *EntryTemp, symbols_table *dataTable,symbols_table *tempLabel) 
 {
-    symbols_table *tempLabel = symbols_list;
+    int i = 0;
 
 	/* Search in the array for .entry / .data / .string label */
 	while (tempLabel)
@@ -28,13 +28,23 @@ void completeLabelAddress(int IC)
             if (!tempLabel->address)
             {
 			    /* Increase the address */
-			    tempLabel->address += INITIAL_ADDRESS + IC;
+			    EntryTemp->address = tempLabel->address;
+                EntryTemp->label = tempLabel->label;
+                EntryTemp = EntryTemp->next;
             }
+
 		}
         else if (!strcmp(tempLabel->type_of_symbol,"data") || !(tempLabel->type_of_symbol,"string"))
         {
 			/* Increase the address */
-			tempLabel->address += INITIAL_ADDRESS + IC;
+            dataTable->value = tempLabel->value;
+            dataTable->address = tempLabel->L + IC;
+            if (i < DC)
+            {
+                dataTable = (dataTable + i);
+                i++;
+            }
+            
 		}
 
         tempLabel = tempLabel->next;
@@ -44,15 +54,14 @@ void completeLabelAddress(int IC)
 
 
 /* check if there is an illegal entry label */
-int countIllegalEntries() 
+int countIllegalEntries(symbols_table *entryLabel, int *numOfEntries) 
 {
 	int errorFlag = 0 ;
-	symbols_table *entryLabel = entryLabelsList;
     symbols_table *labelToComper = symbols_list;
 
-	while (entryLabel) 
+	while (entryLabel->label) 
     {
-        if(!defined_label(entryLabel->label, entryLabel->line))
+        if(!defined_label(entryLabel->label, symbols_list))
         {
             show_error(undifinedLabel, entryLabel->line);
             errorFlag++;
@@ -64,12 +73,15 @@ int countIllegalEntries()
             {
                 if (!strcmp(entryLabel->label, labelToComper->label))
                 {
-			        if (!strcmp(labelToComper->type_of_symbol, "exstern")) 
+                    (*numOfEntries)++; // count the entry labels
+
+			        if (!strcmp(labelToComper->type_of_symbol, "exsternal")) 
                     {
 				        printError("error in line: %d The parameter .entry can't be external label.", entryLabel->line);
 				        errorFlag++;
 			    
                     }
+                   
                 }
             
                 labelToComper = labelToComper->next;
@@ -247,23 +259,22 @@ void addWordToMemory(int *wordMemoryArr, int *memCount, memWordCode memory) {
 
 
 
-void pushdataToMemory(int *wordMemoryArr, int *memCount, int DC) 
+void pushdataToMemory(symbols_table *dataTable ,int *wordMemoryArr, int *memCount, int DC) 
 {
-	int i;
+	int i, val;
 	unsigned int intBitMask = ~0;
-    symbols_table *label;
+    
 
 	intBitMask >>= ((sizeof(int) * ONE_BYTE_SIZE) - ONE_WORD_SIZE);/* int of '1' in all 24 first bits, all the rest bits '0' */
 
-	for (i = 0; i < DC; i++) //Add each int from g_dataArr to the end of memoryArr 
+	for (i = 0; i < DC; i++) //Add each int from dataArr to the end of memoryArr 
     { 
         if (!strcmp(instruction_line_list->type_of_inst, "external"))// if external pass
         {
             continue;
         }
-      
-        label = searchLabel(instruction_line_list->label);
-		*(wordMemoryArr + (*memCount)) = intBitMask & (label->address);// makes sure we only use the first bits 
+        val = atoi(dataTable->value);
+		*(wordMemoryArr + (*memCount)) = intBitMask & val;// makes sure we only use the first bits 
         *(memCount)++;	
         
 	}
@@ -291,28 +302,29 @@ void updateDataLabelsAddress(int IC)
 
 /* Reads second time. */
 /* It converts all the lines into the memory. */
-void second_pass() 
+void second_pass(int *wordMemoryArr, symbols_table *entryLabelList, symbols_table *dataTable, int *numOfEntries, int IC, int DC) 
 {
-    int *wordMemoryArr = (int*)malloc(sizeof(int) * (IC+DC-INITIAL_ADDRESS));
+    wordMemoryArr = (int*)malloc(sizeof(int) * (IC+DC-INITIAL_ADDRESS));
 	int error, memCount = 0, i;
     command_line *line = command_line_list;
     memWordCode memory;
+    symbols_table *LabelList = symbols_list;
+    symbols_table *dataTable = (symbols_table *)malloc(sizeof(symbols_table)*DC);
 	
-	updateDataLabelsAddress(IC); // update the operand if it label 
+	dataTable = completeLabelAddress(IC, DC, entryLabelList, dataTable, LabelList); // update the operand if it label 
 
-	
-	error += countIllegalEntries(); // Check for illegal entries 
+	error += countIllegalEntries(entryLabelList, numOfEntries); // Check for illegal entries 
 
 	
 	for (i = 0; i < (IC+DC-INITIAL_ADDRESS); i++) // Add line in to the memory
     {
 
 		memory = lineMemWordCode(*line);
-        addWordToMemory(wordMemoryArr, memCount, memory);
+        addWordToMemory(wordMemoryArr, &memCount, memory);
        
 	}
 	
-	pushdataToMemory(wordMemoryArr, &memCount, DC);// Add data to the end of memory
+	pushdataToMemory(dataTable, wordMemoryArr, &memCount, DC);// Add data to the end of memory
 
     
 }
