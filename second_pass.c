@@ -45,14 +45,14 @@ void completeLabelAddress(int IC,int DC, symbols_table *EntryTemp, symbols_table
 
 
 /* check if there is an illegal entry label */
-int countIllegalEntries(symbols_table *entryLabel, int *numOfEntries) 
+int countIllegalEntries(symbols_table *entryLabel, int *numOfEntries, symbols_table *LabelList) 
 {
 	int errorFlag = 0 ;
-    symbols_table *labelToComper = symbols_list;
+    symbols_table *labelToComper = LabelList;
 
 	while (entryLabel->label) 
     {
-        if(!defined_label(entryLabel->label, symbols_list))
+        if(!defined_label(entryLabel->label, LabelList))
         {
             show_error(undifinedLabel, entryLabel->line);
             errorFlag++;
@@ -88,9 +88,9 @@ int countIllegalEntries(symbols_table *entryLabel, int *numOfEntries)
 
 
 /* if label exist return pointer to the label in symbols_table ,or NULL if label not found. */
- symbols_table *searchLabel(char *labelName) 
+ symbols_table *searchLabel(char *labelName, symbols_table *LabelList) 
  {
-	symbols_table *tempLabel = symbols_list;
+	symbols_table *tempLabel = LabelList;
 
 	
 	while (tempLabel) 
@@ -153,10 +153,10 @@ int regNum(operand op)
 }
 
 
-memWordCode lineMemWordCode(command_line line) 
+memWordCode lineMemWordCode(command_line line, symbols_table *LabelList) 
 {
 	memWordCode memory = { 0 };
-    symbols_table *label = NULL;
+    symbols_table *Tlabel = NULL;
 
 	if ((line.operand_dest != NULL) && (line.operand_src != NULL)) 
     {
@@ -171,11 +171,11 @@ memWordCode lineMemWordCode(command_line line)
         return memory;
 	} 
 
-    label = searchLabel(line.label);
+    Tlabel = searchLabel(line.label, LabelList);
 
-    if (label != NULL)
+    if (Tlabel != NULL)
     {
-        if (symbols_list->type_of_symbol == "external" || symbols_list->value == '0')
+        if (LabelList->type_of_symbol == "external" || LabelList->value == '0')
         {
             memory.A_R_E = E;
             memory.wordVal.number = 0;
@@ -184,7 +184,7 @@ memWordCode lineMemWordCode(command_line line)
         else
         {
             memory.A_R_E = R;
-            memory.wordVal.number = label->address ;
+            memory.wordVal.number = Tlabel->address ;
             return memory;
         }
         
@@ -192,7 +192,7 @@ memWordCode lineMemWordCode(command_line line)
     else
     {
         memory.A_R_E = R;
-        memory.wordVal.number = command_line_list->operand_src->operand_value;
+        memory.wordVal.number = line.operand_src->operand_value;
     }
 
 	return memory;
@@ -200,7 +200,7 @@ memWordCode lineMemWordCode(command_line line)
 
 
 
-void addWordToMemory(int *wordMemoryArr, int *memCount, memWordCode memory) {
+void addWordToMemory(int *wordMemoryArr, int *memCount, memWordCode memory,int IC, int DC) {
 	
 	if (*memCount < ((IC+DC)-INITIAL_ADDRESS)) //There is space in the array
     {
@@ -236,31 +236,44 @@ void pushdataToMemory(symbols_table *dataTable ,int *wordMemoryArr, int *memCoun
 
 /* Reads second time. */
 /* It converts all the lines into the memory. */
-void second_pass(int *wordMemoryArr, symbols_table *entryLabelList, symbols_table *dataTable, int *numOfEntries, int IC, int DC) 
+void second_pass(char *fileName ,int IC, int DC, int error, symbols_table *LabelList, command_line *comLine) 
 {
-    wordMemoryArr = (int*)malloc(sizeof(int) * (IC+DC-INITIAL_ADDRESS));
-	int error, memCount = 0, i;
-    command_line *line = command_line_list;
+    int *wordMemoryArr;//for the second pass to print the output files
+    int i;
+    int numOfExtern = 0; //use in second read
+    int numOfEntries = 0; //use in second read
+    symbols_table *entryLabels = (symbols_table *)malloc(sizeof(symbols_table)) ; //use in second read
+    symbols_table *dataArr; //use in the second read
+	int memCount = 0;
     memWordCode memory;
-    symbols_table *LabelList = symbols_list;
     symbols_table *dataTable = (symbols_table *)malloc(sizeof(symbols_table)*DC);
+    wordMemoryArr = (int*)malloc(sizeof(int) * (IC+DC-INITIAL_ADDRESS));
 	
-    completeLabelAddress(IC, DC, entryLabelList, dataTable, LabelList, numOfEntries); // update the operand if it label 
+    completeLabelAddress(IC, DC, entryLabels, dataTable, LabelList, numOfEntries); // update the operand if it label 
 
-	error += countIllegalEntries(entryLabelList, numOfEntries); // Check for illegal entries 
+	error += countIllegalEntries(entryLabels, numOfEntries); // Check for illegal entries 
 
 	
 	for (i = 0; i < (IC+DC-INITIAL_ADDRESS); i++) // Add line in to the memory
     {
 
-		memory = lineMemWordCode(*line);
-        addWordToMemory(wordMemoryArr, &memCount, memory);
+		memory = lineMemWordCode(*comLine, LabelList);
+        addWordToMemory(wordMemoryArr, &memCount, memory, IC, DC);
        
 	}
 	
 	pushdataToMemory(dataTable, wordMemoryArr, &memCount, DC);// Add data to the end of memory
 
-    
+        /* If there are no errors */
+	 if (!error) // If no errors, do the print to the files 
+	{
+	    /* Create all the output files */
+	    ObjectFile(fileName, IC, DC, wordMemoryArr,dataArr);
+	    ExternFile(fileName, LabelList , numOfExtern/*, linesArr, numOflines*/);
+	    EntriesFile(fileName, numOfEntries);
+		printf("success, output files for \"%s.as\" created.\n", fileName);
+
+	}
 }
 
 

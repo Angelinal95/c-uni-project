@@ -14,6 +14,7 @@ instruction_line *instruction_line_list = NULL;
 symbols_table *symbols_list = NULL;
 int line_num = 0; //the line number we're at
 int L = 0;
+int error = 0;
 
 int main_pass(char *filename)
 {
@@ -53,7 +54,10 @@ int main_pass(char *filename)
     }
     fclose(filename);
 
-    return error;
+    if (!error)
+        second_pass(filename ,IC, DC, error, symbols_table *LabelList, command_line *comLine) ;
+
+    
 }
 
 //checking if it's an empty line or a comment line
