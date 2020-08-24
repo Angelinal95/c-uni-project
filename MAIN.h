@@ -13,7 +13,7 @@ typedef struct
     unsigned int Addressing_Mode;
     char *operand_value;
 
-}operand;
+} operand;
 
 struct symbols_table
 {
@@ -24,12 +24,7 @@ struct symbols_table
     int address;
     int line;
     int L;
-<<<<<<< HEAD
 };
-=======
-
-}symbols_table;
->>>>>>> 053cfed9d2d8e2c9c3135d3cca56c8e1067a1cac
 
 typedef struct
 {
@@ -38,7 +33,7 @@ typedef struct
     unsigned int opcode;
     int numOfParams;
 
-}command;
+} command;
 
 struct command_line
 {
@@ -51,25 +46,13 @@ struct command_line
     unsigned int A_R_E;
 };
 
-<<<<<<< HEAD
 struct instruction_line
-=======
-}command_line;
-
-typedef struct
->>>>>>> 053cfed9d2d8e2c9c3135d3cca56c8e1067a1cac
 {
     char *label; /*A pointer to the symbol_table*/
     char *type_of_inst;
     int *info;
-<<<<<<< HEAD
     struct instruction_line *next;
 };
-=======
-    instruction_line *next;
-
-}instruction_line;
->>>>>>> 053cfed9d2d8e2c9c3135d3cca56c8e1067a1cac
 
 /* ****************************** structer to use in the Second Read ******************************/
 typedef struct fullMemoryWord /* 24 bits */
@@ -93,7 +76,7 @@ typedef struct fullMemoryWord /* 24 bits */
 
     } wordVal;
 
-}memWordCode;
+} memWordCode;
 
 /*------------------------functions - first pass----------------------------*/
 
