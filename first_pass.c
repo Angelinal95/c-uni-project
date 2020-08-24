@@ -346,6 +346,7 @@ int go_through_line(char *token)
             show_error(invalidFunc, line_num);
             return 0;
         }
+        L = 0;
     }
 }
 
