@@ -15,7 +15,7 @@ second_pass.o: second_pass.c error_check.h MAIN.h
 
 
 file_function.o: file_functions.c file_functions.h
-			gcc -c -ansi -Wall -pedantic file_function.c -o file_function.o
+			gcc -c -ansi -Wall -pedantic file_functions.c -o file_functions.o
 
 
 error_check.o: error_check.c error_check.h
