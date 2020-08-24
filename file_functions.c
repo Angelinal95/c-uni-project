@@ -53,10 +53,10 @@ void ObjectFile(char *fileName,int IC, int DC,int *instrucLinesArr, symbols_tabl
 
 
 /* creates the entry file, contains the addresses of entry labels in base 10 */
-void EntriesFile(char *fileName, int *numOfEntries)
+void EntriesFile(char *fileName, int *numOfEntries, symbols_table *symbolList)
 {
 	FILE *file;
-	symbols_table *tempLabel = symbols_list;
+	symbols_table *tempLabel = symbolList;
 
 	
 	if (tempLabel->label)// if there are entry labels 
