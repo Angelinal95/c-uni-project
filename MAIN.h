@@ -108,7 +108,7 @@ int add_symbol(char *, char *, int);                       //adding a new symbol
 
 /*------------------------functions - second pass----------------------------*/
 
-void completeLabelAddress(int ,int , symbols_table *, symbols_table *,symbols_table *);
+void completeLabelAddress(int ,int , symbols_table *, symbols_table *,symbols_table *, int *numOfEntries);
 int countIllegalEntries(symbols_table *, int *);
 symbols_table *searchLabel(char *);
 int returnIntMemoryWord(memWordCode);

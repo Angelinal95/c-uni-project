@@ -339,7 +339,7 @@ int valid_label(char *label, int line)
     char tempLabel[LABEL_LENGTH];
     firstCharIndex = count_spaces(label); //Checks for white characters at the beginning of the string
 
-    if (defined_label(label, line))
+    if (defined_label((label+firstCharIndex), line))
     {
         show_error(labelExists, line);
         return FALSE;
