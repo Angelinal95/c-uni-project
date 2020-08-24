@@ -13,7 +13,7 @@ typedef struct
     unsigned int Addressing_Mode;
     char *operand_value;
 
-}operand;
+} operand;
 
 typedef struct
 {
@@ -25,7 +25,7 @@ typedef struct
     int line;
     int L;
 
-}symbols_table;
+} symbols_table;
 
 typedef struct
 {
@@ -34,7 +34,7 @@ typedef struct
     unsigned int opcode;
     int numOfParams;
 
-}command;
+} command;
 
 typedef struct
 {
@@ -46,7 +46,7 @@ typedef struct
     int cLine;
     unsigned int A_R_E;
 
-}command_line;
+} command_line;
 
 typedef struct
 {
@@ -79,7 +79,7 @@ typedef struct fullMemoryWord /* 24 bits */
 
     } wordVal;
 
-}memWordCode;
+} memWordCode;
 
 /*------------------------functions - first pass----------------------------*/
 
