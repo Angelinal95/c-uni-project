@@ -81,7 +81,7 @@ typedef struct fullMemoryWord /* 24 bits */
 
 } memWordCode;
 
-int error = 0;
+
 
 /*------------------------functions - first pass----------------------------*/
 
@@ -104,7 +104,7 @@ int regNum(operand);
 memWordCode lineMemWordCode(command_line);
 void addWordToMemory(int *, int *, memWordCode);
 void pushdataToMemory(symbols_table *, int *, int *, int);
-void second_pass(int *, symbols_table *, symbols_table *, int *, int, int);
+void second_pass(char *fileName ,int IC, int DC, int error, symbols_table *LabelList, command_line *line);  
 
 /*------------------------functions - symbols----------------------------*/
 
