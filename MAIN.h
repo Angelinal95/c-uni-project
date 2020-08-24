@@ -81,8 +81,6 @@ typedef struct fullMemoryWord /* 24 bits */
 
 } memWordCode;
 
-
-
 /*------------------------functions - first pass----------------------------*/
 
 int main_pass(char *); //going through a text file
@@ -95,7 +93,7 @@ int add_symbol(char *, char *, int);                       //adding a new symbol
 
 /*------------------------functions - second pass----------------------------*/
 
-void completeLabelAddress(int ,int , symbols_table *, symbols_table *,symbols_table *, int *numOfEntries);
+void completeLabelAddress(int, int, symbols_table *, symbols_table *, symbols_table *, int *numOfEntries);
 int countIllegalEntries(symbols_table *, int *);
 symbols_table *searchLabel(char *);
 int returnIntMemoryWord(memWordCode);
@@ -104,7 +102,7 @@ int regNum(operand);
 memWordCode lineMemWordCode(command_line);
 void addWordToMemory(int *, int *, memWordCode);
 void pushdataToMemory(symbols_table *, int *, int *, int);
-void second_pass(char *fileName ,int IC, int DC, int error, symbols_table *LabelList, command_line *line);  
+void second_pass(char *fileName, int IC, int DC, int error, symbols_table *LabelList, command_line *line, instruction_line *);
 
 /*------------------------functions - symbols----------------------------*/
 
