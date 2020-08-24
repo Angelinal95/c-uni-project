@@ -5,13 +5,13 @@
 int count_c_lines = 0;
 int count_i_lines = 0;
 int count_symbols = 0;
-symbols_table *pointer_to_row = NULL;
+struct symbols_table *pointer_to_row = NULL;
 const char s[2] = " ";
 int IC = INITIAL_ADDRESS;
 int DC = 0; //num of data in the assembly code
-command_line *command_line_list = NULL;
-instruction_line *instruction_line_list = NULL;
-symbols_table *symbols_list = NULL;
+struct command_line *command_line_list = NULL;
+struct instruction_line *instruction_line_list = NULL;
+struct symbols_table *symbols_list = NULL;
 int line_num = 0; //the line number we're at
 int L = 0;
 int error = 0;
@@ -364,7 +364,7 @@ int check_if_com_or_inst(char *token)
 };
 
 /*get the adress of the label*/
-int search_row_in_symbol_table(char *temp_label, symbols_table *pointer_to_row)
+int search_row_in_symbol_table(char *temp_label, struct symbols_table *pointer_to_row)
 {
     while (symbols_list->value != NULL)
     {
