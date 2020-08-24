@@ -4,7 +4,7 @@
 typedef enum {A = 4, R = 2, E = 1} val_A_R_E;
 
 
-void completeLabelAddress(int IC,int DC, symbols_table *EntryTemp, symbols_table *dataTable,symbols_table *tempLabel) 
+void completeLabelAddress(int IC,int DC, symbols_table *EntryTemp, symbols_table *dataTable,symbols_table *tempLabel,int *numOfEntries) 
 {
     int i = 0;
 
@@ -18,13 +18,16 @@ void completeLabelAddress(int IC,int DC, symbols_table *EntryTemp, symbols_table
 			    /* Increase the address */
 			    EntryTemp->address = tempLabel->address;
                 EntryTemp->label = tempLabel->label;
+                EntryTemp->next = (symbols_table *)malloc(sizeof(symbols_table));
                 EntryTemp = EntryTemp->next;
+                (*numOfEntries)++;
             }
 
 		}
         else if (!strcmp(tempLabel->type_of_symbol,"data") || !(tempLabel->type_of_symbol,"string"))
         {
 			/* Increase the address */
+            tempLabel->address = tempLabel->L + IC;
             dataTable->value = tempLabel->value;
             dataTable->address = tempLabel->L + IC;
             if (i < DC)
@@ -217,15 +220,14 @@ void pushdataToMemory(symbols_table *dataTable ,int *wordMemoryArr, int *memCoun
 
 	intBitMask >>= ((sizeof(int) * ONE_BYTE_SIZE) - ONE_WORD_SIZE);/* int of '1' in all 24 first bits, all the rest bits '0' */
 
-	for (i = 0; i < DC; i++) //Add each int from dataArr to the end of memoryArr 
+	for (i = 0; i < DC; i++) //Add from dataTable to the end of memoryArr 
     { 
-        if (!strcmp(instruction_line_list->type_of_inst, "external"))// if external pass
-        {
-            continue;
-        }
+
         val = atoi(dataTable->value);
 		*(wordMemoryArr + (*memCount)) = intBitMask & val;// makes sure we only use the first bits 
-        *(memCount)++;	
+        dataTable++;
+        (*memCount)++;	
+
         
 	}
 
@@ -243,7 +245,7 @@ void second_pass(int *wordMemoryArr, symbols_table *entryLabelList, symbols_tabl
     symbols_table *LabelList = symbols_list;
     symbols_table *dataTable = (symbols_table *)malloc(sizeof(symbols_table)*DC);
 	
-    completeLabelAddress(IC, DC, entryLabelList, dataTable, LabelList); // update the operand if it label 
+    completeLabelAddress(IC, DC, entryLabelList, dataTable, LabelList, numOfEntries); // update the operand if it label 
 
 	error += countIllegalEntries(entryLabelList, numOfEntries); // Check for illegal entries 
 
